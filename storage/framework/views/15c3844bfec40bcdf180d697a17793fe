@@ -60,10 +60,10 @@
                 <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
                 <input type="text" class="form-control" name="User_ID" placeholder="ID Number" autofocus required/><br/>
                 <input type="password" class="form-control" name="User_Password" placeholder="Password" required/><hr/>
-                <button type="submit" class="btn-login">Login</button>
+                <button type="submit" class="btn-login">Submit</button>
             </div>
         </form>
     </div>
-    
+
 </body>
 </html>

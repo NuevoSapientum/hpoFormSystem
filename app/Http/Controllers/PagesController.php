@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -26,9 +27,17 @@ class PagesController extends Controller
     * @param ID & Password
     * @return Response
     */
-    public function auth(){
+    public function auth(Request $request){
         // echo $this->input('User_ID');
-        return view('dashboard')->with('title', 'Home');
+        $id = $request->input('User_ID');
+        $password = $request->input('User_Password');
+        $user = DB::select('select * from tbl_users where emp_id = :id AND emp_password = :pass', ['id' => $id, 'pass' => $password]);
+        if(!empty($user)){
+           return redirect('/dashboard'); 
+        }else{
+            return redirect('/');
+        }
+        // return view('dashboard')->with('title', 'Home');
     }    
 
     /**
