@@ -27,8 +27,8 @@ class PagesController extends Controller
     * @return Response
     */
     public function auth(){
-        echo $this->input('User_ID');
-        // return view('welcome');
+        // echo $this->input('User_ID');
+        return view('dashboard')->with('title', 'Home');
     }    
 
     /**

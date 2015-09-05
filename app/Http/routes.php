@@ -16,7 +16,7 @@
 // });
 
 Route::get('/', 'PagesController@login');
-Route::get('/auth', 'PagesController@auth');
+Route::post('/auth', 'PagesController@auth');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard', ['status' => 'active']);

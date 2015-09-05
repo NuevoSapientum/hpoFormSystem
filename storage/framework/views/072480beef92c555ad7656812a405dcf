@@ -1,0 +1,15 @@
+  <?php $__env->startSection('head'); ?> 
+    <h1>
+      Welcome
+      <small>Optional description</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+      <li class="active">Here</li>
+    </ol>
+  <?php $__env->stopSection(); ?>
+
+  <?php $__env->startSection('content'); ?>
+    History
+  <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

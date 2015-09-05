@@ -1,0 +1,61 @@
+<?php $__env->startSection('head'); ?>
+  <h1>
+    Change Schedule Form
+  </h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+    <form>
+      <label>Date:</label>
+      <input type="date" disabled class="form-control" value="<?php echo date('Y-m-d');?>"/>
+      <br/>
+      <label>Name:</label>
+      <input type="text" class="form-control"/>
+      <br/>
+      <label>Department:</label>
+      <select class="form-control">
+          <option value="Human Resource">Human Resource</option>
+          <option value="System Engine Optimization">System Engine Optimization</option>
+          <option value="Quality Assurance">Quality Assurance</option>
+      </select>
+      <hr/>
+      <label><u>Date of Effectivity:</u></label><br/>
+      <label>From:</label>
+      <input type="date" class="form-control"/>
+      <br/>
+      <label>To:</label>
+      <input type="date" class="form-control"/>
+      <hr/>
+      <label><u>Shift Schedule:</u></label><br/>
+      <label>From:</label>
+      <input type="date" class="form-control"/>
+      <br/>
+      <label>To:</label>
+      <input type="date" class="form-control"/>
+      <hr/>
+      <label>Reason:</label>
+      <textarea class="form-control"></textarea>
+      <br/>
+      <label>Approved by(Supervisor and Project Manager):</label>
+      <br/>
+      <select id="example-multiple-selected" multiple="multiple">
+          <option value="Jay Timbal">Jay Timbal</option>
+          <option value="Solis Roltaire">Solis Roltaire</option>
+          <option value="Jerrymae Noya">Jerrymae Noya</option>
+      </select>
+      <br/>
+      <br/>
+      <label>Noted by(Operation and HR):</label>
+      <br/>
+      <select id="example-multiple-optgroups" multiple="multiple">
+          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
+          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
+          <option value="Will Smith">Will Smith</option>
+      </select>
+      <br/>
+      <br/>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

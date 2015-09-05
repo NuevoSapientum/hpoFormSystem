@@ -1,0 +1,57 @@
+<?php $__env->startSection('head'); ?>
+  <h1>
+    Exit Pass Form
+  </h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+  <form>
+      <label>Date:</label>
+      <input type="date" disabled class="form-control" value="<?php echo date('Y-m-d');?>"/>
+      <label>Name:</label>
+      <input type="text" class="form-control" placeholder="Please Enter Your Name Here" required autofocus><br/>
+      <label>Department:</label>
+      <select class="form-control">
+          <option value="Human Resource">Human Resource</option>
+          <option value="System Engine Optimization">System Engine Optimization</option>
+          <option value="Quality Assurance">Quality Assurance</option>
+      </select>
+      <br/>
+      <label>From:</label>
+      <input type="date" id="fromDate"class="form-control"/><br/> 
+      <label>To:</label>
+      <input type="date" id="toDate"class="form-control"/><br/>       
+      <label>Purpose:</label>
+      <textarea class="form-control"></textarea><br/>
+      <label>Supervisor Signature:</label>
+      <select class="form-control">
+          <option value="Neil Patrick Labor">Neil Patrick Labor</option>
+          <option value="Earl Abram Pedida">Earl Abram Pedida</option>
+          <option value="Jayson Alanano">Jayson Alanano</option>
+      </select>
+      <br/>
+      <label>Project Manager:</label>
+      <select class="form-control">
+          <option value="Jay Timbal">Jay Timbal</option>
+          <option value="Solis Roltaire">Solis Roltaire</option>
+          <option value="Jerrymae Noya">Jerrymae Noya</option>
+      </select>
+      <br/>
+      <label>HR:</label>
+      <select class="form-control">
+          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
+          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
+          <option value="Will Smith">Will Smith</option>
+      </select>
+      <br/>
+      <label>Company Representative:</label>
+      <select class="form-control">
+          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
+          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
+          <option value="Will Smith">Will Smith</option>
+      </select>
+      <br/>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

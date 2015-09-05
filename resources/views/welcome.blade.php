@@ -53,15 +53,17 @@
         <div class="logo">
             <img src='img/hpologo.png' class="img-logo">
         </div>
-        <form action="{{URL::to('/auth')}}">
+        <form action="{{URL::to('/auth')}}" method="POST">
             <div class="form-group">
                 <img src="img/user.png" class="img-user">
                 <hr/>
+                <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
                 <input type="text" class="form-control" name="User_ID" placeholder="ID Number" autofocus required/><br/>
                 <input type="password" class="form-control" name="User_Password" placeholder="Password" required/><hr/>
                 <button type="submit" class="btn-login">Login</button>
             </div>
         </form>
     </div>
+    
 </body>
 </html>
