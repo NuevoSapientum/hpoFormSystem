@@ -1,0 +1,44 @@
+body{
+	font-family: Segoe UI, sans-serif;
+}
+
+.btn-primary{
+	border-radius: 0px;
+	border-style: none;
+	width: 140px;
+	font-size: 16px;
+}
+
+.form-control{
+	font-size: 16px;
+	height: 40px;
+}
+
+/*example-getting-started
+example-single*/
+/*select.example-multiple-selected{
+	height: 200px !important;
+}*/
+/*example-multiple-optgroups*/
+
+/*select.multiselect,
+select.multiselect + div.btn-group,
+select.multiselect + div.btn-group button.multiselect,
+select.multiselect + div.btn-group.open .multiselect-container{
+    width:100% !important;
+}*/
+
+
+label{
+	font-size: 15px;
+}
+
+hr{
+	border: solid 1px black;
+}
+
+h1{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+}
