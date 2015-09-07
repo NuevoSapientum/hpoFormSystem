@@ -20,12 +20,25 @@ class PagesController extends Controller
     public function login(){
         return view('auth.login');
     }
-    
+
+    /**
+    *Display the Create Account page
+    *
+    * 
+    * 
+    */
+    public function createAccount(){
+        return view('auth.register')->with('title', 'Create Account');
+    }
+
     /**
     *Display the Home Page
     *
     */
-    public function dashboard(){
+    public function dashboard(Request $request){
+        // $user = "select  ";
+        // $user = $request->input('username');
+        // echo Auth::user()->name;
         return view('dashboard')->with('title', 'Home');
     }
 

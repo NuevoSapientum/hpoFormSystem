@@ -17,6 +17,11 @@
 
 Route::get('/', 'PagesController@login');
 
+Route::get('/createAccount', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@createAccount'
+]);
+
 Route::get('/dashboard', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@dashboard'

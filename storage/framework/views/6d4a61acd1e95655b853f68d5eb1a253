@@ -110,29 +110,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <!-- The user image in the navbar-->
                   <img src="img/user.png" class="user-image" alt="User Image">
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs">Admin</span>
+                  <span class="hidden-xs"><?php echo e(Auth::user()->emp_name); ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
                     <img src="img/user.png" class="img-circle" alt="User Image">
                     <p>
-                      Admin - Web Developer
+                      <?php echo e(Auth::user()->emp_name); ?> - Web Developer
                       <small>Member since Aug. 2015</small>
                     </p>
                   </li>
                   <!-- Menu Body -->
                   <li class="user-body">
                     <div class="col-xs-4 text-center">
-                      <a href="#">Followers</a>
+                      <a href="#">Inbox</a>
                     </div>
                     <div class="col-xs-4 text-center">
-                      <a href="#">Sales</a>
+                      <a href="#">Forms</a>
                     </div>
                     <div class="col-xs-4 text-center">
-                      <a href="#">Friends</a>
+                      <a href="#">Approvals</a>
                     </div>
                   </li>
+                  <?php if(Auth::user()->emp_name == "Admin"): ?>
+                  <li class="user-body">
+                    <a href="<?php echo e(URL::to('/createAccount')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a>
+                  </li>
+                  <?php endif; ?>
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
@@ -166,7 +171,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <img src="img/user.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>Admin</p>
+              <p><?php echo e(Auth::user()->emp_name); ?></p>
               <!-- Status -->
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -185,7 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           <!-- Sidebar Menu -->
           <ul class="sidebar-menu">
-            <li class="header">Welcome Admin</li>
+            <li class="header">Welcome <?php echo e(Auth::user()->emp_name); ?></li>
             <!-- Optionally, you can add icons to the links -->
             <?php if($title == 'Home'): ?>
             <li class="active">

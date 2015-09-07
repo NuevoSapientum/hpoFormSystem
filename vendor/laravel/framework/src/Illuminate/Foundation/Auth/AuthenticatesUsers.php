@@ -137,6 +137,8 @@ trait AuthenticatesUsers
      */
     public function loginUsername()
     {
+        // $user = $request->input('username');
+        // Session::put('username')
         return property_exists($this, 'username') ? $this->username : 'username';
     }
 
