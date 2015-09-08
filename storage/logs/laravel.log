@@ -3114,3 +3114,6 @@ Stack trace:
 #52 C:\xampp\htdocs\HP\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(87): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #53 C:\xampp\htdocs\HP\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
 #54 {main}  
+[2015-09-08 08:17:51] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'FORM' not found' in C:\xampp\htdocs\hpoforms\storage\framework\views\4589c28a894d7bbc343a9dfb1203be2d:51
+Stack trace:
+#0 {main}  
