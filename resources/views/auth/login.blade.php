@@ -59,7 +59,6 @@
              </ul>
              </div>
              @endif
-             as
             <div class="form-group">
                 <img src="img/user.png" class="img-responsive" style="width: 140px; margin-left: 50px;">
                 <hr/>
