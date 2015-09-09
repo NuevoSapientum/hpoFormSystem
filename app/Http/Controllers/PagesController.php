@@ -36,9 +36,6 @@ class PagesController extends Controller
     *
     */
     public function dashboard(Request $request){
-        // $user = "select  ";
-        // $user = $request->input('username');
-        // echo Auth::user()->name;
         return view('dashboard')->with('title', 'Home');
     }
 
@@ -82,5 +79,8 @@ class PagesController extends Controller
         return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip');
     }
 
+    public function editProfile(){
+        return view('auth.editProfile')->with('title', 'Edit Profile');
+    }
 
 }

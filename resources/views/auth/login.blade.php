@@ -24,9 +24,11 @@
             border-radius: 0px;
         }
         .btn-login{
-            width: 140px;
+            width: 250px;
             height: 35px;
             font-family: Segoe UI, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
             color: white;
             border-style: none;
             background-color: #308dd4;

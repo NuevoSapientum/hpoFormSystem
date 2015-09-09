@@ -118,7 +118,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <img src="img/user.png" class="img-circle" alt="User Image">
                     <p>
                       {{ Auth::user()->emp_name }} - {{ Auth::user()->emp_position }}
-                      <small>Member since Aug. 2015</small>
+                      <small>Member since <?php $date = Auth::user()->created_at; echo date('F j, Y', strtotime($date));?></small>
                     </p>
                   </li>
                   <!-- Menu Body -->
@@ -141,7 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
+                      <a href="{{URL::to('/editProfile')}}" class="btn btn-default btn-flat">Edit Profile</a>
                     </div>
                     <div class="pull-right">
                       <a href="{{URL::to('/auth/logout')}}" class="btn btn-default btn-flat">Sign out</a>

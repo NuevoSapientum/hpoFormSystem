@@ -11,17 +11,7 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/', 'PagesController@login');
-
-Route::get('/createAccount', [
-	'middleware' => 'auth',
-	'uses' => 'PagesController@createAccount'
-]);
-
+/*Routes for all the pages*/
 Route::get('/dashboard', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@dashboard'
@@ -52,10 +42,9 @@ Route::get('/overtimeAuthSlip', [
 	'uses' => 'PagesController@overtimeAuthSlip'
 ]);
 
-
-// Route::get('/', 'Auth\AuthController@getLogin');
-
 // Authentication routes...
+
+// Login Routes
 Route::get('/', [
 	'middleware' => 'guest',
 	'uses' => 'Auth\AuthController@getLogin'
@@ -75,30 +64,14 @@ Route::post('auth/register', [
 	'middleware' => 'admin',
 	'uses' => 'Auth\AuthController@postRegister'
 ]);
-// Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-// Route::get('auth/register','Auth\AuthController@getRegister');
-// Route::post('auth/register', 'Auth\AuthController@postRegister');
-
+// Controller for password
 Route::controllers([
    'password' => 'Auth\PasswordController',
 ]);
-// Route::get('/history', function () {
-//     return view('history');
-// });
 
-// Route::get('/exitForm', function () {
-//     return view('exitForm');
-// });
-
-// Route::get('/requestForLeave', function () {
-//     return view('requestForLeave');
-// });
-
-// Route::get('/changeSchedule', function () {
-//     return view('changeSchedule');
-// });
-
-// Route::get('/overtimeAuthSlip', function () {
-//     return view('overtimeAuthSlip');
-// });
+/*Route for editing a profile of the user*/
+Route::get('/editProfile',[
+	'middleware' => 'auth','admin',
+	'uses' => 'PagesController@editProfile'
+]);

@@ -19,6 +19,18 @@
             border-style: none;
             background-color: #308dd4;
         }
+
+      .btn-flat{
+        background-color: #308dd4;
+        color: white;
+        font-size: 13px;
+        padding: 10px 60px 10px 50px;
+      }
+
+      .btn-flat:hover{
+        text-decoration: none;
+        color: white;
+      }
     </style>
     </head>
     <body>
@@ -37,7 +49,7 @@
         <span class="label label-warning">Reminder: Only Admin can add a user.</span>
           <h1>Create an Account</h1>
           <form action="{{ URL::to('/auth/register') }}" method="post">
-            <div class="alert alert-danger" role="alert">Required: Their ID Number is their username.</div>
+            <div class="alert alert-info" role="alert">Info: The ID Number will be their username.</div>
             
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
             <label>ID Number:</label>
@@ -63,7 +75,7 @@
             <input type="password" name="password_confirmation" placeholder="Confirm Password" class="form-control" />
             <br/>
             <button class="btn-reg">Submit</button>
-            <button class="btn-reg" onClick="goBack()">Back</button>
+            <a href="{{URL::to('/dashboard')}}" class="btn-flat">Back</a>
           </form>
           <hr/>
           <!-- Main Footer -->
@@ -76,10 +88,5 @@
         <strong>Copyright &copy; 2015 <a href="http://www.hpoutsourcinginc.com/">HP Outsourcing Inc.</a></strong> All rights reserved.
       </footer>
       </div>
-      <script>
-        function goBack() {
-            window.history.back();
-        }
-      </script>
     </body>   
 </html>

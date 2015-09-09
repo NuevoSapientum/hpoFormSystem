@@ -66,4 +66,21 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    /**
+     * Edit a user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function edit(array $data)
+    {
+        return User::fill([
+            'username' => $data['username'],
+            'emp_name' => $data['name'],
+            'emp_position' => $data['position'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
 }
