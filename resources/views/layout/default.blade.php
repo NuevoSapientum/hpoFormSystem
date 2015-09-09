@@ -117,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <li class="user-header">
                     <img src="img/user.png" class="img-circle" alt="User Image">
                     <p>
-                      {{ Auth::user()->emp_name }} - Web Developer
+                      {{ Auth::user()->emp_name }} - {{ Auth::user()->emp_position }}
                       <small>Member since Aug. 2015</small>
                     </p>
                   </li>
@@ -133,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <a href="#">Approvals</a>
                     </div>
                   </li>
-                  @if(Auth::user()->emp_name == "Admin")
+                  @if(Auth::user()->emp_position == "Administrator")
                   <li class="user-body">
                     <a href="{{URL::to('/createAccount')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a>
                   </li>
