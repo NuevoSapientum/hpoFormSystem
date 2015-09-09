@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'PagesController@login');
+// Route::get('/', 'PagesController@login');
 
 Route::get('/createAccount', [
 	'middleware' => 'auth',
@@ -53,16 +53,32 @@ Route::get('/overtimeAuthSlip', [
 ]);
 
 
-Route::get('/', 'Auth\AuthController@getLogin');
+// Route::get('/', 'Auth\AuthController@getLogin');
 
 // Authentication routes...
-// Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('/', [
+	'middleware' => 'guest',
+	'uses' => 'Auth\AuthController@getLogin'
+]);
+Route::post('auth/login', [
+	'middleware' => 'guest',
+	'uses' => 'Auth\AuthController@postLogin'
+]);
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::get('auth/register', [
+	'middleware' => 'admin',
+	'uses' => 'Auth\AuthController@getRegister'
+]);
+Route::post('auth/register', [
+	'middleware' => 'admin',
+	'uses' => 'Auth\AuthController@postRegister'
+]);
+// Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+// Route::get('auth/register','Auth\AuthController@getRegister');
+// Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 Route::controllers([
    'password' => 'Auth\PasswordController',
