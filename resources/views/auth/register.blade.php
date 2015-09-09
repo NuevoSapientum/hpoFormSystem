@@ -41,23 +41,23 @@
             
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
             <label>ID Number:</label>
-            <input type="text" name="username" placeholder="Enter ID Number" class="form-control" />
+            <input type="text" name="username" placeholder="Enter ID Number" class="form-control" value="{{old('username')}}" />
             <br/>
             <label>Full Name:</label>
-            <input type="text" name="name" placeholder="Enter Full Name" class="form-control" />
+            <input type="text" name="name" placeholder="Enter Full Name" class="form-control" value="{{old('name')}}" />
             <br/>
             <label>Position:</label>
-            <select class="form-control" name="position">
+            <select class="form-control" name="position" value="{{old('position')}}">
               <option value="Administrator">Administrator</option>
               <option value="QA Expert">QA Expert</option>
               <option value="Web Developer">Web Developer</option>
             </select>
             <br/>
             <label>Email:</label>
-            <input type="email" name="email" placeholder="hpo@example.com" class="form-control" />
+            <input type="email" name="email" placeholder="hpo@example.com" class="form-control" value="{{old('email')}}" />
             <br/>
             <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter Password" class="form-control" />
+            <input type="password" name="password" placeholder="Enter Password" class="form-control" value="{{old('password')}}" />
             <br/>
             <label>Confirm Password:</label>
             <input type="password" name="password_confirmation" placeholder="Confirm Password" class="form-control" />

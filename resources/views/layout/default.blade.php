@@ -319,7 +319,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="bootstrap/js/bootstrap-multiselect.js"></script>
     <script>
-    
+    function goBack() {
+            window.history.back();
+        }
 $(document).ready(function() {
   $('#example-getting-started').multiselect();
   $('#example-single').multiselect();
@@ -331,29 +333,6 @@ $(document).ready(function() {
     buttonClass: 'form-control'
   });
 });
-// /*multimple selected width 100%*/
-// $('#example-multiple-selected').multiselect({
-//   includeSelectAllOption: false,
-//   buttonClass: 'form-control'
-// });
-
-// /*started width 100%*/
-// $('#example-getting-started').multiselect({
-//   includeSelectAllOption: false,
-//   buttonWidth: '100%'
-// });
-
-// /*single width 100%*/
-// $('#example-single').multiselect({
-//   includeSelectAllOption: false,
-//   buttonWidth: '100%'
-// });
-
-// /*multiple option groups width 100%*/
-// $('#example-multiple-optgroups').multiselect({
-//   includeSelectAllOption: false,
-//   buttonWidth: '100%'
-// });
     </script>
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
