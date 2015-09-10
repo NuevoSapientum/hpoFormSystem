@@ -5,9 +5,21 @@
 @endsection
 
 @section('content')
-	<form>
+	
+	@if (count($errors) > 0)
+    <div class="alert alert-danger">
+    There were some problems creating an account:
+    <ul>
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+    </ul>
+    </div>
+    @endif
+	<form method="POST" action="{{URL::to('/editProfile')}}">
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	<label>Name:</label>
-		<input type="text" class="form-control" value="{{Auth::user()->emp_name}}"/>
+		<input type="text" name="name" class="form-control" value="{{Auth::user()->emp_name}}"/>
 		<br/>
 	<label>Position:</label>
 		<select class="form-control" name="position">
@@ -17,12 +29,12 @@
             </select>
 		<br/>
 	<label>Email:</label>
-		<input type="email" class="form-control" value="{{Auth::user()->email}}" />
+		<input type="email" name="email" class="form-control" value="{{Auth::user()->email}}" />
 		<br/>
 	<label>ID Number(<i>Username</i>):</label>
-		<input type="text" class="form-control" value="{{Auth::user()->username}}" />
+		<input type="text" name="username" class="form-control" value="{{Auth::user()->username}}" />
 		<br/>
-	<button class="btn btn-primary">Save</button>
+	<button type="submit" class="btn btn-primary">Save</button>
 	</form>
 
 	<script type="text/javascript">

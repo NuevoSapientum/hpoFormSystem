@@ -70,8 +70,19 @@ Route::controllers([
    'password' => 'Auth\PasswordController',
 ]);
 
-/*Route for editing a profile of the user*/
+/*Routes for editing a profile of the user*/
 Route::get('/editProfile',[
 	'middleware' => 'auth','admin',
-	'uses' => 'PagesController@editProfile'
+	'uses' => 'PagesController@getProfile'
+]);
+
+Route::post('/editProfile',[
+	'middleware' => 'auth','admin',
+	'uses' => 'PagesController@postProfile'
+]);
+
+/*Route to managing accounts*/
+Route::get('/accounts', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@accounts'
 ]);

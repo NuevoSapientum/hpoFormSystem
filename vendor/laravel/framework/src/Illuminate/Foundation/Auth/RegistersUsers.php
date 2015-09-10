@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Auth;
 trait RegistersUsers
 {
     use RedirectsUsers;
-    
-    private $redirectPath = '/';
 
     /**
      * Show the application registration form.
@@ -37,7 +35,7 @@ trait RegistersUsers
             );
         }
 
-        Auth::login($this->create($request->all()));
+        $this->create($request->all());
 
         return redirect($this->redirectPath());
     }

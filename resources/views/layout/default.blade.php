@@ -135,7 +135,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </li>
                   @if(Auth::user()->emp_position == "Administrator")
                   <li class="user-body">
-                    <a href="{{URL::to('auth/register')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a>
+                    <a href="{{URL::to('auth/register')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a><br/>
+                    <a href="{{URL::to('accounts')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Manage Accounts</a>
                   </li>
                   @endif
                   <!-- Menu Footer-->

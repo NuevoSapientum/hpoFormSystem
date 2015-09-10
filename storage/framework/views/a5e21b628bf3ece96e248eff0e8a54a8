@@ -136,7 +136,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </li>
                   <?php if(Auth::user()->emp_position == "Administrator"): ?>
                   <li class="user-body">
-                    <a href="<?php echo e(URL::to('auth/register')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a>
+                    <a href="<?php echo e(URL::to('auth/register')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a><br/>
+                    <a href="<?php echo e(URL::to('accounts')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Manage Accounts</a>
                   </li>
                   <?php endif; ?>
                   <!-- Menu Footer-->

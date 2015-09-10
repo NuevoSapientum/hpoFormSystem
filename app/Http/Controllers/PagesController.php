@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Validator;
+use App\User;
+use Auth;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class PagesController extends Controller
 {
+
 
     /**
     *Display the login page
@@ -79,8 +83,41 @@ class PagesController extends Controller
         return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip');
     }
 
-    public function editProfile(){
+    public function getProfile(){
         return view('auth.editProfile')->with('title', 'Edit Profile');
+    }
+
+    public function postProfile(Request $request){
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $this->edit($request->all());
+
+        return redirect('/');
+    }
+
+    protected function edit(array $data)
+    {
+        Auth::user()->username = $data['username'];
+        Auth::user()->emp_name = $data['name'];
+        Auth::user()->emp_position = $data['position'];
+        Auth::user()->email = $data['email'];
+        return Auth::user()->save();
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'username' => 'required|max:255',
+            'name' => 'required|max:255',
+            'position' => 'required',
+            'email' => 'required|email|max:255',
+        ]);
     }
 
 }
