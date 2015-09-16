@@ -98,12 +98,10 @@ class PagesController extends Controller
         
         $this->edit($request->all());
         return redirect('/');
-
     }
 
     protected function edit(array $data)
     {
-        Auth::user()->username = $data['username'];
         Auth::user()->emp_name = $data['name'];
         Auth::user()->emp_position = $data['position'];
         Auth::user()->email = $data['email'];
@@ -113,7 +111,6 @@ class PagesController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => 'required|max:255',
             'name' => 'required|max:255',
             'position' => 'required',
             'email' => 'required|email|max:255',
@@ -142,16 +139,20 @@ class PagesController extends Controller
                 $request, $validator
             );
         }
-        echo "<script>alert('{$request->input('username')}')</script>";
-        
+
         $user = User::find($id);
 
-        $user->username = $request->input('username');
-        $user->emp_name = $request->input('name');
-        $user->emp_position = $request->input('position');
-        $user->email = $request->input('email');
-        $user->save();
+        $this->updateAccount($user, $request->all());
+        
         return redirect('accounts');
+    }
+
+    protected function updateAccount($user, array $data){
+        $user->username = $data['username'];
+        $user->emp_name = $data['name'];
+        $user->emp_position = $data['position'];
+        $user->email = $data['email'];
+        $user->save();
     }
 
     /*Reset Password*/

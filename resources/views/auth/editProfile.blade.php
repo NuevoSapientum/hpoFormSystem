@@ -31,9 +31,6 @@
 	<label>Email:</label>
 		<input type="email" name="email" class="form-control" value="{{Auth::user()->email}}" />
 		<br/>
-	<label>ID Number(<i>Username</i>):</label>
-		<input type="text" name="username" class="form-control" value="{{Auth::user()->username}}" />
-		<br/>
 	<button type="submit" class="btn btn-primary">Save</button>
 	</form>
 
