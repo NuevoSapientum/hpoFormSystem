@@ -86,3 +86,23 @@ Route::get('/accounts', [
 	'middleware' => 'admin',
 	'uses' => 'PagesController@accounts'
 ]);
+
+Route::get('accounts/show/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@show'
+]);
+
+Route::post('accounts/show/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@postShow'
+]);
+
+Route::get('accounts/resetPassword/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@resetPassword'
+]);
+
+Route::post('accounts/resetPassword/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@postResetPassword'
+]);

@@ -95,10 +95,10 @@ class PagesController extends Controller
                 $request, $validator
             );
         }
-
+        
         $this->edit($request->all());
-
         return redirect('/');
+
     }
 
     protected function edit(array $data)
@@ -118,6 +118,64 @@ class PagesController extends Controller
             'position' => 'required',
             'email' => 'required|email|max:255',
         ]);
+    }
+
+    /*Managing Accounts*/
+
+    public function accounts(){
+        // $users = DB::table('users')->select('username', 'emp_name', 'emp_position', 'email')->groupBy('username')->get();
+        $users = User::orderBy('username')->get();
+        return view('auth.accounts')->with('title', 'Manage Accounts')->with('users', $users);
+    }
+
+    /*Update the basic informations*/
+
+    public function show($id){
+        $user = User::find($id);
+        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user);
+    }
+
+    public function postShow($id, Request $request){
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        echo "<script>alert('{$request->input('username')}')</script>";
+        
+        $user = User::find($id);
+
+        $user->username = $request->input('username');
+        $user->emp_name = $request->input('name');
+        $user->emp_position = $request->input('position');
+        $user->email = $request->input('email');
+        $user->save();
+        return redirect('accounts');
+    }
+
+    /*Reset Password*/
+
+    public function resetPassword($id){
+        $user = User::find($id);
+        return view('auth.resetPassword')->with('title', 'Edit Profile')->with('user', $user);
+    }
+
+    public function postResetPassword($id, Request $request){
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'password' => 'required|confirmed|min:6',
+        ]);
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        $user = User::find($id);
+
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+        return redirect('accounts');
     }
 
 }
