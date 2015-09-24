@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2015 at 04:23 AM
+-- Generation Time: Sep 24, 2015 at 10:08 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -104,13 +104,12 @@ CREATE TABLE IF NOT EXISTS `tbl_chgschd` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_epform` (
-  `tbl_epid` int(11) NOT NULL,
-  `username` int(11) NOT NULL,
-  `date_created` date NOT NULL,
+`tbl_epid` int(11) NOT NULL,
+  `dateCreated` date NOT NULL,
+  `dateFrom` date NOT NULL,
+  `dateTo` date DEFAULT NULL,
   `department_id` int(11) NOT NULL,
-  `date_from` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `date_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `purpose` text NOT NULL,
+  `textPurpose` text NOT NULL,
   `permission_id1` int(11) NOT NULL,
   `permission_id2` int(11) NOT NULL,
   `permission_id3` int(11) NOT NULL,
@@ -121,8 +120,18 @@ CREATE TABLE IF NOT EXISTS `tbl_epform` (
   `permission_4` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `form_type` int(11) NOT NULL,
-  `date_updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `dateUpdated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Dumping data for table `tbl_epform`
+--
+
+INSERT INTO `tbl_epform` (`tbl_epid`, `dateCreated`, `dateFrom`, `dateTo`, `department_id`, `textPurpose`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `form_type`, `dateUpdated`, `user_id`) VALUES
+(13, '2015-09-24', '2015-09-25', '2015-09-26', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:39:29', 2),
+(14, '2015-09-24', '2015-09-24', '2015-09-25', 0, 'asd', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:42:58', 2),
+(15, '2015-09-24', '2015-09-24', '2015-09-26', 0, 'asdas', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:44:00', 2);
 
 -- --------------------------------------------------------
 
@@ -144,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `tbl_form` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_leave` (
-  `tbl_leaveid` int(11) NOT NULL,
+`tbl_leaveid` int(11) NOT NULL,
   `username` int(11) NOT NULL,
   `date_created` date NOT NULL,
   `leave_type` int(11) NOT NULL,
@@ -157,7 +166,16 @@ CREATE TABLE IF NOT EXISTS `tbl_leave` (
   `date_taken` int(11) NOT NULL,
   `date_applied` int(11) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `tbl_leave`
+--
+
+INSERT INTO `tbl_leave` (`tbl_leaveid`, `username`, `date_created`, `leave_type`, `reason`, `permission_1`, `permission_2`, `permission_id1`, `permission_id2`, `entitlement`, `date_taken`, `date_applied`, `status`) VALUES
+(2, 0, '2015-09-24', 0, '123123', 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 2, '2015-09-24', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 2, '2015-09-24', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -166,14 +184,22 @@ CREATE TABLE IF NOT EXISTS `tbl_leave` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_oas` (
-  `tbl_oasid` int(11) NOT NULL,
+`tbl_oasid` int(11) NOT NULL,
   `username` int(11) NOT NULL,
   `date_created` date NOT NULL,
   `department` int(11) NOT NULL,
   `form_type` int(11) NOT NULL,
   `reason` text NOT NULL,
   `client_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `tbl_oas`
+--
+
+INSERT INTO `tbl_oas` (`tbl_oasid`, `username`, `date_created`, `department`, `form_type`, `reason`, `client_id`) VALUES
+(1, 0, '2015-09-24', 0, 0, 'asd', 1),
+(4, 2, '2015-09-24', 0, 0, 'adsdasd', 2);
 
 -- --------------------------------------------------------
 
@@ -191,14 +217,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `emp_position`, `email`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Abram Earl', 'Administrator', 'abram0821@gmail.com', 82113, '$2a$10$ymASGmeyVp/AnwG6I.QviecZtCNlRp/Efv/0a9hDtXZf790bZC88K', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'Abram Earl', 'Administrator', 'abram0821@gmail.com', 82113, '$2a$10$ymASGmeyVp/AnwG6I.QviecZtCNlRp/Efv/0a9hDtXZf790bZC88K', 'RgwjUXusctcUULkE1YPxWBLdIO4CKaUCXwYdErgVRFBh7NvY0UTJI8DQaIbf', '0000-00-00 00:00:00', '2015-09-23 18:31:39'),
+(2, 'Erwin Mark D. Añora', 'Administrator', 'hpo@example.com', 1200289, '$2y$10$V4Sjcyz31EHezyVpBZzoFutrQdxB.XXHXIoI/mKP5fgDDJSXqYZW2', NULL, '2015-09-23 18:31:37', '2015-09-23 18:31:37');
 
 --
 -- Indexes for dumped tables
@@ -220,7 +247,7 @@ ALTER TABLE `tbl_chgschd`
 -- Indexes for table `tbl_epform`
 --
 ALTER TABLE `tbl_epform`
- ADD PRIMARY KEY (`tbl_epid`), ADD UNIQUE KEY `permission_id1` (`permission_id1`,`permission_id2`,`permission_id3`,`permission_id4`), ADD UNIQUE KEY `username` (`username`);
+ ADD PRIMARY KEY (`tbl_epid`), ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `tbl_form`
@@ -232,13 +259,13 @@ ALTER TABLE `tbl_form`
 -- Indexes for table `tbl_leave`
 --
 ALTER TABLE `tbl_leave`
- ADD PRIMARY KEY (`tbl_leaveid`), ADD UNIQUE KEY `username` (`username`), ADD UNIQUE KEY `permission_id1` (`permission_id1`), ADD UNIQUE KEY `permission_id2` (`permission_id2`);
+ ADD PRIMARY KEY (`tbl_leaveid`);
 
 --
 -- Indexes for table `tbl_oas`
 --
 ALTER TABLE `tbl_oas`
- ADD PRIMARY KEY (`tbl_oasid`), ADD UNIQUE KEY `form_type` (`form_type`), ADD UNIQUE KEY `username` (`username`), ADD UNIQUE KEY `username_2` (`username`);
+ ADD PRIMARY KEY (`tbl_oasid`);
 
 --
 -- Indexes for table `users`
@@ -251,10 +278,25 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_epform`
+--
+ALTER TABLE `tbl_epform`
+MODIFY `tbl_epid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+--
+-- AUTO_INCREMENT for table `tbl_leave`
+--
+ALTER TABLE `tbl_leave`
+MODIFY `tbl_leaveid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `tbl_oas`
+--
+ALTER TABLE `tbl_oas`
+MODIFY `tbl_oasid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
