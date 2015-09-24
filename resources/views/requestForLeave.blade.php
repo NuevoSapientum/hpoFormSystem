@@ -7,9 +7,21 @@
 @endsection
 
 @section('content')
-    <form>
+    <form method="POST" action="requestForLeave">
+      @if (count($errors) > 0)
+      <div class="alert alert-danger">
+      <strong>Whoops! </strong> There were some problems with your input. <br> <br>
+      <ul>
+    
+              @foreach ($errors->all() as $error)
+           <li>{{ $error }} </li>
+          @endforeach
+      </ul>
+      </div>
+      @endif
+      <input type="hidden" name="_token" value="{!! csrf_token() !!}">
       <label>Date:</label>
-      <input type="date" disabled class="form-control" value="<?php echo date('Y-m-d');?>"/>
+      <input type="date" name="dateCreated" class="form-control" value="<?php echo date('Y-m-d');?>"/>
       <br/>
       <label>Type of Leave:</label>
       <br/>
@@ -19,17 +31,17 @@
       <input type="radio" name="typeofLeave" value="Paternity" />Paternity Leave <br/>
       <br/>
       <label>Reason(s) for Absence:</label>
-      <textarea class="form-control"></textarea>
+      <textarea class="form-control" name="reason"></textarea>
       <br/>
       <label>Recommending Approval:</label>
-      <select class="form-control">
+      <select class="form-control" name="recommendApproval">
           <option value="Jay Timbal">Jay Timbal</option>
           <option value="Solis Roltaire">Solis Roltaire</option>
           <option value="Jerrymae Noya">Jerrymae Noya</option>
       </select>
       <br/>
       <label>Approved by:</label>
-      <select class="form-control">
+      <select class="form-control" name="approvedBy">
           <option value="Rodrigo Duterte">Rodrigo Duterte</option>
           <option value="Erwin Mark Añora">Erwin Mark Añora</option>
           <option value="Will Smith">Will Smith</option>
@@ -38,7 +50,7 @@
         <!-- Inclusive Dates of Leave -->
       </table>
       <label>Entitlement:</label> 
-      <input type="text" class="form-control"/><br/>
+      <input type="text" class="form-control" /><br/>
       <label>Days Already Taken:</label> 
       <input type="text" class="form-control" disabled value="3 Days"/><br/>
       <label>Days Applied For:</label> 

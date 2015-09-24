@@ -59,6 +59,42 @@ class PagesController extends Controller
         return view('exitForm')->with('title', 'Exit Pass');
     }
 
+    public function postexitForm(Request $request){
+        $validator = $this->exitValidator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $this->exitAdd($request->all());
+        return redirect('/exitForm');
+    }
+    
+    protected function exitValidator(array $data)
+    {
+        // $data['']
+        return Validator::make($data, [
+            'dateCreated' => 'required',
+            'department' => 'required',
+            'dateFrom' => 'required',
+            'dateTo' => 'required',
+            'purpose' => 'required|max:255',
+            'supervisor' => 'required',
+            'projectManager' => 'required',
+            'HR' => 'required',
+            'companyRep' => 'required',
+        ]);
+    }
+
+    protected function exitAdd(array $data)
+    {
+        $id = Auth::user()->id;
+        $dateUpdate = date("Y-m-d H:i:s");
+        $db = DB::insert('INSERT INTO `tbl_epform`(`user_id`, `dateCreated`, `dateFrom`, `dateTo`, `textPurpose`, `dateUpdated`) values(?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['dateFrom'], $data['dateTo'], $data['purpose'], $dateUpdate]);
+    }
+
     /**
     *Display the Request for Leave of Absence Form Page
     *
@@ -66,6 +102,39 @@ class PagesController extends Controller
     public function requestForLeave(){
         return view('requestForLeave')->with('title', 'Request for Leave of Absence');
     }
+
+    public function postrequestForLeave(Request $request){
+        $validator = $this->requestValidator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $this->requestAdd($request->all());
+        return redirect('requestForLeave');
+    }
+
+
+    protected function requestValidator(array $data)
+    {
+        // $data['']
+        return Validator::make($data, [
+            'dateCreated' => 'required',
+            'typeofLeave' => 'required',
+            'reason' => 'required',
+            'recommendApproval' => 'required',
+            'approvedBy' => 'required',
+        ]);
+    }
+
+    protected function requestAdd(array $data)
+    {
+        $id = Auth::user()->id;
+        $db = DB::insert('INSERT INTO `tbl_leave`(`username`, `date_Created`, `reason`, `leave_type`) values(?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave']]);
+    }
+
 
     /**
     *Display the Change Schedule Form Page
@@ -81,6 +150,36 @@ class PagesController extends Controller
     */
     public function overtimeAuthSlip(){
         return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip');
+    }
+
+    public function postovertimeAuthSlip(Request $request){
+        $validator = $this->overtimeAuthSlipValidator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $this->overtimeAuthSlipAdd($request->all());
+        return redirect('overtimeAuthSlip');
+    }
+
+    protected function overtimeAuthSlipValidator(array $data)
+    {
+        // $data['']
+        return Validator::make($data, [
+            'dateCreated' => 'required',
+            'department' => 'required',
+            'client' => 'required',
+            'reason' => 'required',
+        ]);
+    }
+
+    protected function overtimeAuthSlipAdd(array $data)
+    {
+        $id = Auth::user()->id;
+        $db = DB::insert('INSERT INTO `tbl_oas`(`username`, `date_Created`, `reason`, `client_id`) values(?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['client']]);
     }
 
     public function getProfile(){

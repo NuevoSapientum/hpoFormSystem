@@ -27,9 +27,19 @@ Route::get('/exitForm', [
 	'uses' => 'PagesController@exitForm'
 ]);
 
+Route::post('/exitForm', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@postexitForm'
+]);
+
 Route::get('/requestForLeave', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@requestForLeave'
+]);
+
+Route::post('/requestForLeave', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@postrequestForLeave'
 ]);
 
 Route::get('/changeSchedule', [
@@ -40,6 +50,11 @@ Route::get('/changeSchedule', [
 Route::get('/overtimeAuthSlip', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@overtimeAuthSlip'
+]);
+
+Route::post('/overtimeAuthSlip', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@postovertimeAuthSlip'
 ]);
 
 // Authentication routes...
