@@ -25,22 +25,30 @@ class PagesController extends Controller
         return view('auth.login');
     }
 
-    /**
-    *Display the Create Account page
-    *
-    * 
-    * 
-    */
-    public function createAccount(){
-        return view('auth.register')->with('title', 'Create Account');
+    public function position(){
+        // $positions = DB::select('select position.position_name FROM position LEFT JOIN users ON :user_id = position.position_id', ['user_id' => Auth::user()->position_id]);
+        $positions = DB::select('select position_name FROM position where :user_id = position_id', ['user_id' => Auth::user()->position_id]);
+        return $positions; 
     }
+
+    // /**
+    // *Display the Create Account page
+    // *
+    // * 
+    // * 
+    // */
+    // public function createAccount(){
+    //     $positions = DB::select("select * FROM position");
+    //     // return view('auth.register')->with('title', 'Create Account')->with('positions_all', $positions);
+    // }
 
     /**
     *Display the Home Page
     *
     */
     public function dashboard(Request $request){
-        return view('dashboard')->with('title', 'Home');
+        $positions = $this->position();
+        return view('dashboard')->with('title', 'Home')->with('positions', $positions);
     }
 
     /**
@@ -48,7 +56,8 @@ class PagesController extends Controller
     *
     */
     public function history(){
-        return view('history')->with('title', 'History');
+        $positions = $this->position();
+        return view('history')->with('title', 'History')->with('positions', $positions);
     }
 
     /**
@@ -56,7 +65,8 @@ class PagesController extends Controller
     *
     */
     public function exitForm(){
-        return view('exitForm')->with('title', 'Exit Pass');
+        $positions = $this->position();
+        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions);
     }
 
     public function postexitForm(Request $request){
@@ -100,7 +110,8 @@ class PagesController extends Controller
     *
     */
     public function requestForLeave(){
-        return view('requestForLeave')->with('title', 'Request for Leave of Absence');
+        $positions = $this->position();
+        return view('requestForLeave')->with('title', 'Request for Leave of Absence')->with('positions', $positions);
     }
 
     public function postrequestForLeave(Request $request){
@@ -141,7 +152,8 @@ class PagesController extends Controller
     *
     */
     public function changeSchedule(){
-        return view('changeSchedule')->with('title', 'Change Schedule');
+        $positions = $this->position();
+        return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions);
     }
 
     /**
@@ -149,7 +161,8 @@ class PagesController extends Controller
     *
     */
     public function overtimeAuthSlip(){
-        return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip');
+        $positions = $this->position();
+        return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip')->with('positions', $positions);
     }
 
     public function postovertimeAuthSlip(Request $request){
@@ -183,7 +196,8 @@ class PagesController extends Controller
     }
 
     public function getProfile(){
-        return view('auth.editProfile')->with('title', 'Edit Profile');
+        $positions = $this->position();
+        return view('auth.editProfile')->with('title', 'Edit Profile')->with('positions', $positions);
     }
 
     public function postProfile(Request $request){
@@ -220,15 +234,17 @@ class PagesController extends Controller
 
     public function accounts(){
         // $users = DB::table('users')->select('username', 'emp_name', 'emp_position', 'email')->groupBy('username')->get();
-        $users = User::orderBy('username')->get();
-        return view('auth.accounts')->with('title', 'Manage Accounts')->with('users', $users);
+        $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        $positions = $this->position();
+        return view('auth.accounts')->with('title', 'Manage Accounts')->with('users', $users)->with('positions', $positions);
     }
 
     /*Update the basic informations*/
 
     public function show($id){
         $user = User::find($id);
-        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user);
+        $positions = $this->position();
+        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions);
     }
 
     public function postShow($id, Request $request){
@@ -258,7 +274,8 @@ class PagesController extends Controller
 
     public function resetPassword($id){
         $user = User::find($id);
-        return view('auth.resetPassword')->with('title', 'Edit Profile')->with('user', $user);
+        $positions = $this->position();
+        return view('auth.resetPassword')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions);
     }
 
     public function postResetPassword($id, Request $request){

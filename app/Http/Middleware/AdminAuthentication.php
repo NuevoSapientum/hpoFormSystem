@@ -23,7 +23,7 @@ class AdminAuthentication
     public function handle($request, Closure $next)
     {
         if($this->auth->check()){
-            if($this->auth->user()->emp_position == "Administrator"){
+            if($this->auth->user()->position_id == 1){
                 return $next($request);
             }
         }

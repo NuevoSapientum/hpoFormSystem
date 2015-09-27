@@ -4,6 +4,8 @@ namespace Illuminate\Foundation\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DB;
+
 
 trait RegistersUsers
 {
@@ -16,7 +18,8 @@ trait RegistersUsers
      */
     public function getRegister()
     {
-        return view('auth.register');
+        $positions = DB::select("select * FROM position");
+        return view('auth.register')->with('positions_all', $positions);
     }
 
     /**

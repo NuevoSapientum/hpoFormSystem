@@ -16,7 +16,7 @@
         <tr>
         <td>{{$user->username}}</td>
         <td>{{$user->emp_name}}</td>
-        <td>{{$user->emp_position}}</td>
+        <td>{{$user->position_name}}</td>
         <td>{{$user->email}}</td>
         <td>
           <a href="{{URL::to('accounts/show/' . $user->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;

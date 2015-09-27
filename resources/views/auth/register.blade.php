@@ -53,16 +53,16 @@
             
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
             <label>ID Number:</label>
-            <input type="text" name="username" placeholder="Enter ID Number" class="form-control" value="{{old('username')}}" />
+            <input type="number" name="username" placeholder="Enter ID Number" class="form-control" value="{{old('username')}}" />
             <br/>
             <label>Full Name:</label>
             <input type="text" name="name" placeholder="Enter Full Name" class="form-control" value="{{old('name')}}" />
             <br/>
             <label>Position:</label>
             <select class="form-control" name="position" value="{{old('position')}}">
-              <option value="Administrator">Administrator</option>
-              <option value="QA Expert">QA Expert</option>
-              <option value="Web Developer">Web Developer</option>
+              @foreach($positions_all as $positions)
+                <option value="{{$positions->position_id}}">{{$positions->position_name}}</option>
+              @endforeach
             </select>
             <br/>
             <label>Email:</label>

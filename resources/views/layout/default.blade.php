@@ -119,7 +119,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <li class="user-header">
                     <img src="{{URL::asset('img/user.png')}}" class="img-circle" alt="User Image">
                     <p>
-                      {{ Auth::user()->emp_name }} - {{ Auth::user()->emp_position }}
+                      {{ Auth::user()->emp_name }} - @foreach($positions as $position)
+                                                      {{ $position->position_name }}
+                                                     @endforeach
                       <small>Member since <?php $date = Auth::user()->created_at; echo date('F j, Y', strtotime($date));?></small>
                     </p>
                   </li>
@@ -135,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <a href="#">Approvals</a>
                     </div>
                   </li>
-                  @if(Auth::user()->emp_position == "Administrator")
+                  @if(Auth::user()->position_id == 1)
                   <li class="user-body">
                     <a href="{{URL::to('auth/register')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a><br/>
                     <a href="{{URL::to('accounts')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Manage Accounts</a>
