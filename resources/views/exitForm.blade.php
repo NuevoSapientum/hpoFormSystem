@@ -23,11 +23,17 @@
       <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
       <hr/>
       <label>Department:</label>
-      <select class="form-control" name="department">
+      <!-- <select class="form-control" name="department">
           <option value="Human Resource">Human Resource</option>
           <option value="System Engine Optimization">System Engine Optimization</option>
           <option value="Quality Assurance">Quality Assurance</option>
+      </select> -->
+      <select class="form-control" name="department">
+        @foreach($department_user as $user_department)
+          <option value="{{$user_department->department_id}}">{{$user_department->department_name}}</option>
+        @endforeach
       </select>
+      
       <br/>
       <label>From:</label>
       <input type="date" id="fromDate" name="dateFrom" class="form-control"/><br/> 

@@ -1,7 +1,7 @@
 @extends('layout.default')
 
 @section('head')
-	<h1>Edit Profile</h1>
+	<h1>Reset Password</h1>
 @endsection
 
 @section('content')

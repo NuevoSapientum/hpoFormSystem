@@ -70,12 +70,14 @@ class PagesController extends Controller
     */
     public function exitForm(){
         $positions = $this->position();
+        $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
         // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
         $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
         // $Supervisors = 
         // $PMs =
         // $CompanyRep =
-        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs);
+        // dd($department);
+        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department);
     }
 
     public function postexitForm(Request $request){
@@ -91,9 +93,7 @@ class PagesController extends Controller
         return redirect('/exitForm');
     }
     
-    protected function exitValidator(array $data)
-    {
-        // $data['']
+    protected function exitValidator(array $data){
         return Validator::make($data, [
             'dateCreated' => 'required',
             'department' => 'required',
@@ -139,7 +139,6 @@ class PagesController extends Controller
 
     protected function requestValidator(array $data)
     {
-        // $data['']
         return Validator::make($data, [
             'dateCreated' => 'required',
             'typeofLeave' => 'required',
@@ -193,7 +192,6 @@ class PagesController extends Controller
 
     protected function overtimeAuthSlipValidator(array $data)
     {
-        // $data['']
         return Validator::make($data, [
             'dateCreated' => 'required',
             'department' => 'required',
