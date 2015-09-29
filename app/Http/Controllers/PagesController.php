@@ -25,6 +25,10 @@ class PagesController extends Controller
         return view('auth.login');
     }
 
+    public function get_positions(){
+        return DB::select("select * FROM position");
+    }
+
     public function position(){
         // $positions = DB::select('select position.position_name FROM position LEFT JOIN users ON :user_id = position.position_id', ['user_id' => Auth::user()->position_id]);
         $positions = DB::select('select position_name FROM position where :user_id = position_id', ['user_id' => Auth::user()->position_id]);
@@ -66,7 +70,12 @@ class PagesController extends Controller
     */
     public function exitForm(){
         $positions = $this->position();
-        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions);
+        // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+        // $Supervisors = 
+        // $PMs =
+        // $CompanyRep =
+        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs);
     }
 
     public function postexitForm(Request $request){
@@ -156,6 +165,10 @@ class PagesController extends Controller
         return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions);
     }
 
+    public function postchangeSchedule(Request $request){
+        dd($request->all());
+    }
+
     /**
     *Display the Overtime Authorization Slip Form Page
     *
@@ -197,7 +210,8 @@ class PagesController extends Controller
 
     public function getProfile(){
         $positions = $this->position();
-        return view('auth.editProfile')->with('title', 'Edit Profile')->with('positions', $positions);
+        $positions_all = $this->get_positions();
+        return view('auth.editProfile')->with('title', 'Edit Profile')->with('positions', $positions)->with('positions_all', $positions_all);
     }
 
     public function postProfile(Request $request){
@@ -216,7 +230,7 @@ class PagesController extends Controller
     protected function edit(array $data)
     {
         Auth::user()->emp_name = $data['name'];
-        Auth::user()->emp_position = $data['position'];
+        Auth::user()->position_id = $data['position'];
         Auth::user()->email = $data['email'];
         return Auth::user()->save();
     }
@@ -244,7 +258,8 @@ class PagesController extends Controller
     public function show($id){
         $user = User::find($id);
         $positions = $this->position();
-        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions);
+        $positions_all = $this->get_positions();
+        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions)->with('positions_all', $positions_all);
     }
 
     public function postShow($id, Request $request){

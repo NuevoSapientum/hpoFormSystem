@@ -23,9 +23,9 @@
 		<br/>
 	<label>Position:</label>
 		<select class="form-control" name="position">
-              <option id="QA Expert" value="QA Expert">QA Expert</option>
-              <option id="Administrator" value="Administrator">Administrator</option>
-              <option id="Web Developer" value="Web Developer">Web Developer</option>
+              @foreach($positions_all as $post)
+                <option id="{{$post->position_id}}" value="{{$post->position_id}}">{{$post->position_name}}</option>
+              @endforeach
         </select>
 		<br/>
 	<label>Email:</label>
@@ -35,6 +35,6 @@
 	</form>
 
 	<script type="text/javascript">
-			document.getElementById('{{Auth::user()->emp_position}}').selected = "true";
+			document.getElementById('{{Auth::user()->position_id}}').selected = "true";
 	</script>
 @endsection

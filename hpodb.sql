@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2015 at 03:44 AM
+-- Generation Time: Sep 29, 2015 at 04:14 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -62,6 +62,20 @@ INSERT INTO `department` (`department_name`, `department_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `entitlement`
+--
+
+CREATE TABLE IF NOT EXISTS `entitlement` (
+`entitlement_id` int(11) NOT NULL,
+  `days_Given` int(50) NOT NULL,
+  `days_Taken` int(50) NOT NULL,
+  `days_Balance` int(50) NOT NULL,
+  `users_id` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -102,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `position` (
 `position_id` int(11) NOT NULL,
   `department_id` int(11) NOT NULL,
   `position_name` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `position`
@@ -112,7 +126,8 @@ INSERT INTO `position` (`position_id`, `department_id`, `position_name`) VALUES
 (1, 1, 'Administrator'),
 (2, 3, 'System Administrator'),
 (3, 4, 'Web Developer'),
-(5, 1, 'Secretary');
+(5, 1, 'Secretary'),
+(7, 1, 'Trainer');
 
 -- --------------------------------------------------------
 
@@ -258,19 +273,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `username` int(255) NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `entitlement_id` int(11) NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `emp_name`, `position_id`, `email`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(9, 'Admin', 1, 'admin@example', 10001, '$2a$10$iQSZ/1atpmgn/jyFF0GsceILd4n8FGdi2P2YIuMwyULRo8BRvp7jG', 'iFEtA2okns2ryIiYI2Bd7miLgbd5iWib9OjJJzzNLb7Ui3KmC8Dbgit7W8Ry', '0000-00-00 00:00:00', '2015-09-25 22:38:50'),
-(11, 'Erwin Mark Añora', 1, 'bananasapientum@gmail.com', 1200289, '$2y$10$kzUxbLaNjmB39Q4El0kgzedUTEtBKwQ7UjcE3VFK8limz.VvUYe.W', 'D500jZp6KuRTK0jNYG4w6jIglmo2UrFphnhAbmZscadMazICnS5ZMx8iaBZF', '2015-09-25 22:38:39', '2015-09-27 08:23:40'),
-(12, 'Test Dummy', 2, '12@gmail.com', 1200300, '$2y$10$99GzB5BaQTtwAfkTl9zb2Oips/G77zlto1t8JgMJX2WQAony6Qpr6', 'yZYcthIBsJ4eRDSgqFKwyWAlZT4LKl2kBCcY1Mij64giWyKDBb8xARd6YY5x', '2015-09-27 08:23:37', '2015-09-27 08:24:03');
+INSERT INTO `users` (`id`, `emp_name`, `position_id`, `email`, `username`, `password`, `entitlement_id`, `remember_token`, `created_at`, `updated_at`) VALUES
+(9, 'Admin', 1, 'admin@example', 10001, '$2a$10$iQSZ/1atpmgn/jyFF0GsceILd4n8FGdi2P2YIuMwyULRo8BRvp7jG', 0, 'iFEtA2okns2ryIiYI2Bd7miLgbd5iWib9OjJJzzNLb7Ui3KmC8Dbgit7W8Ry', '0000-00-00 00:00:00', '2015-09-25 22:38:50'),
+(11, 'Erwin Mark Añora', 1, 'bananasapientum@gmail.com', 1200289, '$2y$10$kzUxbLaNjmB39Q4El0kgzedUTEtBKwQ7UjcE3VFK8limz.VvUYe.W', 0, 'wH7rfkH8LfhEjz1bvaGwQAZ24NFadvEejUpVzhqKCa1t7U6MNhuci0SMrv5I', '2015-09-25 22:38:39', '2015-09-27 11:44:51'),
+(12, 'Test Dummy', 2, '12@gmail.com', 1200300, '$2y$10$99GzB5BaQTtwAfkTl9zb2Oips/G77zlto1t8JgMJX2WQAony6Qpr6', 0, '1SIsLwx1oSChlq7fBtXkEqDaHsMPjSmNFZwt4WkpJTKIoTESAbhg1iSUW5KD', '2015-09-27 08:23:37', '2015-09-27 11:45:28'),
+(14, 'Ms. Secretary', 5, '1@gmail.com', 1200301, '$2y$10$5mZ74.eW5wvJbakHMVs5a.MIX73SlWkHpXQ32jDxMys0ixjYuuuQO', 0, NULL, '2015-09-27 14:25:32', '2015-09-27 14:25:32'),
+(15, 'Mr. Trainer', 7, '2@gmail.com', 1200302, '$2y$10$g1GcfpzOapFh9/i/k7vpo.ns/YeqoAvgFd0B8QLM1oa6oafUvQjAW', 0, NULL, '2015-09-27 14:28:51', '2015-09-27 14:28:51'),
+(16, 'Ms. Secretary 2', 5, '3@gmail.com', 1200303, '$2y$10$8Pk5kLWkwTaS13MEhVOQiepvnRM7doBvLX8CzVosJk9peLzPsa5vq', 0, NULL, '2015-09-27 14:29:33', '2015-09-27 14:29:33'),
+(17, 'Mr. Developer Number 1', 3, '6@gmail.com', 1200305, '$2y$10$G0z5MPWBDex02M.PIC.MO.yuubNf6eJeESlfw41CMmFbtV6GV2wDG', 0, NULL, '2015-09-27 15:00:33', '2015-09-27 15:00:33');
 
 --
 -- Indexes for dumped tables
@@ -281,6 +301,12 @@ INSERT INTO `users` (`id`, `emp_name`, `position_id`, `email`, `username`, `pass
 --
 ALTER TABLE `department`
  ADD PRIMARY KEY (`department_id`);
+
+--
+-- Indexes for table `entitlement`
+--
+ALTER TABLE `entitlement`
+ ADD PRIMARY KEY (`entitlement_id`), ADD UNIQUE KEY `users_id` (`users_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -304,7 +330,7 @@ ALTER TABLE `tbl_oas`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `users_username_unique` (`username`), ADD KEY `position_id` (`position_id`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `users_username_unique` (`username`), ADD KEY `position_id` (`position_id`), ADD KEY `entitlement_id` (`entitlement_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -316,10 +342,15 @@ ALTER TABLE `users`
 ALTER TABLE `department`
 MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `entitlement`
+--
+ALTER TABLE `entitlement`
+MODIFY `entitlement_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `position`
 --
 ALTER TABLE `position`
-MODIFY `position_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `position_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `tbl_oas`
 --
@@ -329,7 +360,7 @@ MODIFY `tbl_oasid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- Constraints for dumped tables
 --

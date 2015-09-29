@@ -21,19 +21,19 @@
 		<input type="text" class="form-control" name="name" value="{{$user->emp_name}}" /><br/>
 		<label>Position:</label>
 		<select class="form-control" name="position">
-              <option id="QA Expert" value="QA Expert">QA Expert</option>
-              <option id="Administrator" value="Administrator">Administrator</option>
-              <option id="Web Developer" value="Web Developer">Web Developer</option>
+              @foreach($positions_all as $post)
+                <option id="{{$post->position_id}}" value="{{$post->position_id}}">{{$post->position_name}}</option>
+              @endforeach
         </select><br/>
         <label>Email:</label>
 		<input type="text" class="form-control" name="email" value="{{$user->email}}" /><br/>
 		<label>ID Number(<i>Username</i>):</label>
-		<input type="text" name="username" class="form-control" value="{{$user->username}}" />
+		<input type="number" name="username" class="form-control" value="{{$user->username}}" />
 		<br/>
-	<button type="submit" class="btn btn-primary">Save</button>
+	<button type="submit" class="btn btn-primary confirm">Save</button>
 	</form>
 
 	<script type="text/javascript">
-			document.getElementById('{{$user->emp_position}}').selected = "true";
+			document.getElementById('{{$user->position_id}}').selected = "true";
 	</script>
 @endsection

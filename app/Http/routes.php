@@ -47,6 +47,11 @@ Route::get('/changeSchedule', [
 	'uses' => 'PagesController@changeSchedule'
 ]);
 
+Route::post('/changeSchedule',[
+	'middleware' => 'auth',
+	'uses' => 'PagesController@postchangeSchedule'
+]);
+
 Route::get('/overtimeAuthSlip', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@overtimeAuthSlip'

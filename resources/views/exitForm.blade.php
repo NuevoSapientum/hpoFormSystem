@@ -20,9 +20,8 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <label>Date:</label>
-      <input type="date" name="dateCreated" class="form-control" value="<?php echo date('Y-m-d');?>"/>
-      <br/>
+      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
+      <hr/>
       <label>Department:</label>
       <select class="form-control" name="department">
           <option value="Human Resource">Human Resource</option>
@@ -52,9 +51,9 @@
       <br/>
       <label>HR:</label>
       <select class="form-control" name="HR">
-          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
-          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
-          <option value="Will Smith">Will Smith</option>
+          @foreach($HRs as $HR)
+            <option value="{{$HR->id}}">{{$HR->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>Company Representative:</label>
@@ -63,7 +62,7 @@
           <option value="Erwin Mark Añora">Erwin Mark Añora</option>
           <option value="Will Smith">Will Smith</option>
       </select>
-      <br/>
+      <hr/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 @endsection

@@ -6,6 +6,9 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
     rel="stylesheet">
+    <script type="text/javascript" src="<?php echo e(URL::asset('plugins/jQuery/jQuery-2.1.4.min.js')); ?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('plugins/craftpip/jquery-confirm.min.css')); ?>">
+    <script src="<?php echo e(URL::asset('plugins/craftpip/jquery-confirm.min.js')); ?>"></script>
 
     <style type="text/css">
         body{
@@ -66,12 +69,37 @@
                 <hr/>
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 
-                <input type="text" class="form-control" name="username" placeholder="ID Number"  value="<?php echo e(old('username')); ?>" autofocus/><br/>
+                <input type="number" class="form-control" name="username" placeholder="ID Number"  value="<?php echo e(old('username')); ?>" autofocus/><br/>
                 <input type="password" class="form-control" name="password" placeholder="Password" value="<?php echo e(old('password')); ?>"/><hr/>
                 <button type="submit" class="btn-login">Submit</button>
             </div>
         </form>
+        <!-- <button class="example-p-2">Try me</button> -->
     </div>
-
+    <script type="text/javascript">
+        // $('.example-p-2').on('click', function () {
+        //                         $.confirm({
+        //                             title: 'A critical action',
+        //                             content: 'You can queue confirms, you\'ll be asked again for a confirmation.',
+        //                             confirmButton: 'Proceed',
+        //                             confirmButtonClass: 'btn-info',
+        //                             icon: 'fa fa-question-circle',
+        //                             animation: 'scale',
+        //                             confirm: function () {
+        //                                 $.confirm({
+        //                                     title: 'A very critical action',
+        //                                     content: 'Are you sure you want to proceed?',
+        //                                     confirmButton: 'Hell, yes!',
+        //                                     icon: 'fa fa-warning',
+        //                                     confirmButtonClass: 'btn-warning',
+        //                                     animation: 'zoom',
+        //                                     confirm: function () {
+        //                                         alert('A very critical action triggered!');
+        //                                     }
+        //                                 });
+        //                             }
+        //                         });
+        //                     });
+    </script>
 </body>
 </html>
