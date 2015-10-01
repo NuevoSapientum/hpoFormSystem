@@ -43,16 +43,16 @@
       <textarea class="form-control" name="purpose"></textarea><br/>
       <label>Supervisor Signature:</label>
       <select class="form-control" name="supervisor">
-          <option value="Neil Patrick Labor">Neil Patrick Labor</option>
-          <option value="Earl Abram Pedida">Earl Abram Pedida</option>
-          <option value="Jayson Alanano">Jayson Alanano</option>
+          @foreach($Supervisors as $Supervisor)
+            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>Project Manager:</label>
       <select class="form-control" name="projectManager">
-          <option value="Jay Timbal">Jay Timbal</option>
-          <option value="Solis Roltaire">Solis Roltaire</option>
-          <option value="Jerrymae Noya">Jerrymae Noya</option>
+          @foreach($PMs as $PM)
+            <option value="{{$PM->id}}">{{$PM->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>HR:</label>
@@ -64,9 +64,9 @@
       <br/>
       <label>Company Representative:</label>
       <select class="form-control" name="companyRep">
-          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
-          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
-          <option value="Will Smith">Will Smith</option>
+          @foreach($CompanyReps as $CompanyRep)
+            <option value="{{$CompanyRep->id}}">{{$CompanyRep->emp_name}}</option>
+          @endforeach
       </select>
       <hr/>
       <button type="submit" class="btn btn-primary">Submit</button>

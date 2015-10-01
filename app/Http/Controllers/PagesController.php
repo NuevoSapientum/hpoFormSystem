@@ -73,11 +73,10 @@ class PagesController extends Controller
         $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
         // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
         $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
-        // $Supervisors = 
-        // $PMs =
-        // $CompanyRep =
-        // dd($department);
-        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department);
+        $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+        $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+        $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps);
     }
 
     public function postexitForm(Request $request){
@@ -111,9 +110,8 @@ class PagesController extends Controller
     {
         $id = Auth::user()->id;
         $dateUpdate = date("Y-m-d H:i:s");
-        $db = DB::insert('INSERT INTO `tbl_epform`(`user_id`, `dateCreated`, `dateFrom`, `dateTo`, `textPurpose`, `dateUpdated`) values(?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['dateFrom'], $data['dateTo'], $data['purpose'], $dateUpdate]);
+        $db = DB::insert('INSERT INTO `tbl_epform`(`user_id`, `dateCreated`, `dateFrom`, `dateTo`, `textPurpose`, `dateUpdated`, `department_id`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['dateFrom'], $data['dateTo'], $data['purpose'], $dateUpdate, $data['department'], $data['supervisor'], $data['projectManager'], $data['HR'], $data['companyRep']]);
     }
-
     /**
     *Display the Request for Leave of Absence Form Page
     *
@@ -151,7 +149,10 @@ class PagesController extends Controller
     protected function requestAdd(array $data)
     {
         $id = Auth::user()->id;
-        $db = DB::insert('INSERT INTO `tbl_leave`(`username`, `date_Created`, `reason`, `leave_type`) values(?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave']]);
+        $days_taken = Auth::user()->entitlement - $data['days_applied'];
+        Auth::user()->days_taken = $days_taken;
+        Auth::user()->save();
+        $db = DB::insert('INSERT INTO `tbl_leave`(`username`, `date_Created`, `reason`, `leave_type`, `days_applied`) values(?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave'], $data['days_applied']]);
     }
 
 
@@ -161,7 +162,13 @@ class PagesController extends Controller
     */
     public function changeSchedule(){
         $positions = $this->position();
-        return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions);
+        $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
+        // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+        $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+        $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+        $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+        return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps);
     }
 
     public function postchangeSchedule(Request $request){
@@ -271,15 +278,17 @@ class PagesController extends Controller
         $user = User::find($id);
 
         $this->updateAccount($user, $request->all());
-        
+
         return redirect('accounts');
     }
 
     protected function updateAccount($user, array $data){
         $user->username = $data['username'];
         $user->emp_name = $data['name'];
-        $user->emp_position = $data['position'];
+        $user->position_id = $data['position'];
         $user->email = $data['email'];
+        $user->permissioners = $data['permissioners'];
+        $user->entitlement = $data['entitlement'];
         $user->save();
     }
 

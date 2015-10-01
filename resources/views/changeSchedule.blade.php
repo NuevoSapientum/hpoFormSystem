@@ -12,9 +12,9 @@
       <input type="hidden" name="date" value="<?php echo date('Y-m-d');?>"/>
       <label>Department:</label>
       <select class="form-control" name="department">
-          <option value="Human Resource">Human Resource</option>
-          <option value="System Engine Optimization">System Engine Optimization</option>
-          <option value="Quality Assurance">Quality Assurance</option>
+        @foreach($department_user as $user_department)
+          <option value="{{$user_department->department_id}}">{{$user_department->department_name}}</option>
+        @endforeach
       </select>
       <hr/>
       <label><u>Date of Effectivity:</u></label><br/>
@@ -37,17 +37,17 @@
       <label><u>Approved by:</u></label>
       <br/>
       <label>Supervisor:</label>
-      <select class="form-control" name="SPandPM">
-          <option value="Solis Roltaire">Solis Roltaire</option>
-          <option value="Jay Timbal">Jay Timbal</option>
-          <option value="Jerrymae Noya">Jerrymae Noya</option>
+      <select class="form-control" name="supervisor">
+           @foreach($Supervisors as $Supervisor)
+            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>Project Manager:</label>
-      <select class="form-control" name="SPandPM">
-          <option value="Jay Timbal">Jay Timbal</option>
-          <option value="Solis Roltaire">Solis Roltaire</option>
-          <option value="Jerrymae Noya">Jerrymae Noya</option>
+      <select class="form-control" name="projectManager">
+          @foreach($PMs as $PM)
+            <option value="{{$PM->id}}">{{$PM->emp_name}}</option>
+          @endforeach
       </select>
       <hr/>
       <label><u>Noted by:</u></label>
@@ -60,10 +60,10 @@
       </select>
       <br/>
       <label>HR:</label>
-      <select class="form-control">
-          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
-          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
-          <option value="Will Smith">Will Smith</option>
+      <select class="form-control" name="HR">
+          @foreach($HRs as $HR)
+            <option value="{{$HR->id}}">{{$HR->emp_name}}</option>
+          @endforeach
       </select>
       <hr/>
       <button type="submit" class="btn btn-primary">Submit</button>

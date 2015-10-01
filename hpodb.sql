@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2015 at 04:14 PM
+-- Generation Time: Oct 01, 2015 at 05:16 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `tbl_chgschd` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_epform` (
-  `tbl_epid` int(11) NOT NULL,
+`tbl_epid` int(11) NOT NULL,
   `dateCreated` date NOT NULL,
   `dateFrom` date NOT NULL,
   `dateTo` date DEFAULT NULL,
@@ -178,20 +178,18 @@ CREATE TABLE IF NOT EXISTS `tbl_epform` (
   `permission_2` int(11) NOT NULL,
   `permission_3` int(11) NOT NULL,
   `permission_4` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
   `form_type` int(11) NOT NULL,
   `dateUpdated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_epform`
 --
 
 INSERT INTO `tbl_epform` (`tbl_epid`, `dateCreated`, `dateFrom`, `dateTo`, `department_id`, `textPurpose`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `form_type`, `dateUpdated`, `user_id`) VALUES
-(13, '2015-09-24', '2015-09-25', '2015-09-26', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:39:29', 2),
-(14, '2015-09-24', '2015-09-24', '2015-09-25', 0, 'asd', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:42:58', 2),
-(15, '2015-09-24', '2015-09-24', '2015-09-26', 0, 'asdas', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-09-23 23:44:00', 2);
+(1, '2015-10-01', '2015-09-24', '2015-09-30', 1, 'QWERTY', 14, 15, 14, 12, 0, 0, 0, 0, 1, 0, '2015-10-01 11:03:57', 11);
 
 -- --------------------------------------------------------
 
@@ -213,8 +211,8 @@ CREATE TABLE IF NOT EXISTS `tbl_form` (
 --
 
 CREATE TABLE IF NOT EXISTS `tbl_leave` (
-  `tbl_leaveid` int(11) NOT NULL,
-  `username` int(11) NOT NULL,
+`tbl_leaveid` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `date_created` date NOT NULL,
   `leave_type` int(11) NOT NULL,
   `reason` text NOT NULL,
@@ -222,20 +220,16 @@ CREATE TABLE IF NOT EXISTS `tbl_leave` (
   `permission_2` int(11) NOT NULL,
   `permission_id1` int(11) NOT NULL,
   `permission_id2` int(11) NOT NULL,
-  `entitlement` int(11) NOT NULL,
-  `date_taken` int(11) NOT NULL,
-  `date_applied` int(11) NOT NULL,
+  `days_applied` int(11) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_leave`
 --
 
-INSERT INTO `tbl_leave` (`tbl_leaveid`, `username`, `date_created`, `leave_type`, `reason`, `permission_1`, `permission_2`, `permission_id1`, `permission_id2`, `entitlement`, `date_taken`, `date_applied`, `status`) VALUES
-(2, 0, '2015-09-24', 0, '123123', 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 2, '2015-09-24', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 2, '2015-09-24', 0, 'asdasd', 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `tbl_leave` (`tbl_leaveid`, `user_id`, `date_created`, `leave_type`, `reason`, `permission_1`, `permission_2`, `permission_id1`, `permission_id2`, `days_applied`, `status`) VALUES
+(8, 11, '2015-10-01', 2, 'QWERTY', 0, 0, 0, 0, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -273,7 +267,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `username` int(255) NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `entitlement_id` int(11) NOT NULL,
+  `permissioners` int(11) NOT NULL DEFAULT '0',
+  `entitlement` int(11) NOT NULL,
+  `days_taken` int(11) NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -283,14 +279,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `emp_name`, `position_id`, `email`, `username`, `password`, `entitlement_id`, `remember_token`, `created_at`, `updated_at`) VALUES
-(9, 'Admin', 1, 'admin@example', 10001, '$2a$10$iQSZ/1atpmgn/jyFF0GsceILd4n8FGdi2P2YIuMwyULRo8BRvp7jG', 0, 'iFEtA2okns2ryIiYI2Bd7miLgbd5iWib9OjJJzzNLb7Ui3KmC8Dbgit7W8Ry', '0000-00-00 00:00:00', '2015-09-25 22:38:50'),
-(11, 'Erwin Mark Añora', 1, 'bananasapientum@gmail.com', 1200289, '$2y$10$kzUxbLaNjmB39Q4El0kgzedUTEtBKwQ7UjcE3VFK8limz.VvUYe.W', 0, 'wH7rfkH8LfhEjz1bvaGwQAZ24NFadvEejUpVzhqKCa1t7U6MNhuci0SMrv5I', '2015-09-25 22:38:39', '2015-09-27 11:44:51'),
-(12, 'Test Dummy', 2, '12@gmail.com', 1200300, '$2y$10$99GzB5BaQTtwAfkTl9zb2Oips/G77zlto1t8JgMJX2WQAony6Qpr6', 0, '1SIsLwx1oSChlq7fBtXkEqDaHsMPjSmNFZwt4WkpJTKIoTESAbhg1iSUW5KD', '2015-09-27 08:23:37', '2015-09-27 11:45:28'),
-(14, 'Ms. Secretary', 5, '1@gmail.com', 1200301, '$2y$10$5mZ74.eW5wvJbakHMVs5a.MIX73SlWkHpXQ32jDxMys0ixjYuuuQO', 0, NULL, '2015-09-27 14:25:32', '2015-09-27 14:25:32'),
-(15, 'Mr. Trainer', 7, '2@gmail.com', 1200302, '$2y$10$g1GcfpzOapFh9/i/k7vpo.ns/YeqoAvgFd0B8QLM1oa6oafUvQjAW', 0, NULL, '2015-09-27 14:28:51', '2015-09-27 14:28:51'),
-(16, 'Ms. Secretary 2', 5, '3@gmail.com', 1200303, '$2y$10$8Pk5kLWkwTaS13MEhVOQiepvnRM7doBvLX8CzVosJk9peLzPsa5vq', 0, NULL, '2015-09-27 14:29:33', '2015-09-27 14:29:33'),
-(17, 'Mr. Developer Number 1', 3, '6@gmail.com', 1200305, '$2y$10$G0z5MPWBDex02M.PIC.MO.yuubNf6eJeESlfw41CMmFbtV6GV2wDG', 0, NULL, '2015-09-27 15:00:33', '2015-09-27 15:00:33');
+INSERT INTO `users` (`id`, `emp_name`, `position_id`, `email`, `username`, `password`, `permissioners`, `entitlement`, `days_taken`, `remember_token`, `created_at`, `updated_at`) VALUES
+(9, 'Admin', 1, 'admin@example.com', 10001, '$2a$10$iQSZ/1atpmgn/jyFF0GsceILd4n8FGdi2P2YIuMwyULRo8BRvp7jG', 0, 0, 0, 'iFEtA2okns2ryIiYI2Bd7miLgbd5iWib9OjJJzzNLb7Ui3KmC8Dbgit7W8Ry', '0000-00-00 00:00:00', '2015-10-01 10:09:39'),
+(11, 'Erwin Mark Añora', 1, 'bananasapientum@gmail.com', 1200289, '$2y$10$kzUxbLaNjmB39Q4El0kgzedUTEtBKwQ7UjcE3VFK8limz.VvUYe.W', 0, 7, 3, 'wH7rfkH8LfhEjz1bvaGwQAZ24NFadvEejUpVzhqKCa1t7U6MNhuci0SMrv5I', '2015-09-25 22:38:39', '2015-10-01 20:27:30'),
+(12, 'Test Dummy', 2, '12@gmail.com', 1200300, '$2y$10$99GzB5BaQTtwAfkTl9zb2Oips/G77zlto1t8JgMJX2WQAony6Qpr6', 3, 7, 0, '1SIsLwx1oSChlq7fBtXkEqDaHsMPjSmNFZwt4WkpJTKIoTESAbhg1iSUW5KD', '2015-09-27 08:23:37', '2015-10-01 19:25:53'),
+(14, 'Ms. Secretary', 5, '1@gmail.com', 1200301, '$2y$10$5mZ74.eW5wvJbakHMVs5a.MIX73SlWkHpXQ32jDxMys0ixjYuuuQO', 1, 0, 0, NULL, '2015-09-27 14:25:32', '2015-10-01 10:24:28'),
+(15, 'Mr. Trainer', 7, '2@gmail.com', 1200302, '$2y$10$g1GcfpzOapFh9/i/k7vpo.ns/YeqoAvgFd0B8QLM1oa6oafUvQjAW', 2, 0, 0, NULL, '2015-09-27 14:28:51', '2015-10-01 10:25:41'),
+(16, 'Ms. Secretary 2', 5, '3@gmail.com', 1200303, '$2y$10$8Pk5kLWkwTaS13MEhVOQiepvnRM7doBvLX8CzVosJk9peLzPsa5vq', 1, 0, 0, NULL, '2015-09-27 14:29:33', '2015-10-01 10:25:51'),
+(17, 'Mr. Developer Number 1', 3, '6@gmail.com', 1200305, '$2y$10$G0z5MPWBDex02M.PIC.MO.yuubNf6eJeESlfw41CMmFbtV6GV2wDG', 3, 0, 0, NULL, '2015-09-27 15:00:33', '2015-10-01 10:26:00');
 
 --
 -- Indexes for dumped tables
@@ -321,6 +317,24 @@ ALTER TABLE `position`
  ADD PRIMARY KEY (`position_id`), ADD KEY `department_id` (`department_id`);
 
 --
+-- Indexes for table `tbl_epform`
+--
+ALTER TABLE `tbl_epform`
+ ADD PRIMARY KEY (`tbl_epid`), ADD UNIQUE KEY `tbl_epid` (`tbl_epid`);
+
+--
+-- Indexes for table `tbl_form`
+--
+ALTER TABLE `tbl_form`
+ ADD PRIMARY KEY (`form_id`), ADD UNIQUE KEY `form_type` (`form_type`);
+
+--
+-- Indexes for table `tbl_leave`
+--
+ALTER TABLE `tbl_leave`
+ ADD PRIMARY KEY (`tbl_leaveid`);
+
+--
 -- Indexes for table `tbl_oas`
 --
 ALTER TABLE `tbl_oas`
@@ -330,7 +344,7 @@ ALTER TABLE `tbl_oas`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `users_username_unique` (`username`), ADD KEY `position_id` (`position_id`), ADD KEY `entitlement_id` (`entitlement_id`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `users_username_unique` (`username`), ADD KEY `position_id` (`position_id`), ADD KEY `entitlement_id` (`entitlement`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -351,6 +365,16 @@ MODIFY `entitlement_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `position`
 MODIFY `position_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `tbl_epform`
+--
+ALTER TABLE `tbl_epform`
+MODIFY `tbl_epid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `tbl_leave`
+--
+ALTER TABLE `tbl_leave`
+MODIFY `tbl_leaveid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `tbl_oas`
 --
