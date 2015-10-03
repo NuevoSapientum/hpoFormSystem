@@ -46,10 +46,10 @@
         </ul>
         </div>
         @endif
-        <span class="label label-warning">Reminder: Only Admin can add a user.</span>
+        <span class="label label-warning">Reminder: Only Admin can add user.</span>
           <h1>Create an Account</h1>
           <form action="{{ URL::to('/auth/register') }}" method="post">
-            <div class="alert alert-info" role="alert">Info: The ID Number will be their username.</div>
+            <div class="alert alert-info" role="alert">Info: The ID Number is the username.</div>
             
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
             <label>ID Number:</label>

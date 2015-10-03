@@ -9,7 +9,18 @@
 @section('content')
     <form method="POST" action="{{URL::to('/changeSchedule')}}">
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="date" value="<?php echo date('Y-m-d');?>"/>
+      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
+      @if (count($errors) > 0)
+      <div class="alert alert-danger">
+      <strong>Whoops! </strong> There were some problems with your input. <br> <br>
+      <ul>
+    
+              @foreach ($errors->all() as $error)
+           <li>{{ $error }} </li>
+          @endforeach
+      </ul>
+      </div>
+      @endif
       <label>Department:</label>
       <select class="form-control" name="department">
         @foreach($department_user as $user_department)
@@ -19,10 +30,10 @@
       <hr/>
       <label><u>Date of Effectivity:</u></label><br/>
       <label>From:</label>
-      <input type="date" name="dateFromofEffectivity" class="form-control"/>
+      <input type="date" name="dateFromEffectivity" class="form-control"/>
       <br/>
       <label>To:</label>
-      <input type="date" name="dateToofEffectivity" class="form-control"/>
+      <input type="date" name="dateToEffectivity" class="form-control"/>
       <hr/>
       <label><u>Shift Schedule:</u></label><br/>
       <label>From:</label>
@@ -53,10 +64,10 @@
       <label><u>Noted by:</u></label>
       <br/>
       <label>Operation:</label>
-      <select class="form-control">
-          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
-          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
-          <option value="Will Smith">Will Smith</option>
+      <select class="form-control" name="permissioner">
+          @foreach($permissioners as $permissioner)
+            <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>HR:</label>

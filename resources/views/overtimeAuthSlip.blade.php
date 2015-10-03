@@ -20,14 +20,13 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <label>Date:</label>
-      <input type="date" name="dateCreated" class="form-control" value="<?php echo date('Y-m-d');?>"/>
+      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
       <br/>
       <label>Department:</label>
       <select class="form-control" name="department">
-          <option value="Human Resource">Human Resource</option>
-          <option value="System Engine Optimization">System Engine Optimization</option>
-          <option value="Quality Assurance">Quality Assurance</option>
+          @foreach($department_user as $user_department)
+          <option value="{{$user_department->department_id}}">{{$user_department->department_name}}</option>
+        @endforeach
       </select>
       <br/>
       <label>Client:</label>

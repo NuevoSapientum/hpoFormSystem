@@ -37,16 +37,16 @@
       <br/>
       <label>Recommending Approval:</label>
       <select class="form-control" name="recommendApproval">
-          <option value="Jay Timbal">Jay Timbal</option>
-          <option value="Solis Roltaire">Solis Roltaire</option>
-          <option value="Jerrymae Noya">Jerrymae Noya</option>
+          @foreach($permissioners as $permissioner)
+            <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @endforeach
       </select>
       <br/>
       <label>Approved by:</label>
       <select class="form-control" name="approvedBy">
-          <option value="Rodrigo Duterte">Rodrigo Duterte</option>
-          <option value="Erwin Mark Añora">Erwin Mark Añora</option>
-          <option value="Will Smith">Will Smith</option>
+          @foreach($permissioners as $permissioner)
+            <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @endforeach
       </select><br/>
       <table>
         <!-- Inclusive Dates of Leave -->
@@ -58,16 +58,21 @@
       <label>Days Applied For:</label> 
       <br/>
       <select class="form-control" name="days_applied">
-        @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
-          @if($i == 1)
-            <option value="{{$i}}">{{$i}} Day</option>
-          @else
-            <option value="{{$i}}">{{$i}} Days</option>
-          @endif
-        @endfor
+        {{$balance = Auth::user()->entitlement - Auth::user()->days_taken}}
+        @if($balance == 0)
+          <option value="0">No days left</option>
+        @else
+          @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
+            @if($i == 1)
+              <option value="{{$i}}">{{$i}} Day</option>
+            @else
+              <option value="{{$i}}">{{$i}} Days</option>
+            @endif
+          @endfor
+        @endif
       </select><br/>
       <label>Balance:</label> 
-      <input type="text" class="form-control" disabled value="{{$balance = Auth::user()->entitlement - Auth::user()->days_taken}}"/><br/>
+      <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 @endsection

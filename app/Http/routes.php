@@ -22,6 +22,11 @@ Route::get('/history', [
 	'uses' => 'PagesController@history'
 ]);
 
+Route::get('/inbox',[
+	'middleware' => 'auth',
+	'uses' => 'PagesController@inbox'
+]);
+
 Route::get('/exitForm', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@exitForm'

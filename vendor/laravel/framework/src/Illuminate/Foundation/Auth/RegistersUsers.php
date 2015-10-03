@@ -39,7 +39,14 @@ trait RegistersUsers
         }
 
         $this->create($request->all());
-
+        $image = "blank";
+        $name = "blank";
+        $users = DB::select("SELECT id FROM users ORDER BY id DESC LIMIT 1");
+        $id;
+        foreach ($users as $user) {
+            $id = $user->id;
+        }
+        DB::insert("INSERT into `profile_image`(`name`, `image`, `id`) values(?, ?, ?)", [$name, $image, $id]);
         return redirect($this->redirectPath());
     }
 }

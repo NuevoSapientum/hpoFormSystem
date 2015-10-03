@@ -53,6 +53,9 @@
 		<label>Entitlement:</label>
 		<input type="number" name="entitlement" value="{{$user->entitlement}}" class="form-control" />
 		<br/>
+		<label>Days Taken:</label>
+		<input type="number" name="days_taken" value="{{$user->days_taken}}" class="form-control" />
+		<br/>
 	<button type="submit" class="btn btn-primary confirm">Save</button>
 	</form>
 

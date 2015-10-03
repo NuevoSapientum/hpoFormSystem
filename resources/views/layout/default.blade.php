@@ -26,17 +26,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect.
     -->
     <script src="{{URL::asset('plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
-    <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/craftpip/jquery-confirm.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/sweet/sweetalert.css')}}">
 
+    <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
+    <script src="{{URL::asset('js/app.js')}}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
   </head>
   <!--
   BODY TAG OPTIONS:
@@ -109,14 +109,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Menu Toggle Button -->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
-                  <img src="{{URL::asset('img/user.png')}}" class="user-image" alt="User Image">
+                  @while($row = mysqli_fetch_array($profileImage))
+                    @if($row[2] == "blank")
+                    <img src="{{URL::asset('img/user.png')}}" class="user-image" alt="User Image">
+                    @else
+                      <img class="user-image" src="data:image;base64, {{$row[3]}} " alt="User Image">
+                    @endif
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
                   <span class="hidden-xs">{{ Auth::user()->emp_name }}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
+                    @if($row[2] == "blank")
                     <img src="{{URL::asset('img/user.png')}}" class="img-circle" alt="User Image">
+                    @else
+                      <img class="img-circle" src="data:image;base64, {{$row[3]}} " alt="User Image">
+                    @endif
+                     
+                    
                     <p>
                       {{ Auth::user()->emp_name }} - @foreach($positions as $position)
                                                       {{ $position->position_name }}
@@ -127,7 +138,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <!-- Menu Body -->
                   <li class="user-body">
                     <div class="col-xs-4 text-center">
-                      <a href="#">Inbox</a>
+                      <a href="{{URL::to('/inbox')}}">Inbox</a>
                     </div>
                     <div class="col-xs-4 text-center">
                       <a href="#">Forms</a>
@@ -172,7 +183,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
+              @if($row[2] == "blank")
               <img src="{{URL::asset('img/user.png')}}" class="img-circle" alt="User Image">
+              @else
+                <img class="img-circle" src="data:image;base64, {{$row[3]}} " alt="User Image">
+              @endif
+              @endwhile
             </div>
             <div class="pull-left info">
               <p>{{ Auth::user()->emp_name }}</p>
@@ -324,7 +340,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{{URL::asset('bootstrap/js/bootstrap-multiselect.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="{{URL::asset('plugins/sweetalert/sweetalert.min.js')}}"></script>
     <script>
     function goBack() {
             window.history.back();

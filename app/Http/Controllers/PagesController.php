@@ -7,6 +7,7 @@ use DB;
 use Validator;
 use App\User;
 use Auth;
+use Input;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,26 +26,21 @@ class PagesController extends Controller
         return view('auth.login');
     }
 
-    public function get_positions(){
+    protected function get_positions(){
         return DB::select("select * FROM position");
     }
 
-    public function position(){
+    protected function position(){
         // $positions = DB::select('select position.position_name FROM position LEFT JOIN users ON :user_id = position.position_id', ['user_id' => Auth::user()->position_id]);
         $positions = DB::select('select position_name FROM position where :user_id = position_id', ['user_id' => Auth::user()->position_id]);
         return $positions; 
     }
 
-    // /**
-    // *Display the Create Account page
-    // *
-    // * 
-    // * 
-    // */
-    // public function createAccount(){
-    //     $positions = DB::select("select * FROM position");
-    //     // return view('auth.register')->with('title', 'Create Account')->with('positions_all', $positions);
-    // }
+    protected function getImage(){
+        $con=mysqli_connect("localhost","root","password","hpodb");
+        $qry = "select * from profile_image where id = '".Auth::user()->id."'";
+        return $result = mysqli_query($con, $qry);
+    }
 
     /**
     *Display the Home Page
@@ -52,7 +48,9 @@ class PagesController extends Controller
     */
     public function dashboard(Request $request){
         $positions = $this->position();
-        return view('dashboard')->with('title', 'Home')->with('positions', $positions);
+        $profileImage = $this->getImage();
+
+        return view('dashboard')->with('title', 'Home')->with('positions', $positions)->with('profileImage', $profileImage);
     }
 
     /**
@@ -60,8 +58,17 @@ class PagesController extends Controller
     *
     */
     public function history(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
-        return view('history')->with('title', 'History')->with('positions', $positions);
+        return view('history')->with('title', 'History')->with('positions', $positions)->with('profileImage', $profileImage);
+    }
+
+    public function inbox(){
+        $profileImage = $this->getImage();
+        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id", ['user_id' => Auth::user()->id]);
+        $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        $positions = $this->position();
+        return view('user.inbox')->with('title', 'Inbox')->with('profileImage', $profileImage)->with('positions', $positions)->with('exitPass', $exitPass)->with('users', $users);
     }
 
     /**
@@ -69,6 +76,7 @@ class PagesController extends Controller
     *
     */
     public function exitForm(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
         $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
         // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
@@ -76,11 +84,20 @@ class PagesController extends Controller
         $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
         $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
         $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
-        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps);
+        return view('exitForm')->with('title', 'Exit Pass')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps)->with('profileImage', $profileImage);
     }
 
     public function postexitForm(Request $request){
-        $validator = $this->exitValidator($request->all());
+        $rules = array('dateCreated' => 'required',
+                       'department' => 'required',
+                       'dateFrom' => 'required',
+                       'dateTo' => 'required',
+                       'purpose' => 'required|max:255',
+                       'supervisor' => 'required',
+                       'projectManager' => 'required',
+                       'HR' => 'required',
+                       'companyRep' => 'required');
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $this->throwValidationException(
@@ -90,20 +107,6 @@ class PagesController extends Controller
 
         $this->exitAdd($request->all());
         return redirect('/exitForm');
-    }
-    
-    protected function exitValidator(array $data){
-        return Validator::make($data, [
-            'dateCreated' => 'required',
-            'department' => 'required',
-            'dateFrom' => 'required',
-            'dateTo' => 'required',
-            'purpose' => 'required|max:255',
-            'supervisor' => 'required',
-            'projectManager' => 'required',
-            'HR' => 'required',
-            'companyRep' => 'required',
-        ]);
     }
 
     protected function exitAdd(array $data)
@@ -117,12 +120,19 @@ class PagesController extends Controller
     *
     */
     public function requestForLeave(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
-        return view('requestForLeave')->with('title', 'Request for Leave of Absence')->with('positions', $positions);
+        $permissioners = DB::select("select * FROM users WHERE permissioners");
+        return view('requestForLeave')->with('title', 'Request for Leave of Absence')->with('positions', $positions)->with('permissioners', $permissioners)->with('profileImage', $profileImage);
     }
 
     public function postrequestForLeave(Request $request){
-        $validator = $this->requestValidator($request->all());
+        $rules = array('dateCreated' => 'required',
+                       'typeofLeave' => 'required',
+                       'reason' => 'required',
+                       'recommendApproval' => 'required',
+                       'approvedBy' => 'required');
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $this->throwValidationException(
@@ -134,25 +144,16 @@ class PagesController extends Controller
         return redirect('requestForLeave');
     }
 
-
-    protected function requestValidator(array $data)
-    {
-        return Validator::make($data, [
-            'dateCreated' => 'required',
-            'typeofLeave' => 'required',
-            'reason' => 'required',
-            'recommendApproval' => 'required',
-            'approvedBy' => 'required',
-        ]);
-    }
-
     protected function requestAdd(array $data)
     {
         $id = Auth::user()->id;
-        $days_taken = Auth::user()->entitlement - $data['days_applied'];
-        Auth::user()->days_taken = $days_taken;
-        Auth::user()->save();
-        $db = DB::insert('INSERT INTO `tbl_leave`(`username`, `date_Created`, `reason`, `leave_type`, `days_applied`) values(?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave'], $data['days_applied']]);
+        
+        if($data['days_applied'] != 0){
+            $days_taken = Auth::user()->days_taken + $data['days_applied'];
+            Auth::user()->days_taken = $days_taken;
+            Auth::user()->save();
+            $db = DB::insert('INSERT INTO `tbl_leave`(`user_id`, `date_Created`, `reason`, `leave_type`, `days_applied`, `permission_id1`, `permission_id2`) values(?, ?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave'], $data['days_applied'], $data['approvedBy'], $data['recommendApproval']]);
+        }
     }
 
 
@@ -161,18 +162,44 @@ class PagesController extends Controller
     *
     */
     public function changeSchedule(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
         $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
         // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        $permissioners = DB::select("SELECT * FROM users WHERE permissioners");
         $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
         $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
         $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
         $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
-        return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps);
+        return view('changeSchedule')->with('title', 'Change Schedule')->with('positions', $positions)->with('HRs', $HRs)->with('department_user', $department)->with('Supervisors', $Supervisors)->with('PMs', $PMs)->with('CompanyReps', $CompanyReps)->with('permissioners', $permissioners)->with('profileImage', $profileImage);
     }
 
     public function postchangeSchedule(Request $request){
-        dd($request->all());
+        $rules = array('dateCreated' => 'required',
+                       'department' => 'required',
+                       'dateFromEffectivity' => 'required',
+                       'dateToEffectivity' => 'required',
+                       'dateFromShift' => 'required',
+                       'dateToShift' => 'required',
+                       'reason' => 'required',
+                       'supervisor' => 'required',
+                       'projectManager' => 'required',
+                       'HR' => 'required');
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        // dd($request->all());
+        $this->changeScheduleAdd($request->all());
+        return redirect('changeSchedule');
+    }
+
+    public function changeScheduleAdd(array $data){
+        $id = Auth::user()->id;
+        $db = DB::insert('INSERT INTO `tbl_chgschd`(`user_id`, `date_Created`, `department`, `date_from`, `date_to`, `shift_from`, `shift_to`, `reason`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['department'], $data['dateFromEffectivity'], $data['dateToEffectivity'], $data['dateFromShift'], $data['dateToShift'], $data['reason'], $data['supervisor'], $data['projectManager'], $data['permissioner'], $data['HR']]);
     }
 
     /**
@@ -180,12 +207,19 @@ class PagesController extends Controller
     *
     */
     public function overtimeAuthSlip(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
-        return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip')->with('positions', $positions);
+        $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
+        return view('overtimeAuthSlip')->with('title', 'Overtime Authorization Slip')->with('positions', $positions)->with('department_user', $department)->with('profileImage', $profileImage);
     }
 
     public function postovertimeAuthSlip(Request $request){
-        $validator = $this->overtimeAuthSlipValidator($request->all());
+        $rules = array('dateCreated' => 'required',
+                       'department' => 'required',
+                       'client' => 'required',
+                       'reason' => 'required');
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $this->throwValidationException(
@@ -197,16 +231,6 @@ class PagesController extends Controller
         return redirect('overtimeAuthSlip');
     }
 
-    protected function overtimeAuthSlipValidator(array $data)
-    {
-        return Validator::make($data, [
-            'dateCreated' => 'required',
-            'department' => 'required',
-            'client' => 'required',
-            'reason' => 'required',
-        ]);
-    }
-
     protected function overtimeAuthSlipAdd(array $data)
     {
         $id = Auth::user()->id;
@@ -214,23 +238,53 @@ class PagesController extends Controller
     }
 
     public function getProfile(){
+        $profileImage = $this->getImage();
         $positions = $this->position();
         $positions_all = $this->get_positions();
-        return view('auth.editProfile')->with('title', 'Edit Profile')->with('positions', $positions)->with('positions_all', $positions_all);
+        return view('auth.editProfile')->with('title', 'Edit Profile')->with('positions', $positions)->with('positions_all', $positions_all)->with('profileImage', $profileImage);
     }
 
     public function postProfile(Request $request){
-        $validator = $this->validator($request->all());
+        $file = array('image' => Input::file('image'));
+        $rules = array('name' => 'required|max:255',
+                       'position' => 'required',
+                       'email' => 'required|email|max:255');
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $this->throwValidationException(
                 $request, $validator
             );
         }
-        
-        $this->edit($request->all());
+        if($_FILES['image']['error'] != UPLOAD_ERR_OK){
+            die("Upload failed with error code " . $_FILES['image']['error']);
+        }
+
+        $info = getimagesize($_FILES['image']['tmp_name']);
+        if($info === FALSE){
+            // die("<script>alert('Unable to determine image type of upload file');</script>");
+        }
+
+        if(($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)){
+            // die("Not a gif/jpeg/png");
+        }else{
+            $image = addslashes($_FILES['image']['tmp_name']);
+            $name = addslashes($_FILES['image']['name']);
+            $image = file_get_contents($image);
+            $image = base64_encode($image);
+            $this->updateImage($name, $image);
+            $this->edit($request->all());
+        }
         return redirect('/');
     }
+
+    public function updateImage($name, $image){
+        DB::update("UPDATE `profile_image` SET `name` = :name, `image` = :image WHERE `id` = :user", ['name' => $name, 'image' => $image, 'user' => Auth::user()->id]);
+    }
+
+    // public function saveImage($name, $image){
+    //     DB::insert("INSERT into `profile_image`(`name`, `image`, `id`) values(?, ?, ?)", [$name, $image, Auth::user()->id]);
+    // }
 
     protected function edit(array $data)
     {
@@ -240,31 +294,24 @@ class PagesController extends Controller
         return Auth::user()->save();
     }
 
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'position' => 'required',
-            'email' => 'required|email|max:255',
-        ]);
-    }
-
     /*Managing Accounts*/
 
     public function accounts(){
+        $profileImage = $this->getImage();
         // $users = DB::table('users')->select('username', 'emp_name', 'emp_position', 'email')->groupBy('username')->get();
         $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
         $positions = $this->position();
-        return view('auth.accounts')->with('title', 'Manage Accounts')->with('users', $users)->with('positions', $positions);
+        return view('auth.accounts')->with('title', 'Manage Accounts')->with('users', $users)->with('positions', $positions)->with('profileImage', $profileImage);
     }
 
     /*Update the basic informations*/
 
     public function show($id){
+        $profileImage = $this->getImage();
         $user = User::find($id);
         $positions = $this->position();
         $positions_all = $this->get_positions();
-        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions)->with('positions_all', $positions_all);
+        return view('auth.editAccount')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions)->with('positions_all', $positions_all)->with('profileImage', $profileImage);
     }
 
     public function postShow($id, Request $request){
@@ -289,15 +336,17 @@ class PagesController extends Controller
         $user->email = $data['email'];
         $user->permissioners = $data['permissioners'];
         $user->entitlement = $data['entitlement'];
+        $user->days_taken = $data['days_taken'];
         $user->save();
     }
 
     /*Reset Password*/
 
     public function resetPassword($id){
+        $profileImage = $this->getImage();
         $user = User::find($id);
         $positions = $this->position();
-        return view('auth.resetPassword')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions);
+        return view('auth.resetPassword')->with('title', 'Edit Profile')->with('user', $user)->with('positions', $positions)->with('profileImage', $profileImage);
     }
 
     public function postResetPassword($id, Request $request){
