@@ -27,6 +27,31 @@ Route::get('/inbox',[
 	'uses' => 'PagesController@inbox'
 ]);
 
+Route::get('inbox/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@editInbox'
+]);
+
+Route::post('inbox/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@postInbox'
+]);
+
+Route::get('inbox/delete/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@deleteInbox'
+]);
+
+Route::get('approval',[
+	'middleware' => 'auth',
+	'uses' => 'PagesController@approval'
+]);
+
+Route::get('approval/view/{type}/{id}',[
+	'middleware' => 'auth',
+	'uses' => 'PagesController@viewApproval'
+]);
+
 Route::get('/exitForm', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@exitForm'
@@ -91,9 +116,9 @@ Route::post('auth/register', [
 ]);
 
 // Controller for password
-Route::controllers([
-   'password' => 'Auth\PasswordController',
-]);
+// Route::controllers([
+//    'password' => 'Auth\PasswordController',
+// ]);
 
 /*Routes for editing a profile of the user*/
 Route::get('/editProfile',[

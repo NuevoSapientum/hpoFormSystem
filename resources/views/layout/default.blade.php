@@ -138,13 +138,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <!-- Menu Body -->
                   <li class="user-body">
                     <div class="col-xs-4 text-center">
-                      <a href="{{URL::to('/inbox')}}">Inbox</a>
+                      <a href="{{URL::to('/inbox')}}">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
                     </div>
-                    <div class="col-xs-4 text-center">
+                    <div class="col-xs-3 text-center">
                       <a href="#">Forms</a>
                     </div>
                     <div class="col-xs-4 text-center">
-                      <a href="#">Approvals</a>
+                      <a href="{{URL::to('/approval')}}">Approvals&nbsp;<span class="label label-default">{{$approvalNotif}}</span></a>
                     </div>
                   </li>
                   @if(Auth::user()->position_id == 1)
