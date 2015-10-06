@@ -25,7 +25,7 @@
 	    <label>Purpose:</label>
 	    <textarea class="form-control" id="textArea" name="textPurpose"></textarea><br/>
 	    <label>Supervisor Signature:</label>
-	      <select class="form-control" name="supervisor">
+	      <select class="form-control" id="supervisor" name="supervisor">
 	          @foreach($Supervisors as $Supervisor)
 	          	@if($Supervisor === $content->permission_id1)
 		          	<option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
@@ -47,7 +47,7 @@
 	      </select>
 	      <br/>
 	      <label>HR:</label>
-	      <select class="form-control" name="HR">
+	      <select class="form-control" id="HR" name="HR">
 	      	@foreach($HRs as $HR)
 	      		@if($HR->id === $content->permission_id3)
 	      			<option selected="true" value="{{$HR->id}}">{{$HR->emp_name}}</option>
@@ -58,7 +58,7 @@
 	      </select>
 	      <br/>
 	      <label>Company Representative:</label>
-	      <select class="form-control" name="companyRep">
+	      <select class="form-control" id="companyRep" name="companyRep">
 	          @foreach($CompanyReps as $CompanyRep)
 	          	@if($CompanyRep->id === $content->permission_id4)
 	          		<option selected="true" value="{{$CompanyRep->id}}">{{$CompanyRep->emp_name}}</option>
@@ -72,6 +72,16 @@
 	</form>
 	<script type="text/javascript">
 			document.getElementById('textArea').value = "{{$content->textPurpose}}";
+			if({{$content->status}} === 1){
+				// getElementsByName('dateFrom').disabled = "true";
+				document.getElementById('fromDate').disabled = true;
+				document.getElementById('toDate').disabled = true;
+				document.getElementById('textArea').disabled = true;
+				document.getElementById('supervisor').disabled = true;
+				document.getElementById('projectManager').disabled = true;
+				document.getElementById('HR').disabled = true;
+				document.getElementById('companyRep').disabled = true;
+			}
 	</script>
 	@endforeach
 @endsection

@@ -35,15 +35,15 @@
     </thead>
     <tbody>
       @foreach($exitPass as $exit)
-        @if($exit->status == 0)
+        @if($exit->status == 2)
         @else
         <tr>
         <td>{{$exit->dateCreated}}</td>
         <td>{{$exit->dateUpdated}}</td>
         <td>Exit Pass</td>
-        @if($exit->status == 1)
+        @if($exit->status == 0)
           <td>Pending</td>
-        @elseif($exit->status == 2)
+        @elseif($exit->status == 1)
           <td>Approved</td>
         @endif
         <td>
@@ -54,15 +54,15 @@
         @endif
       @endforeach
       @foreach($leaveForm as $leave)
-        @if($leave->status == 0)
+        @if($leave->status == 2)
         @else
         <tr>
         <td>{{$leave->date_created}}</td>
         <td>{{$leave->dateUpdated}}</td>
         <td>Request for Leave of Absence</td>
-        @if($leave->status == 1)
+        @if($leave->status == 0)
           <td>Pending</td>
-        @elseif($leave->status == 2)
+        @elseif($leave->status == 1)
           <td>Approved</td>
         @else
           <td>Closed</td>
@@ -75,15 +75,15 @@
         @endif
       @endforeach
       @foreach($changeSchedule as $change)
-        @if($change->status == 0)
+        @if($change->status == 2)
         @else
         <tr>
         <td>{{$change->date_created}}</td>
         <td>{{$change->dateUpdated}}</td>
         <td>Change Schedule</td>
-        @if($change->status == 1)
+        @if($change->status == 0)
           <td>Pending</td>
-        @elseif($change->status == 2)
+        @elseif($change->status == 1)
           <td>Approved</td>
         @endif
         <td>
@@ -94,18 +94,16 @@
         @endif
       @endforeach
       @foreach($oas as $over)
-        @if($over->status == 0)
+        @if($over->status == 2)
         @else
         <tr>
         <td>{{$over->date_created}}</td>
         <td>{{$over->dateUpdated}}</td>
         <td>Overtime Authorization Slip</td>
-        @if($over->status == 1)
+        @if($over->status == 0)
           <td>Pending</td>
-        @elseif($over->status == 2)
+        @elseif($over->status == 1)
           <td>Approved</td>
-        @elseif($over->status == 3)
-          <td>Disapproved</td>
         @endif
         <td>
           <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;

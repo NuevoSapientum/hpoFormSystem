@@ -32,10 +32,10 @@ class PagesController extends Controller
     }
 
     public function inboxNotif(){
-        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 0", ['user_id' => Auth::user()->id]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 0", ['user_id' => Auth::user()->id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 0", ['user_id' => Auth::user()->id]);
-        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 0", ['user_id' => Auth::user()->id]);
+        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
+        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
+        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
+        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
 
@@ -43,11 +43,11 @@ class PagesController extends Controller
     public function approvalNotif(){
         $id = Auth::user()->id;
         $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 1]);
+                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
         $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2
-                            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 1]);
+                            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 0]);
         $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 1]);
+                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
         return count($exitPass) + count($leaveForm) + count($changeSchedule);
     }
 
@@ -284,17 +284,17 @@ class PagesController extends Controller
 
     public function exitApprovals($id){
         return DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 1]);
+                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
     }
 
     public function leaveApprovals($id){
         return DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2
-            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 1]);
+            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 0]);
     }
 
     public function changeApprovals($id){
         return DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 1]);
+                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
     }
 
     public function approval(){
@@ -389,6 +389,75 @@ class PagesController extends Controller
         }else{
             $status = "Nothing to Show.";
             return redirect('approval')->with('status', $status);
+        }
+    }
+
+    public function permissionerApproval(Request $request, $type, $id){
+        if($type == 1){
+            $result = $this->approveExit($request->all(), $id);
+            // dd($request->all());
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+            // echo $result;
+            return redirect('approval')->with('status', $status);
+        }elseif($type == 2){
+            $result = $this->editLeave($request->all(), $id);
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+            return redirect('approval')->with('status', $status);
+        }elseif($type == 3){
+            $result = $this->editChange($request->all(), $id);
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+            return redirect('approval')->with('status', $status);
+        }else{
+            $status = "Nothing to Show.";
+            return redirect('approval')->with('status', $status);
+        }
+    }
+
+    public function approveExit(array $data, $id){
+        $dateUpdate = date("Y-m-d H:i:s");
+        // dd($data);
+        if(isset($data['permission_1'])){
+            if($data['permission_1'] != 0){
+            return DB::update("UPDATE `tbl_epform` SET `permission_1` = :answer, `dateUpdated` = :dateUpdated 
+                                WHERE `tbl_epid` = :id", 
+                                ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_1']]);
+            }
+        }else{
+            if(isset($data['permission_2'])){
+                if($data['permission_2'] != 0){
+                    return DB::update("UPDATE `tbl_epform` SET `permission_2` = :answer, `dateUpdated` = :dateUpdated 
+                                    WHERE `tbl_epid` = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_2']]);
+                }
+            }else{
+                if(isset($data['permission_3'])){
+                    if($data['permission_3'] != 0){
+                        return DB::update("UPDATE `tbl_epform` SET `permission_3` = :answer, `dateUpdated` = :dateUpdated 
+                                        WHERE `tbl_epid` = :id", 
+                                        ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_3']]);
+                    }
+                }else{
+                    if(isset($data['permission_4'])){
+                        if($data['permission_4'] != 0){
+                            return DB::update("UPDATE `tbl_epform` SET `permission_4` = :answer, `status` = :status, `dateUpdated` = :dateUpdated 
+                                            WHERE `tbl_epid` = :id", 
+                                            ['dateUpdated' => $dateUpdate, 'id' => $id, 'status' => 1, 'answer' => $data['permission_4']]);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -518,8 +587,15 @@ class PagesController extends Controller
             );
         }
 
-        $this->requestAdd($request->all());
-        return redirect('inbox');
+        $result = $this->requestAdd($request->all());
+        if($result){
+            return redirect('inbox');
+        }else{
+           $status = "Failed!";
+           return redirect('inbox')->with('status', $status); 
+        }
+        // echo $result;
+        
     }
 
     protected function requestAdd(array $data)
@@ -532,6 +608,7 @@ class PagesController extends Controller
             Auth::user()->save();
             $db = DB::insert('INSERT INTO `tbl_leave`(`id`, `date_Created`, `reason`, `leave_type`, `days_applied`, `permission_id1`, `permission_id2`) values(?, ?, ?, ?, ?, ?, ?)', [$id, $data['dateCreated'], $data['reason'], $data['typeofLeave'], $data['days_applied'], $data['approvedBy'], $data['recommendApproval']]);
         }
+        return 0;
     }
 
 

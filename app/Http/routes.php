@@ -57,6 +57,11 @@ Route::get('approval/view/{type}/{id}',[
 	'uses' => 'PagesController@viewApproval'
 ]);
 
+Route::post('approval/view/{type}/{id}',[
+	'middleware' => 'auth',
+	'uses' => 'PagesController@permissionerApproval'
+]);
+
 Route::get('/exitForm', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@exitForm'

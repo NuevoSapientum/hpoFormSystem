@@ -18,8 +18,8 @@
     @foreach($contents as $content)
     
 
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
-		<input type="hidden" disabled="true" name="_token" value="{!! csrf_token() !!}">
+	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>From:</label>
 	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
 	    <label>To:</label>
@@ -85,6 +85,10 @@
 	}else if({{$content->permission_1}} === 2){
 		document.getElementById('permission_1no').checked = 'true';
 	}
+	if({{$content->permission_id1}} === {{Auth::user()->id}}){
+		document.getElementById('permission_1yes').disabled = false;
+		document.getElementById('permission_1no').disabled = false;
+	}
 
 	if({{$content->permission_2}} === 1){
 		document.getElementById('permission_2yes').checked = 'true';
@@ -112,7 +116,16 @@
 		document.getElementById('permission_4no').checked = 'true';
 	}
 	
-	
+	if({{$content->status}} === 1){
+		document.getElementById('permission_1yes').disabled = true;
+		document.getElementById('permission_1no').disabled = true;
+		document.getElementById('permission_2yes').disabled = true;
+		document.getElementById('permission_2no').disabled = true;
+		document.getElementById('permission_3yes').disabled = true;
+		document.getElementById('permission_3no').disabled = true;
+		document.getElementById('permission_4yes').disabled = true;
+		document.getElementById('permission_4no').disabled = true;
+	}
  //      var clientId = '862357115869-nmcsojlu77uu0gsig6e8hsncpo4oavic.apps.googleusercontent.com';
 
  //      if (!/^([0-9])$/.test(clientId[0])) {
