@@ -11,10 +11,15 @@ use Input;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\position;
 
 class PagesController extends Controller
 {
 
+
+    public function index(){
+        return view('index');
+    }
 
     /**
     *Display the login page
@@ -47,12 +52,11 @@ class PagesController extends Controller
     }
 
     protected function get_positions(){
-        return DB::select("select * FROM position");
+        return position::all();
     }
 
     protected function position(){
-        // $positions = DB::select('select position.position_name FROM position LEFT JOIN users ON :user_id = position.position_id', ['user_id' => Auth::user()->position_id]);
-        $positions = DB::select('select position_name FROM position where :user_id = position_id', ['user_id' => Auth::user()->position_id]);
+        $positions = position::where('position_id', Auth::user()->position_id)->get();
         return $positions; 
     }
 
@@ -339,6 +343,19 @@ class PagesController extends Controller
                         'PMs' => $PMs,
                         'CompanyReps' => $CompanyReps
                 );
+            // $id = Auth::user()->id;
+            // foreach ($contents as $content) {
+            //     if($content->permission_id1 === $id){
+            //         echo "1";
+            //     }elseif($content->permission_id2 === $id && $content->permission_1 === 1){
+            //         echo "2";
+            //     }elseif($content->permission_id3 === $id && $content->permission_2 === 1){
+            //         echo "3";
+            //     }elseif($content->permission_id4 === $id && $content->permission_3 ===1){
+            //         echo "4";
+            //     }
+            // }
+            // dd($contents);
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalExitView')->with($data);
         }elseif($type == 2){

@@ -26,6 +26,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $fillable = ['emp_name', 'position_id', 'email', 'username', 'password'];
 
+    public function position(){
+        return $this->belongsTo('hpoforms/positions');
+    }
+
     /**
      * The attributes excluded from the model's JSON form.
      *

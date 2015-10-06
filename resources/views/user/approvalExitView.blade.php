@@ -16,62 +16,171 @@
     </div>
     @endif
     @foreach($contents as $content)
+    
+
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
-		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		<input type="hidden" disabled="true" name="_token" value="{!! csrf_token() !!}">
 		<label>From:</label>
-	    <input type="date" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
+	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
 	    <label>To:</label>
-	    <input type="date" id="toDate" name="dateTo" value="{{$content->dateTo}}" class="form-control"/><br/>       
+	    <input type="date" disabled="true" id="toDate" name="dateTo" value="{{$content->dateTo}}" class="form-control"/><br/>       
 	    <label>Purpose:</label>
-	    <textarea class="form-control" id="textArea" name="textPurpose"></textarea><br/>
+	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose"></textarea><br/>
 	    <label>Supervisor Signature:</label>
-	      <select class="form-control" name="supervisor">
-	          @foreach($Supervisors as $Supervisor)
-	          	@if($Supervisor === $content->permission_id1)
-		          	<option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
-	          	@else
-		            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
-	          	@endif
-	          @endforeach
-	      </select>
+	      @foreach($Supervisors as $Supervisor)
+	      	@if($Supervisor->id === $content->permission_id1)
+	          	<input disabled="true" class="form-control" value="{{$Supervisor->emp_name}}" />
+	      	@endif
+	      @endforeach
+	      <div class="radio">
+	        <label><input type="radio" disabled="true" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+	        <label><input type="radio" disabled="true" id="permission_1no" name="permission_1" value="2" />No</label>
+	      </div>
 	      <br/>
-	      <label>Project Manager:</label>
-	      <select class="form-control" id="projectManager" name="projectManager">
-	          @foreach($PMs as $PM)
-	          	@if($PM->id === $content->permission_id2)
-		            <option selected="true" value="{{$PM->id}}">{{$PM->emp_name}}</option>
-	          	@else
-	          		<option value="{{$PM->id}}">{{$PM->emp_name}}</option>
-	          	@endif
-	          @endforeach
-	      </select>
+      	<label>Project Manager:</label>
+          @foreach($PMs as $PM)
+          	@if($PM->id === $content->permission_id2)
+	            <input disabled="true" class="form-control" value="{{$PM->emp_name}}" />
+	        @endif
+          @endforeach
+          <div class="radio">
+	        <label><input type="radio" disabled="true" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+	        <label><input type="radio" disabled="true" id="permission_2no" name="permission_2" value="2" />No</label>
+	      </div>
 	      <br/>
-	      <label>HR:</label>
-	      <select class="form-control" name="HR">
+	    <label>HR:</label>
 	      	@foreach($HRs as $HR)
 	      		@if($HR->id === $content->permission_id3)
-	      			<option selected="true" value="{{$HR->id}}">{{$HR->emp_name}}</option>
-	      		@else
-	            	<option value="{{$HR->id}}">{{$HR->emp_name}}</option>
+	      			<input disabled="true" class="form-control" value="{{$HR->emp_name}}" />
 	            @endif
 	          @endforeach
-	      </select>
+	      <div class="radio">
+	        <label><input type="radio" disabled="true" id="permission_3yes" name="permission_3" value="1" />Yes</label>
+	        <label><input type="radio" disabled="true" id="permission_3no" name="permission_3" value="2" />No</label>
+	      </div>
 	      <br/>
-	      <label>Company Representative:</label>
-	      <select class="form-control" name="companyRep">
+      	<label>Company Representative:</label>
 	          @foreach($CompanyReps as $CompanyRep)
 	          	@if($CompanyRep->id === $content->permission_id4)
-	          		<option selected="true" value="{{$CompanyRep->id}}">{{$CompanyRep->emp_name}}</option>
-	          	@else
-		            <option value="{{$CompanyRep->id}}">{{$CompanyRep->emp_name}}</option>
+	          		<input disabled="true" class="form-control" value="{{$CompanyRep->emp_name}}"/>
 	          	@endif
 	          @endforeach
-	      </select>
+          <div class="radio">
+	        <label><input type="radio" disabled="true" id="permission_4yes" name="permission_4" value="1" />Yes</label>
+	        <label><input type="radio" disabled="true" id="permission_4no" name="permission_4" value="2" />No</label>
+	      </div>
 	      <hr/>
 		<button type="submit" name="submit" class="btn btn-primary">Save</button>
 	</form>
-	<script type="text/javascript">
-			document.getElementById('textArea').value = "{{$content->textPurpose}}";
-	</script>
+	<script>
+	document.getElementById('textArea').value = "{{$content->textPurpose}}";
+	//Check if the permissioner first clicked yes
+	if({{$content->permission_1}} === 1){
+		document.getElementById('permission_1yes').checked = 'true';
+		//Check if the user is the next permissioner
+		if({{$content->permission_id2}} == {{Auth::user()->id}}){
+			document.getElementById('permission_2yes').disabled = false;
+			document.getElementById('permission_2no').disabled = false;
+		}
+	}else if({{$content->permission_1}} === 2){
+		document.getElementById('permission_1no').checked = 'true';
+	}
+
+	if({{$content->permission_2}} === 1){
+		document.getElementById('permission_2yes').checked = 'true';
+		if({{$content->permission_id3}} == {{Auth::user()->id}}){
+			document.getElementById('permission_3yes').disabled = false;
+			document.getElementById('permission_3no').disabled = false;
+		}
+	}else if({{$content->permission_2}} === 2){
+		document.getElementById('permission_2no').checked = 'true';
+	}
+
+	if({{$content->permission_3}} === 1){
+		document.getElementById('permission_3yes').checked = 'true';
+		if({{$content->permission_id4}} == {{Auth::user()->id}}){
+			document.getElementById('permission_4yes').disabled = false;
+			document.getElementById('permission_4no').disabled = false;
+		}
+	}else if({{$content->permission_3}} == 2){
+		document.getElementById('permission_3no').checked = 'true';
+	}
+
+	if({{$content->permission_4}} === 1){
+		document.getElementById('permission_4yes').checked = 'true';
+	}else if({{$content->permission_4}} === 2){
+		document.getElementById('permission_4no').checked = 'true';
+	}
+	
+	
+ //      var clientId = '862357115869-nmcsojlu77uu0gsig6e8hsncpo4oavic.apps.googleusercontent.com';
+
+ //      if (!/^([0-9])$/.test(clientId[0])) {
+ //        alert('Invalid Client ID - did you forget to insert your application Client ID?');
+ //      }
+ //      // Create a new instance of the realtime utility with your client ID.
+ //      var realtimeUtils = new utils.RealtimeUtils({ clientId: clientId });
+
+ //      authorize();
+
+ //      function authorize() {
+ //        // Attempt to authorize
+ //        realtimeUtils.authorize(function(response){
+ //          if(response.error){
+ //            // Authorization failed because this is the first time the user has used your application,
+ //            // show the authorize button to prompt them to authorize manually.
+ //            var button = document.getElementById('auth_button');
+ //            button.classList.add('visible');
+ //            button.addEventListener('click', function () {
+ //              realtimeUtils.authorize(function(response){
+ //                start();
+ //              }, true);
+ //            });
+ //          } else {
+ //              start();
+ //          }
+ //        }, false);
+ //      }
+
+ //      function start() {
+ //        // With auth taken care of, load a file, or create one if there
+ //        // is not an id in the URL.
+ //        var id = realtimeUtils.getParam('id');
+ //        if (id) {
+ //          // Load the document id from the URL
+ //          realtimeUtils.load(id.replace('/', ''), onFileLoaded, onFileInitialize);
+ //        } else {
+ //          // Create a new document, add it to the URL
+ //          realtimeUtils.createRealtimeFile('New Quickstart File', function(createResponse) {
+ //            window.history.pushState(null, null, '?id=' + createResponse.id);
+ //            realtimeUtils.load(createResponse.id, onFileLoaded, onFileInitialize);
+ //          });
+ //        }
+ //      }
+
+ //      // The first time a file is opened, it must be initialized with the
+ //      // document structure. This function will add a collaborative string
+ //      // to our model at the root.
+ //      function onFileInitialize(model) {
+ //        var string = model.createString();
+ //        string.setText('Welcome to the Quickstart App!');
+ //        model.getRoot().set('demo_string', string);
+ //      }
+
+ //      // After a file has been initialized and loaded, we can access the
+ //      // document. We will wire up the data model to the UI.
+ //      function onFileLoaded(doc) {
+ //        var collaborativeString = doc.getModel().getRoot().get('demo_string');
+ //        wireTextBoxes(collaborativeString);
+ //      }
+
+ //      // Connects the text boxes to the collaborative string
+ //      function wireTextBoxes(collaborativeString) {
+ //        var textArea1 = document.getElementById('text_area_1');
+ //        var textArea2 = document.getElementById('text_area_2');
+ //        gapi.drive.realtime.databinding.bindString(collaborativeString, textArea1);
+ //        gapi.drive.realtime.databinding.bindString(collaborativeString, textArea2);
+ //      }
+    </script>
 	@endforeach
 @endsection

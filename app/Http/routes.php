@@ -11,6 +11,11 @@
 |
 */
 
+Route::get('/index', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@index'
+]);
+
 /*Routes for all the pages*/
 Route::get('/dashboard', [
 	'middleware' => 'auth',

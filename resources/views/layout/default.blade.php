@@ -9,6 +9,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>{{ $title }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="https://www.gstatic.com/realtime/quickstart-styles.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Load the Realtime JavaScript library -->
+    <script src="https://apis.google.com/js/api.js"></script>
+
+    <!-- Load the utility library -->
+    <script src="https://www.gstatic.com/realtime/realtime-client-utils.js"></script>
     <!-- Bootstrap 3.3.4 -->
     <link rel="stylesheet" href="{{URL::asset('bootstrap/css/bootstrap.min.css')}}">
     <!-- Font Awesome -->
@@ -30,6 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
     <script src="{{URL::asset('js/app.js')}}"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
