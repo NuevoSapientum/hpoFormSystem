@@ -118,10 +118,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
                   <?php while($row = mysqli_fetch_array($profileImage)): ?>
-                    <?php if($row[2] == "blank"): ?>
-                    <img src="<?php echo e(URL::asset('img/user.png')); ?>" class="user-image" alt="User Image">
+                    <?php if($row[1] == "blank"): ?>
+                      <img src="<?php echo e(URL::asset('img/user.png')); ?>" class="user-image" alt="User Image">
                     <?php else: ?>
-                      <img class="user-image" src="data:image;base64, <?php echo e($row[3]); ?> " alt="User Image">
+                      <img class="user-image" src="data:image;base64, <?php echo e($row[2]); ?> " alt="User Image">
                     <?php endif; ?>
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
                   <span class="hidden-xs"><?php echo e(Auth::user()->emp_name); ?></span>
@@ -129,10 +129,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
-                    <?php if($row[2] == "blank"): ?>
+                    <?php if($row[1] == "blank"): ?>
                     <img src="<?php echo e(URL::asset('img/user.png')); ?>" class="img-circle" alt="User Image">
                     <?php else: ?>
-                      <img class="img-circle" src="data:image;base64, <?php echo e($row[3]); ?> " alt="User Image">
+                      <img class="img-circle" src="data:image;base64, <?php echo e($row[2]); ?> " alt="User Image">
                     <?php endif; ?>
                      
                     
@@ -192,10 +192,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
-              <?php if($row[2] == "blank"): ?>
+              <?php if($row[1] == "blank"): ?>
               <img src="<?php echo e(URL::asset('img/user.png')); ?>" class="img-circle" alt="User Image">
               <?php else: ?>
-                <img class="img-circle" src="data:image;base64, <?php echo e($row[3]); ?> " alt="User Image">
+                <img class="img-circle" src="data:image;base64, <?php echo e($row[2]); ?> " alt="User Image">
               <?php endif; ?>
               <?php endwhile; ?>
             </div>

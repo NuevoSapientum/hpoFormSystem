@@ -118,10 +118,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
                   @while($row = mysqli_fetch_array($profileImage))
-                    @if($row[2] == "blank")
-                    <img src="{{URL::asset('img/user.png')}}" class="user-image" alt="User Image">
+                    @if($row[1] == "blank")
+                      <img src="{{URL::asset('img/user.png')}}" class="user-image" alt="User Image">
                     @else
-                      <img class="user-image" src="data:image;base64, {{$row[3]}} " alt="User Image">
+                      <img class="user-image" src="data:image;base64, {{$row[2]}} " alt="User Image">
                     @endif
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
                   <span class="hidden-xs">{{ Auth::user()->emp_name }}</span>
@@ -129,10 +129,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
-                    @if($row[2] == "blank")
+                    @if($row[1] == "blank")
                     <img src="{{URL::asset('img/user.png')}}" class="img-circle" alt="User Image">
                     @else
-                      <img class="img-circle" src="data:image;base64, {{$row[3]}} " alt="User Image">
+                      <img class="img-circle" src="data:image;base64, {{$row[2]}} " alt="User Image">
                     @endif
                      
                     
@@ -191,10 +191,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
-              @if($row[2] == "blank")
+              @if($row[1] == "blank")
               <img src="{{URL::asset('img/user.png')}}" class="img-circle" alt="User Image">
               @else
-                <img class="img-circle" src="data:image;base64, {{$row[3]}} " alt="User Image">
+                <img class="img-circle" src="data:image;base64, {{$row[2]}} " alt="User Image">
               @endif
               @endwhile
             </div>

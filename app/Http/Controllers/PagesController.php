@@ -11,7 +11,12 @@ use Input;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\position;
+use App\Positions;
+use App\ExitPass;
+use App\Leaves;
+use App\Change;
+use App\Overtime;
+use App\Departments;
 
 class PagesController extends Controller
 {
@@ -32,37 +37,52 @@ class PagesController extends Controller
     }
 
     public function inboxNotif(){
-        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
-        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
+        $exitPass = ExitPass::where('user_id', Auth::user()->id)
+                    ->where('status', '!=', '2')->get();
+        // $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
+        $leaveForm = Leaves::where('user_id', Auth::user()->id)
+                     ->where('status', '!=', '2')->get();
+        // $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
+        $changeSchedule = Change::where('user_id', Auth::user()->id)
+                          ->where('status', '!=', '2')->get();
+        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
+        $oas = Overtime::where('user_id', Auth::user()->id)
+               ->where('status', '!=', '2')->get();
+        // $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
+         //   
+        // dd($exitPass);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
 
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
-                                ['id1' => $id, 'id2' => $id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
+        // $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
+                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
+        $exitPass = ExitPass::find($id);
+
+        // $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
+                                // ['id1' => $id, 'id2' => $id]);
+        $leaveForm = Leaves::find($id);
+        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
+                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
+        $changeSchedule = Change::find($id);
         return count($exitPass) + count($leaveForm) + count($changeSchedule);
     }
 
     protected function get_positions(){
-        return position::all();
+        return Positions::all();
     }
 
     protected function position(){
-        $positions = position::where('position_id', Auth::user()->position_id)->get();
+        $positions = Positions::where('id', Auth::user()->position_id)->get();
         return $positions; 
     }
 
     protected function getImage(){
         $con=mysqli_connect("localhost","root","password","hpodb");
-        $qry = "select * from profile_image where id = '".Auth::user()->id."'";
+        $qry = "select * from profile_image where id = '".Auth::user()->img_id."'";
+        
         return $result = mysqli_query($con, $qry);
     }
 
@@ -75,7 +95,7 @@ class PagesController extends Controller
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
-        $exitPass = DB::select("SELECT * FROM tbl_epform ");
+        $exitPass = ExitPass::all();
         $data = array(
                     'title' => 'Home',
                     'positions' => $positions,
@@ -83,7 +103,14 @@ class PagesController extends Controller
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif
             );
+        // dd($profileImage);
         return view('dashboard')->with($data);
+        // $exit = Positions::all();
+        // foreach ($exit as $Exit) {
+        //     echo $Exit->position_name;
+        // }
+        // $exit = ExitPass::all();
+        // dd($exit);
     }
 
     /**
@@ -91,23 +118,33 @@ class PagesController extends Controller
     *
     */
     public function history(){
+        $id = Auth::user()->id;
         $positions = $this->position();
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
-        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user || permission_id1 = :id1
-                                || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
-                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
-                                'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user || permission_id1 = :id1
-                                || permission_id2 = :id2",
-                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user || permission_id1 = :id1
-                                || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
-                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
-                                'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
-        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user",
-                                ['user' => Auth::user()->id]);
+        $exitPass = ExitPass::where('user_id', $id)->where('permission_id1', $id)
+                    ->orWhere('permission_id2', $id)->orWhere('permission_id3', $id)
+                    ->orWhere('permission_id4', $id)->get();
+        // $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user || permission_id1 = :id1
+        //                         || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
+        //                         ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
+        //                         'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
+        $leaveForm = Leaves::where('user_id', $id)->where('permission_id1', $id)
+                    ->orWhere('permission_id2', $id)->get();
+        // $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user || permission_id1 = :id1
+        //                         || permission_id2 = :id2",
+        //                         ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id]);
+        $changeSchedule = Change::where('user_id', $id)->where('permission_id1', $id)
+                          ->orWhere('permission_id2', $id)->orWhere('permission_id3', $id)
+                          ->orWhere('permission_id4', $id)->get();
+        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user || permission_id1 = :id1
+        //                         || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
+        //                         ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
+        //                         'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
+        $oas = Overtime::where('user_id', $id);
+        // $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user",
+                                // ['user' => Auth::user()->id]);
         // dd($leaveForm);
         $data = array(
                     'title' => 'History',
@@ -633,25 +670,28 @@ class PagesController extends Controller
         $profileImage = $this->getImage();
         $positions = $this->position();
         $approvalNotif = $this->approvalNotif();
-        $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
-        // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
-        $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
-        $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
-        $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
-        $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
-        $data = array(
-                    'title' => 'Exit Pass',
-                    'positions' => $positions,
-                    'HRs' => $HRs,
-                    'department_user' => $department,
-                    'Supervisors' => $Supervisors,
-                    'PMs' => $PMs,
-                    'CompanyReps' => $CompanyReps,
-                    'profileImage' => $profileImage,
-                    'inboxNotif' => $inboxNotif,
-                    'approvalNotif' => $approvalNotif
-            );
-        return view('exitForm')->with($data);
+        $id = Auth::user()->position_id;
+        $department = Positions::find($id)->departments;
+        $HRs = 
+        // $department = DB::select("SELECT department.* FROM `department` JOIN position ON position.position_id = :user_posid AND department.department_id = position.department_id", ['user_posid' => Auth::user()->position_id]);
+        // // $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
+        // $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+        // $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+        // $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+        // $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+        // $data = array(
+        //             'title' => 'Exit Pass',
+        //             'positions' => $positions,
+        //             'HRs' => $HRs,
+        //             'department_user' => $department,
+        //             'Supervisors' => $Supervisors,
+        //             'PMs' => $PMs,
+        //             'CompanyReps' => $CompanyReps,
+        //             'profileImage' => $profileImage,
+        //             'inboxNotif' => $inboxNotif,
+        //             'approvalNotif' => $approvalNotif
+        //     );
+        // return view('exitForm')->with($data);
     }
 
     public function postexitForm(Request $request){
