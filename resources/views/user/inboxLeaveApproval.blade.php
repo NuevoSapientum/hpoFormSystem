@@ -1,7 +1,7 @@
 @extends('layout.default')
 
 @section('head')
-	<h1>Edit Request for Leave of Absence Form</h1>
+	<h1>Request for Leave of Absence</h1>
 @endsection
 
 @section('content')

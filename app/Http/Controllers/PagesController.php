@@ -75,6 +75,7 @@ class PagesController extends Controller
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
+        $exitPass = DB::select("SELECT * FROM tbl_epform ");
         $data = array(
                     'title' => 'Home',
                     'positions' => $positions,
@@ -94,13 +95,32 @@ class PagesController extends Controller
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
+        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user || permission_id1 = :id1
+                                || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
+                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
+                                'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
+        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user || permission_id1 = :id1
+                                || permission_id2 = :id2",
+                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id]);
+        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user || permission_id1 = :id1
+                                || permission_id2 = :id2 || permission_id3 = :id3 || permission_id4 = :id4",
+                                ['user' => Auth::user()->id, 'id1' => Auth::user()->id, 'id2' => Auth::user()->id,
+                                'id3' => Auth::user()->id, 'id4' => Auth::user()->id]);
+        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user",
+                                ['user' => Auth::user()->id]);
+        // dd($leaveForm);
         $data = array(
                     'title' => 'History',
                     'positions' => $positions,
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
-                    'approvalNotif' => $approvalNotif
+                    'approvalNotif' => $approvalNotif,
+                    'exitPass' => $exitPass,
+                    'leaveForm' => $leaveForm,
+                    'changeSchedule' => $changeSchedule,
+                    'oas' => $oas
             );
+        // // dd($exitPass);
         return view('history')->with($data);
     }
 

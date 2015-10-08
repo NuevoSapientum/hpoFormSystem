@@ -1,7 +1,7 @@
 @extends('layout.default')
 
 @section('head')
-	<h1>Edit Change Schedule Form</h1>
+	<h1>Change Schedule</h1>
 @endsection
 
 @section('content')
@@ -114,7 +114,10 @@
                 <label><input type="radio" disabled />No</label>
               @endif
             </div>
-      	<hr/>
+            <hr/>
+          <label>Note:</label>
+      	     <textarea class="form-control" disabled >{{$content->changeNote}}</textarea>
+        <hr/>
 	</form>
 	<script type="text/javascript">
 	</script>

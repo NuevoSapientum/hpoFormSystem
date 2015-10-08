@@ -1,7 +1,7 @@
 @extends('layout.default')
 
 @section('head')
-	<h1>Exit Pass In Progress</h1>
+	<h1>Exit Pass</h1>
 @endsection
 
 @section('content')
@@ -103,6 +103,7 @@
 	      <br/>
 	      <label>Note:</label>
 	      <textarea disabled class="form-control">{{$content->exitNote}}</textarea>
+		<hr/>
 	</form>
 	<script>
 	// $('button').click(function(){
