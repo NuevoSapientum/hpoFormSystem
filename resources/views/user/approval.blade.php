@@ -30,6 +30,7 @@
         <th>Date Created</th>
         <th>Date Updated</th>
         <th>Form</th>
+        <th>Status</th>
         <th></th>
       </tr>
     </thead>
@@ -40,6 +41,13 @@
           <td>{{$exit->dateCreated}}</td>
           <td>{{$exit->dateUpdated}}</td>
           <td>Exit Pass</td>
+          @if($exit->status === 0)
+            <td>Pending</td>
+          @elseif($exit->status === 1)
+            <td>Approved</td>
+          @elseif($exit->status === 2)
+            <td>Denied</td>
+          @endif
           <td>
             <a href="{{URL::to('approval/view/' . $exit->form_type . '/' . $exit->tbl_epid)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
           </td>
@@ -51,6 +59,13 @@
           <td>{{$leave->date_created}}</td>
           <td>{{$leave->dateUpdated}}</td>
           <td>Request for Leave of Absence</td>
+          @if($leave->status === 0)
+            <td>Pending</td>
+          @elseif($leave->status === 1)
+            <td>Approved</td>
+          @elseif($leave->status === 2)
+            <td>Denied</td>
+          @endif
           <td>
             <a href="{{URL::to('approval/view/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
           </td>
@@ -62,6 +77,13 @@
           <td>{{$change->date_created}}</td>
           <td>{{$change->dateUpdated}}</td>
           <td>Change of Schedule</td>
+          @if($change->status === 0)
+            <td>Pending</td>
+          @elseif($change->status === 1)
+            <td>Approved</td>
+          @elseif($change->status === 2)
+            <td>Denied</td>
+          @endif
           <td>
             <a href="{{URL::to('approval/view/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
           </td>

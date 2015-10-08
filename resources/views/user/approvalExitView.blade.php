@@ -16,16 +16,16 @@
     </div>
     @endif
     @foreach($contents as $content)
-    
 
-	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" id="approvalExit" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
+		<hr/>
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>From:</label>
 	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
 	    <label>To:</label>
 	    <input type="date" disabled="true" id="toDate" name="dateTo" value="{{$content->dateTo}}" class="form-control"/><br/>       
 	    <label>Purpose:</label>
-	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose"></textarea><br/>
+	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose">{{$content->textPurpose}}</textarea><br/>
 	    <label>Supervisor Signature:</label>
 	      @foreach($Supervisors as $Supervisor)
 	      	@if($Supervisor->id === $content->permission_id1)
@@ -33,8 +33,30 @@
 	      	@endif
 	      @endforeach
 	      <div class="radio">
-	        <label><input type="radio" disabled="true" id="permission_1yes" name="permission_1" value="1" />Yes</label>
-	        <label><input type="radio" disabled="true" id="permission_1no" name="permission_1" value="2" />No</label>
+	      	@if($content->permission_2 === 0 && $content->permission_id1 === Auth::user()->id)
+	      		@if($content->permission_1 === 1)
+			        <label><input type="radio" disabled checked="true"/>Yes</label>
+			        <label><input type="radio" disabled />No</label>
+		        @elseif($content->permission_1 === 2)
+		        	<label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+			        <label><input type="radio" id="permission_1no" name="permission_1" checked="true" value="2" />No</label>
+			    @else
+			    	<label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+	              	<label><input type="radio" id="permission_1no" name="permission_1" value="2" />No</label>
+			    @endif
+	      	
+		    @else
+		    	@if($content->permission_1 === 1)
+			        <label><input type="radio" disabled checked="true"/>Yes</label>
+			        <label><input type="radio" disabled />No</label>
+		        @elseif($content->permission_1 === 2)
+		        	<label><input type="radio" disabled />Yes</label>
+			        <label><input type="radio" disabled checked="true"/>No</label>
+			    @else
+			    	<label><input type="radio" disabled />Yes</label>
+	              	<label><input type="radio" disabled />No</label>
+		    	@endif
+		    @endif
 	      </div>
 	      <br/>
       	<label>Project Manager:</label>
@@ -44,8 +66,29 @@
 	        @endif
           @endforeach
           <div class="radio">
-	        <label><input type="radio" disabled="true" id="permission_2yes" name="permission_2" value="1" />Yes</label>
-	        <label><input type="radio" disabled="true" id="permission_2no" name="permission_2" value="2" />No</label>
+	        @if($content->permission_1 === 1 && Auth::user()->id === $content->permission_id2)
+	      		@if($content->permission_2 === 1)
+			        <label><input type="radio" disabled checked="true"/>Yes</label>
+			        <label><input type="radio" disabled />No</label>
+		        @elseif($content->permission_2 === 2)
+		        	<label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+			        <label><input type="radio" id="permission_2no" name="permission_2" checked="true" value="2" />No</label>
+			    @else
+			    	<label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+	              	<label><input type="radio" id="permission_2no" name="permission_2" value="2" />No</label>
+			    @endif
+		    @else
+		    	@if($content->permission_2 === 1)
+		    	<label><input type="radio" checked="true" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+		    	@elseif($content->permission_2 === 2)
+		    	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" checked="true" disabled />No</label>
+              	@else
+              	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+              	@endif
+		    @endif
 	      </div>
 	      <br/>
 	    <label>HR:</label>
@@ -55,8 +98,29 @@
 	            @endif
 	          @endforeach
 	      <div class="radio">
-	        <label><input type="radio" disabled="true" id="permission_3yes" name="permission_3" value="1" />Yes</label>
-	        <label><input type="radio" disabled="true" id="permission_3no" name="permission_3" value="2" />No</label>
+	        @if($content->permission_2 === 1 && Auth::user()->id === $content->permission_id3)
+	      		@if($content->permission_3 === 1)
+			        <label><input type="radio" disabled checked="true" name="permission_3" value="1" />Yes</label>
+			        <label><input type="radio" disabled name="permission_3" value="2" />No</label>
+		        @elseif($content->permission_3 === 2)
+		        	<label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
+			        <label><input type="radio" id="permission_3no" name="permission_3" checked="true" value="2" />No</label>
+			    @else
+			    	<label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
+	              	<label><input type="radio" id="permission_3no" name="permission_3" value="2" />No</label>
+			    @endif
+		    @else
+		    	@if($content->permission_3 === 1)
+		    	<label><input type="radio" checked="true" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+		    	@elseif($content->permission_3 === 2)
+		    	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" checked="true" disabled />No</label>
+              	@else
+              	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+              	@endif
+		    @endif
 	      </div>
 	      <br/>
       	<label>Company Representative:</label>
@@ -66,66 +130,98 @@
 	          	@endif
 	          @endforeach
           <div class="radio">
-	        <label><input type="radio" disabled="true" id="permission_4yes" name="permission_4" value="1" />Yes</label>
-	        <label><input type="radio" disabled="true" id="permission_4no" name="permission_4" value="2" />No</label>
+	        @if($content->permission_3 === 1 && Auth::user()->id === $content->permission_id4)
+	      		@if($content->permission_4 === 1)
+			        <label><input type="radio" disabled checked="true" />Yes</label>
+			        <label><input type="radio" disabled />No</label>
+		        @elseif($content->permission_4 === 2)
+		        	<label><input type="radio" name="permission_4" value="1" />Yes</label>
+			        <label><input type="radio" name="permission_4" checked="true" value="2" />No</label>
+			    @else
+			    	<label><input type="radio" id="permission_4yes" name="permission_4" value="1" />Yes</label>
+	              	<label><input type="radio" id="permission_4no" name="permission_4" value="2" />No</label>
+			    @endif
+		    @else
+		    	@if($content->permission_4 === 1)
+		    	<label><input type="radio" checked="true" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+		    	@elseif($content->permission_4 === 2)
+		    	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" checked="true" disabled />No</label>
+              	@else
+              	<label><input type="radio" disabled />Yes</label>
+              	<label><input type="radio" disabled />No</label>
+              	@endif
+		    @endif
 	      </div>
-	      <hr/>
-		<button type="submit" name="submit" class="btn btn-primary">Save</button>
+        @if($content->permission_1 == 2 || $content->permission_2 == 2 || $content->permission_3 == 2
+        	|| $content->permission_4 == 2)
+        	<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+	          <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	              <div class="modal-header">
+	                <h4>Note:</h4>
+	              </div>
+	              <div class="modal-body">
+	                <textarea class="form-control" id="note" name="note">{{$content->exitNote}}</textarea>
+	              </div>
+	              <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                <button type="submit" class="btn btn-primary">Save changes</button>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+			<button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+		@else
+			<div class="modal fade" id="false" role="dialog" aria-labelledby="myModalLabel">
+	          <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	              <div class="modal-header">
+	                <h4>Note:</h4>
+	              </div>
+	              <div class="modal-body">
+	                <textarea class="form-control" id="note" name="note" placeholder="Your Note Please:"></textarea>
+	              </div>
+	              <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                <button type="submit" class="btn btn-primary">Save changes</button>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+		<button type="submit" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+		@endif
 	</form>
 	<script>
-	document.getElementById('textArea').value = "{{$content->textPurpose}}";
+	$(document).ready(function() {
+		// alert('{{$content->exitNote}}')
+       $('input[type="radio"]').click(function() {
+          // alert($(this).attr('id') == 'permission_2no');
+           if($(this).attr('id') == 'permission_1no' || $(this).attr('id') == 'permission_2no' 
+                || $(this).attr('id') == 'permission_3no' || $(this).attr('id') == 'permission_4no') {
+                $('#false').attr('id', 'myModal');
+                $('#submit').attr('type', 'button');
+                $('#note').prop('required', true);
+           }else {
+                $('#myModal').attr('id', 'false');
+                $('#submit').attr('type', 'submit');
+                $('#note').prop('required', false);
+           }
+       });
+    });
+	// $('button').click(function(){
+	// 	if($('input:radio[name=permission_2]:checked').val() == 1){
+	// 		$('#submit').attr("",);
+	// 	}else if($('input:radio[name=permission_2]:checked').val() == 2){
+	// 		$('#submit').attr({
+	// 			data-target: "#myModal",
+	// 			data-toggle: "modal"
+	// 		});
+	// 	}
+	// });
+	// alert($('input[permission_2]:checked', 'approvalExit').val());
 	//Check if the permissioner first clicked yes
-	if({{$content->permission_1}} === 1){
-		document.getElementById('permission_1yes').checked = 'true';
-		//Check if the user is the next permissioner
-		if({{$content->permission_id2}} == {{Auth::user()->id}}){
-			document.getElementById('permission_2yes').disabled = false;
-			document.getElementById('permission_2no').disabled = false;
-		}
-	}else if({{$content->permission_1}} === 2){
-		document.getElementById('permission_1no').checked = 'true';
-	}
-	if({{$content->permission_id1}} === {{Auth::user()->id}}){
-		document.getElementById('permission_1yes').disabled = false;
-		document.getElementById('permission_1no').disabled = false;
-	}
-
-	if({{$content->permission_2}} === 1){
-		document.getElementById('permission_2yes').checked = 'true';
-		if({{$content->permission_id3}} == {{Auth::user()->id}}){
-			document.getElementById('permission_3yes').disabled = false;
-			document.getElementById('permission_3no').disabled = false;
-		}
-	}else if({{$content->permission_2}} === 2){
-		document.getElementById('permission_2no').checked = 'true';
-	}
-
-	if({{$content->permission_3}} === 1){
-		document.getElementById('permission_3yes').checked = 'true';
-		if({{$content->permission_id4}} == {{Auth::user()->id}}){
-			document.getElementById('permission_4yes').disabled = false;
-			document.getElementById('permission_4no').disabled = false;
-		}
-	}else if({{$content->permission_3}} == 2){
-		document.getElementById('permission_3no').checked = 'true';
-	}
-
-	if({{$content->permission_4}} === 1){
-		document.getElementById('permission_4yes').checked = 'true';
-	}else if({{$content->permission_4}} === 2){
-		document.getElementById('permission_4no').checked = 'true';
-	}
-	
-	if({{$content->status}} === 1){
-		document.getElementById('permission_1yes').disabled = true;
-		document.getElementById('permission_1no').disabled = true;
-		document.getElementById('permission_2yes').disabled = true;
-		document.getElementById('permission_2no').disabled = true;
-		document.getElementById('permission_3yes').disabled = true;
-		document.getElementById('permission_3no').disabled = true;
-		document.getElementById('permission_4yes').disabled = true;
-		document.getElementById('permission_4no').disabled = true;
-	}
  //      var clientId = '862357115869-nmcsojlu77uu0gsig6e8hsncpo4oavic.apps.googleusercontent.com';
 
  //      if (!/^([0-9])$/.test(clientId[0])) {

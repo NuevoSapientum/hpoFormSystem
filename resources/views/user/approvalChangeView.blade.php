@@ -16,78 +16,212 @@
     </div>
     @endif
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->chgschd_id)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->chgschd_id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<hr/>
 		<label><u>Date of Effectivity:</u></label><br/>
 	    <label>From:</label>
-	    <input type="date" name="dateFromEffectivity" value="{{$content->date_from}}" class="form-control"/>
+	    <input type="text" disabled value="{{$content->date_from}}" class="form-control"/>
 	    <br/>
 	    <label>To:</label>
-	    <input type="date" name="dateToEffectivity" value="{{$content->date_to}}" class="form-control"/>
+	    <input type="text" disabled="" value="{{$content->date_to}}" class="form-control"/>
 	    <hr/>
 	    <label><u>Shift Schedule:</u></label><br/>
 	    <label>From:</label>
-	    <input type="date" name="dateFromShift" value="{{$content->shift_from}}" class="form-control"/>
+	    <input type="text" disabled="" value="{{$content->shift_from}}" class="form-control"/>
 	    <br/>
 	    <label>To:</label>
-	    <input type="date" name="dateToShift" value="{{$content->shift_to}}" class="form-control"/>
+	    <input type="text" disabled="" value="{{$content->shift_to}}" class="form-control"/>
 	    <hr/>
 	    <label>Reason:</label>
-	    <textarea class="form-control" id="reason" name="reason"></textarea>
+	    <textarea class="form-control" id="reason" disabled>{{$content->reason}}</textarea>
 	    <hr/>
 	    <label><u>Approved by:</u></label>
 	    <br/>
       	<label>Supervisor:</label>
-      	<select class="form-control" name="supervisor">
-        	   @foreach($Supervisors as $Supervisor)
-        	   	 @if($Supervisor->id === $content->permission_id1)
-        	   	 	<option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
-        	   	 @else
-           		 	<option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
-           		 @endif
-          		@endforeach
-      	</select>
+    	   @foreach($Supervisors as $Supervisor)
+    	   	 @if($Supervisor->id === $content->permission_id1)
+            <input disabled class="form-control" value="{{$Supervisor->emp_name}}" />
+            @endif
+      		@endforeach
+          <div class="radio">
+            @if($content->permission_2 === 0 && $content->permission_id1 === Auth::user()->id)
+              @if($content->permission_1 === 1)
+                <label><input type="radio" disabled checked="true"/>Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @elseif($content->permission_1 === 2)
+                <label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+                <label><input type="radio" id="permission_1no" name="permission_1" checked="true" value="2" />No</label>
+            @else
+                <label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+                <label><input type="radio" id="permission_1no" name="permission_1" value="2" />No</label>
+            @endif
+            
+            @else
+              @if($content->permission_1 === 1)
+                  <label><input type="radio" disabled checked="true"/>Yes</label>
+                  <label><input type="radio" disabled />No</label>
+                @elseif($content->permission_1 === 2)
+                  <label><input type="radio" disabled />Yes</label>
+                  <label><input type="radio" disabled checked="true"/>No</label>
+              @else
+                  <label><input type="radio" disabled />Yes</label>
+                  <label><input type="radio" disabled />No</label>
+              @endif
+            @endif
+          </div>
       	<br/>
       	<label>Project Manager:</label>
-      	<select class="form-control" name="projectManager">
-        	  @foreach($PMs as $PM)
-        	  	@if($PM->id === $content->permission_id2)
-        	  		<option selected="true" value="{{$PM->id}}">{{$PM->emp_name}}</option>
-        	  	@else
-	            	<option value="{{$PM->id}}">{{$PM->emp_name}}</option>
-	            @endif
-          	  @endforeach
-      	</select>
+      	  @foreach($PMs as $PM)
+            @if($PM->id === $content->permission_id2)
+              <input disabled="true" class="form-control" value="{{$PM->emp_name}}" />
+            @endif
+          @endforeach
+          <div class="radio">
+            @if($content->permission_1 === 1 && Auth::user()->id === $content->permission_id2)
+              @if($content->permission_2 === 1)
+                <label><input type="radio" disabled checked="true"/>Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @elseif($content->permission_2 === 2)
+                <label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+                <label><input type="radio" id="permission_2no" name="permission_2" checked="true" value="2" />No</label>
+            @else
+                <label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+                <label><input type="radio" id="permission_2no" name="permission_2" value="2" />No</label>
+            @endif
+            @else
+              @if($content->permission_2 === 1)
+                <label><input type="radio" checked="true" disabled />Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @elseif($content->permission_2 === 2)
+                <label><input type="radio" disabled />Yes</label>
+                <label><input type="radio" checked="true" disabled />No</label>
+              @else
+                <label><input type="radio" disabled />Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @endif
+            @endif
+          </div>
       	<hr/>
       	<label><u>Noted by:</u></label>
       	<br/>
       	<label>Operation:</label>
-      	<select class="form-control" name="permissioner">
-        	  @foreach($permissioners as $permissioner)
-        	  	@if($permissioner->id === $content->permission_id3)
-	        	  	<option selected="true" value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
-	        	@else
-	            	<option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
-	            @endif
-          	  @endforeach
-      	</select>
+      	  @foreach($permissioners as $permissioner)
+      	  	@if($permissioner->id === $content->permission_id3)
+              <input type="text" disabled class="form-control" value="{{$permissioner->emp_name}}" />
+            @endif
+      	  @endforeach
+          <div class="radio">
+            @if($content->permission_2 === 1 && Auth::user()->id === $content->permission_id3)
+              @if($content->permission_3 === 1)
+                <label><input type="radio" disabled checked="true" name="permission_3" value="1" />Yes</label>
+                <label><input type="radio" disabled name="permission_3" value="2" />No</label>
+              @elseif($content->permission_3 === 2)
+                <label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
+                <label><input type="radio" id="permission_3no" name="permission_3" checked="true" value="2" />No</label>
+            @else
+                <label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
+                <label><input type="radio" id="permission_3no" name="permission_3" value="2" />No</label>
+            @endif
+            @else
+              @if($content->permission_3 === 1)
+                <label><input type="radio" checked="true" disabled />Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @elseif($content->permission_3 === 2)
+                <label><input type="radio" disabled />Yes</label>
+                <label><input type="radio" checked="true" disabled />No</label>
+              @else
+                <label><input type="radio" disabled />Yes</label>
+                <label><input type="radio" disabled />No</label>
+              @endif
+            @endif
+          </div>
       	<br/>
       	<label>HR:</label>
-      	<select class="form-control" name="HR">
         	  @foreach($HRs as $HR)
         	  	@if($HR->id === $content->permission_id4)
-        	  		<option selected="true" value="{{$HR->id}}">{{$HR->emp_name}}</option>
-        	  	@else
-	            	<option value="{{$HR->id}}">{{$HR->emp_name}}</option>
-	            @endif
-          	  @endforeach
-      	</select>
+                <input disabled="true" class="form-control" value="{{$HR->emp_name}}" />
+              @endif
+        	  @endforeach
+            <div class="radio">
+              @if($content->permission_3 === 1 && Auth::user()->id === $content->permission_id4)
+                @if($content->permission_4 === 1)
+                  <label><input type="radio" disabled checked="true" />Yes</label>
+                  <label><input type="radio" disabled />No</label>
+                @elseif($content->permission_4 === 2)
+                  <label><input type="radio" id="permission_4yes" name="permission_4" value="1" />Yes</label>
+                  <label><input type="radio" id="permission_4no" name="permission_4" checked="true" value="2" />No</label>
+              @else
+                  <label><input type="radio" id="permission_4yes" name="permission_4" value="1" />Yes</label>
+                  <label><input type="radio" id="permission_4no" name="permission_4" value="2" />No</label>
+              @endif
+              @else
+                @if($content->permission_4 === 1)
+                  <label><input type="radio" checked="true" disabled />Yes</label>
+                  <label><input type="radio" disabled />No</label>
+                @elseif($content->permission_4 === 2)
+                  <label><input type="radio" disabled />Yes</label>
+                  <label><input type="radio" checked="true" disabled />No</label>
+                @else
+                  <label><input type="radio" disabled />Yes</label>
+                  <label><input type="radio" disabled />No</label>
+                @endif
+              @endif
+            </div>
       	<hr/>
-		<button type="submit" name="submit" class="btn btn-primary">Save</button>
+         @if($content->permission_1 == 2 || $content->permission_2 == 2 || $content->permission_3 == 2
+          || $content->permission_4 == 2)
+          <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4>Note:</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea class="form-control" id="note" name="note">{{$content->changeNote}}</textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      <button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+    @else
+      <div class="modal fade" id="false" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4>Note:</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea class="form-control" id="note" name="note" placeholder="Your Note Please:"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    <button type="submit" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+    @endif
 	</form>
 	<script type="text/javascript">
-			document.getElementById('reason').value = "{{$content->reason}}";
+    $(document).ready(function() {
+       $('input[type="radio"]').click(function() {
+          // alert($(this).attr('id') == 'permission_2no');
+           if($(this).attr('id') == 'permission_1no' || $(this).attr('id') == 'permission_2no' 
+                || $(this).attr('id') == 'permission_3no' || $(this).attr('id') == 'permission_4no') {
+                $('#false').attr('id', 'myModal');
+                $('#submit').attr('type', 'button');
+           }else {
+                $('#myModal').attr('id', 'false');
+                $('#submit').attr('type', 'submit');
+           }
+       });
+    });
 	</script>
 	@endforeach
 @endsection

@@ -6,93 +6,185 @@
 
 @section('content')
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_leaveid)}}" name="editProfile" enctype="multipart/form-data">
-		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_leaveid)}}" name="editProfile" enctype="multipart/form-data">
+		<hr/>
+    <input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Type of Leave:</label>
-		<div class="radio">
-			@if($content->leave_type == 1)
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
-		    @elseif($content->leave_type == 2)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
-		    @elseif($content->leave_type == 3)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
-		    @elseif($content->leave_type == 4)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="4" />Paternity Leave </label>
-		    @endif
+		<div class="radio" >
+        @if($content->leave_type == 1)
+            <label><input type="radio" disabled checked="checked" />Vacation Leave</label>
+            <label><input type="radio" disabled />Sick Leave </label>
+            <label><input type="radio" disabled />Maternity Leave </label>
+            <label><input type="radio" disabled />Paternity Leave </label>
+        @elseif($content->leave_type == 2)
+          <label><input type="radio" disabled />Vacation Leave</label>
+            <label><input type="radio" disabled checked="checked" />Sick Leave </label>
+            <label><input type="radio" disabled />Maternity Leave </label>
+            <label><input type="radio" disabled />Paternity Leave </label>
+        @elseif($content->leave_type == 3)
+          <label><input type="radio" disabled />Vacation Leave</label>
+            <label><input type="radio" disabled />Sick Leave </label>
+            <label><input type="radio" disabled checked="checked" />Maternity Leave </label>
+            <label><input type="radio" disabled value="4" />Paternity Leave </label>
+        @elseif($content->leave_type == 4)
+          <label><input type="radio" disabled />Vacation Leave</label>
+            <label><input type="radio" disabled />Sick Leave </label>
+            <label><input type="radio" disabled />Maternity Leave </label>
+            <label><input type="radio" disabled checked="checked" />Paternity Leave </label>
+        @endif
         </div>
         <br/>
       <label>Reason(s) for Absence:</label>
-      <textarea class="form-control" id="textPurpose" name="reason"></textarea>
+      <textarea class="form-control" disabled="true">{{$content->reason}}</textarea>
       <br/>
       <label>Recommending Approval:</label>
-      <select class="form-control" name="recommendApproval">
-          @foreach($permissioners as $permissioner)
-          	@if($permissioner->id === $content->permission_id1)
-            	<option selected="true" value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
-            @else
-            	<option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
-            @endif
-          @endforeach
-      </select>
+      @foreach($permissioners as $permissioner)
+      	@if($permissioner->id === $content->permission_id1)
+        	<input type="text" class="form-control" disabled="true" value="{{$permissioner->emp_name}}"/>
+        @endif
+      @endforeach
+      <div class="radio">
+        @if($content->permission_2 === 0 && $content->permission_id1 === Auth::user()->id)
+            @if($content->permission_1 === 1)
+              <label><input type="radio" disabled checked="true"/>Yes</label>
+              <label><input type="radio" disabled />No</label>
+            @elseif($content->permission_1 === 2)
+              <label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+              <label><input type="radio" id="permission_1no" name="permission_1" checked="true" value="2" />No</label>
+          @else
+              <label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
+              <label><input type="radio" id="permission_1no" name="permission_1" value="2" />No</label>
+          @endif
+          
+        @else
+          @if($content->permission_1 === 1)
+              <label><input type="radio" disabled checked="true"/>Yes</label>
+              <label><input type="radio" disabled />No</label>
+            @elseif($content->permission_1 === 2)
+              <label><input type="radio" disabled />Yes</label>
+              <label><input type="radio" disabled checked="true"/>No</label>
+          @else
+            <label><input type="radio" disabled />Yes</label>
+                  <label><input type="radio" disabled />No</label>
+          @endif
+        @endif
+      </div>
       <br/>
       <label>Approved by:</label>
-      <select class="form-control" name="approvedBy">
-          @foreach($permissioners as $permissioner)
-          	@if($permissioner->id === $content->permission_id2)
-	            <option selected="true" value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
-	        @else
-	        	<option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+      @foreach($permissioners as $permissioner)
+      	@if($permissioner->id === $content->permission_id2)
+          <input type="text" class="form-control" disabled="true" value="{{$permissioner->emp_name}}"/>
+        @endif
+      @endforeach
+      <div class="radio">
+        @if($content->permission_1 === 1 && Auth::user()->id === $content->permission_id2)
+            @if($content->permission_2 === 1)
+              <label><input type="radio" disabled checked="true"/>Yes</label>
+              <label><input type="radio" disabled />No</label>
+            @elseif($content->permission_2 === 2)
+              <label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+              <label><input type="radio" id="permission_2no" name="permission_2" checked="true" value="2" />No</label>
+          @else
+              <label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
+              <label><input type="radio" id="permission_2no" name="permission_2" value="2" />No</label>
           @endif
-          @endforeach
-      </select><br/>
+        @else
+          @if($content->permission_2 === 1)
+            <label><input type="radio" checked="true" disabled />Yes</label>
+            <label><input type="radio" disabled />No</label>
+          @elseif($content->permission_2 === 2)
+            <label><input type="radio" disabled />Yes</label>
+            <label><input type="radio" checked="true" disabled />No</label>
+          @else
+            <label><input type="radio" disabled />Yes</label>
+            <label><input type="radio" disabled />No</label>
+          @endif
+        @endif
+      </div>
+      <br/>
       <table>
         <!-- Inclusive Dates of Leave -->
       </table>
-      <label>Entitlement:</label> 
-      <input type="text" class="form-control" name="entitlement" disabled="true" value="{{Auth::user()->entitlement}} Days" /><br/>
       <label>Days Applied For:</label> 
       <br/>
-      <select class="form-control" name="days_applied">
-        {{$balance = Auth::user()->entitlement - Auth::user()->days_taken + $content->days_applied}}
-        {{$preBalance = Auth::user()->days_taken - $content->days_applied}}
-        @if($balance == 0)
-          <option value="0">No days left</option>
-        @else
-          @for($i = 1; $i <= $balance; $i++)
-            @if($i == 1)
-            	@if($i === $content->days_applied)
-            		<option selected="true" value="{{$i}}">{{$i}} Day</option>
-            	@else
-              		<option value="{{$i}}">{{$i}} Day</option>
-              	@endif
-            @else
-              	@if($i === $content->days_applied)
-            		<option selected="true" value="{{$i}}">{{$i}} Days</option>
-	        	@else
-	          		<option value="{{$i}}">{{$i}} Days</option>
-	          	@endif
-            @endif
-          @endfor
-        @endif
-      </select><br/>
-      <label>Balance:</label> 
-      <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
-        <button type="submit" name="submit" class="btn btn-primary">Save</button>
-	</form>
+      @if($content->days_applied === 1)
+      <input class="form-control" disabled value="{{$content->days_applied}} Day" />
+      @else
+      <input class="form-control" disabled value="{{$content->days_applied}} Days" />
+      @endif
+      <hr/>
+      @if($content->permission_1 == 2 || $content->permission_2 == 2)
+          <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4>Note:</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea class="form-control" id="note" name="note">{{$content->requestNote}}</textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      <button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+    @else
+      <div class="modal fade" id="false" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4>Note:</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea class="form-control" id="note" name="note" placeholder="Your Note Please:"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    <button type="submit" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+	 @endif
+  </form>
 	<script type="text/javascript">
-		document.getElementById('textPurpose').value = "{{$content->reason}}";
+    $(document).ready(function() {
+       $('input[type="radio"]').click(function() {
+          // alert($(this).attr('id') == 'permission_2no');
+           if($(this).attr('id') == 'permission_1no' || $(this).attr('id') == 'permission_2no') {
+                $('#false').attr('id', 'myModal');
+                $('#submit').attr('type', 'button');
+           }else {
+                $('#myModal').attr('id', 'false');
+                $('#submit').attr('type', 'submit');
+           }
+       });
+    });
+    // if({{$content->permission_1}} === 1){
+    //   document.getElementById('permission_1yes').checked = 'true';
+    //   //Check if the user is the next permissioner
+    //   if({{$content->permission_id1}} == {{Auth::user()->id}}){
+    //     document.getElementById('permission_2yes').disabled = false;
+    //     document.getElementById('permission_2no').disabled = false;
+    //   }
+    // }else if({{$content->permission_1}} === 2){
+    //   document.getElementById('permission_1no').checked = 'true';
+    // }
+    // if({{$content->permission_id1}} === {{Auth::user()->id}}){
+    //   document.getElementById('permission_1yes').disabled = false;
+    //   document.getElementById('permission_1no').disabled = false;
+    // }
+
+    // if({{$content->permission_2}} === 1){
+    //   document.getElementById('permission_2yes').checked = 'true';
+    // }else if({{$content->permission_2}} === 2){
+    //   document.getElementById('permission_2no').checked = 'true';
+    // }
+
 	</script>
 	@endforeach
 @endsection

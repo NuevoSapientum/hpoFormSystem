@@ -34,7 +34,7 @@ class PagesController extends Controller
     public function inboxNotif(){
         $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
         $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
+        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 2", ['user_id' => Auth::user()->id]);
         $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 1", ['user_id' => Auth::user()->id]);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
@@ -43,11 +43,11 @@ class PagesController extends Controller
     public function approvalNotif(){
         $id = Auth::user()->id;
         $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2
-                            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 0]);
+                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
+        $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
+                                ['id1' => $id, 'id2' => $id]);
         $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
+                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
         return count($exitPass) + count($leaveForm) + count($changeSchedule);
     }
 
@@ -106,10 +106,10 @@ class PagesController extends Controller
 
     public function inbox(){
         $profileImage = $this->getImage();
-        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id", ['user_id' => Auth::user()->id]);
-        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id", ['user_id' => Auth::user()->id]);
-        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id", ['user_id' => Auth::user()->id]);
-        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id", ['user_id' => Auth::user()->id]);
+        $exitPass = DB::select("SELECT * FROM tbl_epform WHERE id = :user_id AND status != 3", ['user_id' => Auth::user()->id]);
+        $leaveForm = DB::select("SELECT * FROM tbl_leave WHERE id = :user_id AND status != 3", ['user_id' => Auth::user()->id]);
+        $changeSchedule = DB::select("SELECT * FROM tbl_chgschd WHERE id = :user_id AND status != 3", ['user_id' => Auth::user()->id]);
+        $oas = DB::select("SELECT * FROM tbl_oas WHERE id = :user_id AND status != 3", ['user_id' => Auth::user()->id]);
         $users = DB::select("select * FROM users LEFT JOIN position ON users.position_id=position.position_id");
         $positions = $this->position();
         $inboxNotif = $this->inboxNotif();
@@ -126,6 +126,7 @@ class PagesController extends Controller
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif
                     );
+        // dd($leaveForm);
         return view('user.inbox')->with($data);
     }
 
@@ -142,48 +143,102 @@ class PagesController extends Controller
             );
         if($type == 1){
             $contents = DB::select("SELECT * FROM tbl_epform WHERE tbl_epid = :id", ['id' => $id]);
-            $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
-            $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
-            $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
-            $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
-            $dataSecond = array(
-                        'title' => "Edit Exit Pass",
-                        'contents' => $contents,
-                        'HRs' => $HRs,
-                        'Supervisors' => $Supervisors,
-                        'PMs' => $PMs,
-                        'CompanyReps' => $CompanyReps
-                );
-            $data = array_merge($dataFirst, $dataSecond);
-            return view('user.inboxExit')->with($data);
+            foreach ($contents as $content) {
+                if($content->permission_1 != 0){
+                    $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+                    $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+                    $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+                    $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+                    $dataSecond = array(
+                                'title' => "Edit Exit Pass",
+                                'contents' => $contents,
+                                'HRs' => $HRs,
+                                'Supervisors' => $Supervisors,
+                                'PMs' => $PMs,
+                                'CompanyReps' => $CompanyReps
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxExitApproval')->with($data);
+                }else{
+                    $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+                    $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+                    $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+                    $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+                    $dataSecond = array(
+                                'title' => "Edit Exit Pass",
+                                'contents' => $contents,
+                                'HRs' => $HRs,
+                                'Supervisors' => $Supervisors,
+                                'PMs' => $PMs,
+                                'CompanyReps' => $CompanyReps
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxExit')->with($data);
+                }
+            }
+            
         }elseif($type == 2){
             $contents = DB::select("SELECT * FROM tbl_leave WHERE tbl_leaveid = :id", ['id' => $id]);
-            $permissioners = DB::select("select * FROM users WHERE permissioners");
-            $dataSecond = array(
-                            'title' => "Edit Request for Leave of Absence",
-                            'contents' => $contents,
-                            'permissioners' => $permissioners
-                );
-            $data = array_merge($dataFirst, $dataSecond);
-            return view('user.inboxLeave')->with($data);
+            foreach ($contents as $content) {
+                if($content->permission_1 != 0){
+                    $permissioners = DB::select("select * FROM users WHERE permissioners");
+                    $dataSecond = array(
+                                    'title' => "Edit Request for Leave of Absence",
+                                    'contents' => $contents,
+                                    'permissioners' => $permissioners
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxLeaveApproval')->with($data);
+                }else{
+                    $permissioners = DB::select("select * FROM users WHERE permissioners");
+                    $dataSecond = array(
+                                    'title' => "Edit Request for Leave of Absence",
+                                    'contents' => $contents,
+                                    'permissioners' => $permissioners
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxLeave')->with($data);
+                }
+            }
         }elseif($type == 3){
             $contents = DB::select("SELECT * FROM tbl_chgschd WHERE chgschd_id = :id", ['id' => $id]);
-            $permissioners = DB::select("SELECT * FROM users WHERE permissioners");
-            $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
-            $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
-            $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
-            $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
-            $dataSecond = array(
-                            'title' => "Edit Change Schedule",
-                            'contents' => $contents,
-                            'permissioners' => $permissioners,
-                            'HRs' => $HRs,
-                            'Supervisors' => $Supervisors,
-                            'PMs' => $PMs,
-                            'CompanyReps' => $CompanyReps
-                );
-            $data = array_merge($dataFirst, $dataSecond);
-            return view('user.inboxChange')->with($data);
+            foreach ($contents as $content) {
+                if($content->permission_1 != 0){
+                    $permissioners = DB::select("SELECT * FROM users WHERE permissioners");
+                    $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+                    $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+                    $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+                    $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+                    $dataSecond = array(
+                                    'title' => "Edit Change Schedule",
+                                    'contents' => $contents,
+                                    'permissioners' => $permissioners,
+                                    'HRs' => $HRs,
+                                    'Supervisors' => $Supervisors,
+                                    'PMs' => $PMs,
+                                    'CompanyReps' => $CompanyReps
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxChangeApproval')->with($data);
+                }else{
+                    $permissioners = DB::select("SELECT * FROM users WHERE permissioners");
+                    $HRs = DB::select("SELECT * FROM `users` JOIN position ON position.position_id = users.position_id AND position.department_id = 1");
+                    $Supervisors = DB::select("SELECT * FROM `users` WHERE `permissioners` = 1");
+                    $PMs = DB::select("SELECT * FROM `users` WHERE `permissioners` = 2");
+                    $CompanyReps = DB::select("SELECT * FROM `users` WHERE `permissioners` = 3");
+                    $dataSecond = array(
+                                    'title' => "Edit Change Schedule",
+                                    'contents' => $contents,
+                                    'permissioners' => $permissioners,
+                                    'HRs' => $HRs,
+                                    'Supervisors' => $Supervisors,
+                                    'PMs' => $PMs,
+                                    'CompanyReps' => $CompanyReps
+                        );
+                    $data = array_merge($dataFirst, $dataSecond);
+                    return view('user.inboxChange')->with($data);
+                }
+            }
         }elseif($type == 4){
             $contents = DB::select("SELECT * FROM tbl_oas WHERE tbl_oasid = :id", ['id' => $id]);
             $dataSecond = array(
@@ -284,17 +339,17 @@ class PagesController extends Controller
 
     public function exitApprovals($id){
         return DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
+                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
     }
 
     public function leaveApprovals($id){
-        return DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2
-            AND status = :status", ['id1' => $id, 'id2' => $id, 'status' => 0]);
+        return DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
+                        ['id1' => $id, 'id2' => $id]);
     }
 
     public function changeApprovals($id){
         return DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            OR permission_id4 = :id4 AND status = :status", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id, 'status' => 0]);
+                            OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
     }
 
     public function approval(){
@@ -343,19 +398,6 @@ class PagesController extends Controller
                         'PMs' => $PMs,
                         'CompanyReps' => $CompanyReps
                 );
-            // $id = Auth::user()->id;
-            // foreach ($contents as $content) {
-            //     if($content->permission_id1 === $id){
-            //         echo "1";
-            //     }elseif($content->permission_id2 === $id && $content->permission_1 === 1){
-            //         echo "2";
-            //     }elseif($content->permission_id3 === $id && $content->permission_2 === 1){
-            //         echo "3";
-            //     }elseif($content->permission_id4 === $id && $content->permission_3 ===1){
-            //         echo "4";
-            //     }
-            // }
-            // dd($contents);
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalExitView')->with($data);
         }elseif($type == 2){
@@ -404,20 +446,23 @@ class PagesController extends Controller
             // echo $result;
             return redirect('approval')->with('status', $status);
         }elseif($type == 2){
-            $result = $this->editLeave($request->all(), $id);
+            $result = $this->approveLeave($request->all(), $id);
             if($result){
                 $status = "Success!";
             }else{
                 $status = "Failed!";
             }
+            // echo $result;
             return redirect('approval')->with('status', $status);
         }elseif($type == 3){
-            $result = $this->editChange($request->all(), $id);
+            $result = $this->approveChange($request->all(), $id);
             if($result){
                 $status = "Success!";
             }else{
                 $status = "Failed!";
             }
+            echo $result;
+            // dd($request->all());
             return redirect('approval')->with('status', $status);
         }else{
             $status = "Nothing to Show.";
@@ -429,34 +474,132 @@ class PagesController extends Controller
         $dateUpdate = date("Y-m-d H:i:s");
         // dd($data);
         if(isset($data['permission_1'])){
-            if($data['permission_1'] != 0){
-            return DB::update("UPDATE `tbl_epform` SET `permission_1` = :answer, `dateUpdated` = :dateUpdated 
-                                WHERE `tbl_epid` = :id", 
-                                ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_1']]);
+            if($data['permission_1'] == 2){
+                return DB::update("UPDATE tbl_epform SET permission_1 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_1'] == 1){
+                return DB::update("UPDATE tbl_epform SET permission_1 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
             }
-        }else{
-            if(isset($data['permission_2'])){
-                if($data['permission_2'] != 0){
-                    return DB::update("UPDATE `tbl_epform` SET `permission_2` = :answer, `dateUpdated` = :dateUpdated 
-                                    WHERE `tbl_epid` = :id", 
-                                    ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_2']]);
-                }
-            }else{
-                if(isset($data['permission_3'])){
-                    if($data['permission_3'] != 0){
-                        return DB::update("UPDATE `tbl_epform` SET `permission_3` = :answer, `dateUpdated` = :dateUpdated 
-                                        WHERE `tbl_epid` = :id", 
-                                        ['dateUpdated' => $dateUpdate, 'id' => $id, 'answer' => $data['permission_3']]);
-                    }
-                }else{
-                    if(isset($data['permission_4'])){
-                        if($data['permission_4'] != 0){
-                            return DB::update("UPDATE `tbl_epform` SET `permission_4` = :answer, `status` = :status, `dateUpdated` = :dateUpdated 
-                                            WHERE `tbl_epid` = :id", 
-                                            ['dateUpdated' => $dateUpdate, 'id' => $id, 'status' => 1, 'answer' => $data['permission_4']]);
-                        }
-                    }
-                }
+        }elseif(isset($data['permission_2'])){
+            if($data['permission_2'] == 2){
+                return DB::update("UPDATE tbl_epform SET permission_2 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_2'] == 1){
+                return DB::update("UPDATE tbl_epform SET permission_2 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
+            }
+        }elseif(isset($data['permission_3'])){
+            if($data['permission_3'] == 2){
+                return DB::update("UPDATE tbl_epform SET permission_3 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_3'] == 1){
+                return DB::update("UPDATE tbl_epform SET permission_3 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
+            }
+        }elseif(isset($data['permission_4'])){
+            if($data['permission_4'] == 2){
+                return DB::update("UPDATE tbl_epform SET permission_4 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_4'] == 1){
+                return DB::update("UPDATE tbl_epform SET permission_4 = :answer, exitNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE tbl_epid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
+                                    'id' => $id, 'note' => '', 'status' => 1]);
+            }
+        }
+    }
+
+    public function approveLeave(array $data, $id){
+        $dateUpdate = date("Y-m-d H:i:s");
+        if(isset($data['permission_1'])){
+            if($data['permission_1'] == 2){
+                return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
+                                    WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'status' => 2, 'note' => $data['note']]);
+            }elseif($data['permission_1'] == 1){
+                return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
+                                    WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'status' => 0, 'note' => '']);
+            }
+        }elseif(isset($data['permission_2'])){
+            if($data['permission_2'] == 2){
+                return DB::update("UPDATE tbl_leave SET permission_2 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
+                                    WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
+                                    'id' => $id, 'status' => 2, 'note' => $data['note']]);
+            }elseif($data['permission_2'] == 1){
+                return DB::update("UPDATE tbl_leave SET permission_2 = :answer, requestNote = :note, status = :status,
+                                    dateUpdated = :dateUpdated WHERE tbl_leaveid = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'], 
+                                    'id' => $id, 'status' => 1, 'note' => '']);
+            }
+        }
+    }
+
+    public function approveChange(array $data, $id){
+        $dateUpdate = date("Y-m-d H:i:s");
+        // dd($data);
+        if(isset($data['permission_1'])){
+            if($data['permission_1'] == 2){
+                return DB::update("UPDATE tbl_chgschd SET permission_1 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_1'] == 1){
+                return DB::update("UPDATE tbl_chgschd SET permission_1 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
+            }
+        }elseif(isset($data['permission_2'])){
+            if($data['permission_2'] == 2){
+                return DB::update("UPDATE tbl_chgschd SET permission_2 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_2'] == 1){
+                return DB::update("UPDATE tbl_chgschd SET permission_2 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
+            }
+        }elseif(isset($data['permission_3'])){
+            if($data['permission_3'] == 2){
+                return DB::update("UPDATE tbl_chgschd SET permission_3 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_3'] == 1){
+                return DB::update("UPDATE tbl_chgschd SET permission_3 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
+                                    'id' => $id, 'note' => '', 'status' => 0]);
+            }
+        }elseif(isset($data['permission_4'])){
+            if($data['permission_4'] == 2){
+                return DB::update("UPDATE tbl_chgschd SET permission_4 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
+                                    'id' => $id, 'note' => $data['note'], 'status' => 2]);
+            }elseif($data['permission_4'] == 1){
+                return DB::update("UPDATE tbl_chgschd SET permission_4 = :answer, changeNote = :note, 
+                                    dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
+                                    ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
+                                    'id' => $id, 'note' => '', 'status' => 1]);
             }
         }
     }
@@ -516,32 +659,68 @@ class PagesController extends Controller
 
     public function deleteInbox($type, $id){
         if($type == 1){
-            $result = DB::update("UPDATE tbl_epform SET status = :status WHERE tbl_epid = :id", ['status' => 0, 'id' => $id]);
-            if($result)
-                $status = "Success!";
-            else
-                $status = "Failed!";
+            $contents = DB::select("SELECT permission_1 FROM tbl_epform WHERE tbl_epid = :id", ['id' => $id]);
+            foreach ($contents as $content) {
+                if($content->permission_1 === 1 || $content->permission_1 === 2 ){
+                    $status = "Failed!";
+                }else{
+                    $result = DB::update("UPDATE tbl_epform SET status = :status WHERE tbl_epid = :id", ['status' => 3, 'id' => $id]);
+                    if($result)
+                        $status = "Success!";
+                    else
+                        $status = "Failed!";
+                }
+            }
             return redirect('inbox')->with('status', $status);
         }elseif($type == 2){
-            $result = DB::update("UPDATE tbl_leave SET status = :status WHERE tbl_leaveid = :id", ['status' => 0, 'id' => $id]);
-            if($result)
-                $status = "Success!";
-            else
-                $status = "Failed!";
+            $contents = DB::select("SELECT permission_1 FROM tbl_leave WHERE tbl_leaveid = :id", ['id' => $id]);
+            foreach ($contents as $content) {
+                if($content->permission_1 === 1 || $content->permission_1 === 2){
+                    $status = "Failed!";
+                }else{
+                    $result = DB::update("UPDATE tbl_leave SET status = :status WHERE tbl_leaveid = :id", ['status' => 3, 'id' => $id]);
+                    if($result)
+                        $status = "Success!";
+                    else
+                        $status = "Failed!";
+                }
+            }
+            
             return redirect('inbox')->with('status', $status);
         }elseif($type == 3){
-            $result = DB::update("UPDATE tbl_chgschd SET status = :status WHERE chgschd_id = :id", ['status' => 0, 'id' => $id]);
-            if($result)
-                $status = "Success!";
-            else
-                $status = "Failed!";
+            $contents = DB::select("SELECT permission_1 FROM tbl_chgschd WHERE chgschd_id = :id", ['id' => $id]);
+            foreach ($contents as $content) {
+                if($content->permission_1 === 1 || $content->permission_1 === 2){
+                    $status = "Failed!";
+                }else{
+                    $result = DB::update("UPDATE tbl_chgschd SET status = :status WHERE chgschd_id = :id", ['status' => 3, 'id' => $id]);
+                    if($result)
+                        $status = "Success!";
+                    else
+                        $status = "Failed!";        
+                }
+            }
+            
             return redirect('inbox')->with('status', $status);
         }elseif($type == 4){
-            $result = DB::update("UPDATE tbl_oas SET status =:status WHERE tbl_oasid = :id", ['status' => 0, 'id' => $id]);
+            // $contents = DB::select("SELECT permission_1 FROM tbl_oas WHERE tbl_oasid = :id", ['id' => $id]);
+            // foreach ($contents as $content) {
+            //     if($content->permission_1 === 1 || $content->permission_1 === 2){
+            //         $status = "Failed!";
+            //     }else{
+            //         $result = DB::update("UPDATE tbl_oas SET status =:status WHERE tbl_oasid = :id", ['status' => 3, 'id' => $id]);
+            //         if($result)
+            //             $status = "Success!";
+            //         else
+            //             $status = "Failed!";        
+            //     }
+            // }
+            $result = DB::update("UPDATE tbl_oas SET status =:status WHERE tbl_oasid = :id", ['status' => 3, 'id' => $id]);
             if($result)
                 $status = "Success!";
             else
-                $status = "Failed!";
+                $status = "Failed!";  
+            
             return redirect('inbox')->with('status', $status);
         }
     }

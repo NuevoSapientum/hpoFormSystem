@@ -43,18 +43,24 @@
         <td>Exit Pass</td>
         @if($exit->status == 0)
           <td>Pending</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $exit->form_type . '/' . $exit->tbl_epid  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+          </td>
         @elseif($exit->status == 1)
           <td>Approved</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+          </td>
+        @elseif($exit->status == 2)
+          <td>Denied</td>
+          <td><a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
-        <td>
-          <a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-          <a href="{{URL::to('inbox/delete/' . $exit->form_type . '/' . $exit->tbl_epid )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
-        </td>
         </tr>
         @endif
       @endforeach
       @foreach($leaveForm as $leave)
-        @if($leave->status == 2)
+        @if($leave->status == 3)
         @else
         <tr>
         <td>{{$leave->date_created}}</td>
@@ -62,15 +68,19 @@
         <td>Request for Leave of Absence</td>
         @if($leave->status == 0)
           <td>Pending</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $leave->form_type . '/' . $leave->tbl_leaveid )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+          </td>
         @elseif($leave->status == 1)
           <td>Approved</td>
-        @else
-          <td>Closed</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+          </td>
+        @elseif($leave->status == 2)
+          <td>Denied</td>
+          <td><a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' .$leave->tbl_leaveid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
-        <td>
-          <a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-          <a href="{{URL::to('inbox/delete/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
-        </td>
         </tr>
         @endif
       @endforeach
@@ -83,13 +93,20 @@
         <td>Change Schedule</td>
         @if($change->status == 0)
           <td>Pending</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+          </td>
         @elseif($change->status == 1)
           <td>Approved</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+          </td>
+        @elseif($change->status == 2)
+          <td>Denied</td>
+          <td><a href="{{URL::to('inbox/edit/' . $change->form_type . '/' .$change->chgschd_id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
+        
         @endif
-        <td>
-          <a href="{{URL::to('inbox/edit/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-          <a href="{{URL::to('inbox/delete/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
-        </td>
         </tr>
         @endif
       @endforeach
@@ -102,13 +119,19 @@
         <td>Overtime Authorization Slip</td>
         @if($over->status == 0)
           <td>Pending</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+          </td>
         @elseif($over->status == 1)
           <td>Approved</td>
+          <td>
+            <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+          </td>
+        @elseif($over->status == 2)
+          <td>Denied</td>
+          <td><a href="{{URL::to('inbox/edit/' . $over->form_type . '/' .$over->tbl_oasid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
-        <td>
-          <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-          <a href="{{URL::to('inbox/delete/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
-        </td>
         </tr>
         @endif
       @endforeach
