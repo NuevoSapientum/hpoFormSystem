@@ -155,7 +155,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <a href="{{URL::to('/approval')}}">Approvals&nbsp;<span class="label label-default">{{$approvalNotif}}</span></a>
                     </div>
                   </li>
-                  @if(Auth::user()->position_id == 1)
+                  @if($empDepartment->department_name == "Human Resource")
                   <li class="user-body">
                     <a href="{{URL::to('auth/register')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a><br/>
                     <a href="{{URL::to('accounts')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Manage Accounts</a>

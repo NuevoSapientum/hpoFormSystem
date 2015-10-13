@@ -35,26 +35,27 @@
     </thead>
     <tbody>
       @foreach($exitPass as $exit)
-        @if($exit->status == 2)
+        @if($exit->status == 3)
         @else
         <tr>
-        <td>{{$exit->dateCreated}}</td>
-        <td>{{$exit->dateUpdated}}</td>
+        
+        <td>{{date('F d, Y', strtotime($exit->created_at))}}</td>
+        <td>{{date('F d, Y', strtotime($exit->updated_at))}}</td>
         <td>Exit Pass</td>
         @if($exit->status == 0)
           <td>Pending</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-            <a href="{{URL::to('inbox/delete/' . $exit->form_type . '/' . $exit->tbl_epid  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+            <a href="{{URL::to('inbox/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $exit->form_id . '/' . $exit->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
           </td>
         @elseif($exit->status == 1)
           <td>Approved</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('inbox/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
           </td>
         @elseif($exit->status == 2)
           <td>Denied</td>
-          <td><a href="{{URL::to('inbox/edit/' . $exit->form_type . '/' .$exit->tbl_epid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
+          <td><a href="{{URL::to('inbox/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
         </tr>
         @endif
@@ -63,74 +64,74 @@
         @if($leave->status == 3)
         @else
         <tr>
-        <td>{{$leave->date_created}}</td>
-        <td>{{$leave->dateUpdated}}</td>
+        <td>{{date('F d, Y', strtotime($leave->created_at))}}</td>
+        <td>{{date('F d, Y', strtotime($leave->updated_at))}}</td>
         <td>Request for Leave of Absence</td>
         @if($leave->status == 0)
           <td>Pending</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-            <a href="{{URL::to('inbox/delete/' . $leave->form_type . '/' . $leave->tbl_leaveid )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+            <a href="{{URL::to('inbox/edit/' . $leave->form_id . '/' . $leave->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $leave->form_id . '/' . $leave->id )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
           </td>
         @elseif($leave->status == 1)
           <td>Approved</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('inbox/edit/' . $leave->form_id . '/' . $leave->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
           </td>
         @elseif($leave->status == 2)
           <td>Denied</td>
-          <td><a href="{{URL::to('inbox/edit/' . $leave->form_type . '/' .$leave->tbl_leaveid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
+          <td><a href="{{URL::to('inbox/edit/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
         </tr>
         @endif
       @endforeach
       @foreach($changeSchedule as $change)
-        @if($change->status == 2)
+        @if($change->status == 3)
         @else
         <tr>
-        <td>{{$change->date_created}}</td>
-        <td>{{$change->dateUpdated}}</td>
+        <td>{{date('F d, Y', strtotime($change->created_at))}}</td>
+        <td>{{date('F d, Y', strtotime($change->updated_at))}}</td>
         <td>Change Schedule</td>
         @if($change->status == 0)
           <td>Pending</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-            <a href="{{URL::to('inbox/delete/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+            <a href="{{URL::to('inbox/edit/' . $change->form_id . '/' . $change->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $change->form_id . '/' . $change->id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
           </td>
         @elseif($change->status == 1)
           <td>Approved</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('inbox/edit/' . $change->form_id . '/' . $change->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
           </td>
         @elseif($change->status == 2)
           <td>Denied</td>
-          <td><a href="{{URL::to('inbox/edit/' . $change->form_type . '/' .$change->chgschd_id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
+          <td><a href="{{URL::to('inbox/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         
         @endif
         </tr>
         @endif
       @endforeach
       @foreach($oas as $over)
-        @if($over->status == 2)
+        @if($over->status == 3)
         @else
         <tr>
-        <td>{{$over->date_created}}</td>
-        <td>{{$over->dateUpdated}}</td>
+        <td>{{date('F d, Y', strtotime($over->created_at))}}</td>
+        <td>{{date('F d, Y', strtotime($over->updated_at))}}</td>
         <td>Overtime Authorization Slip</td>
         @if($over->status == 0)
           <td>Pending</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-            <a href="{{URL::to('inbox/delete/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+            <a href="{{URL::to('inbox/edit/' . $over->form_id . '/' . $over->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+            <a href="{{URL::to('inbox/delete/' . $over->form_id . '/' . $over->id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
           </td>
         @elseif($over->status == 1)
           <td>Approved</td>
           <td>
-            <a href="{{URL::to('inbox/edit/' . $over->form_type . '/' . $over->tbl_oasid)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('inbox/edit/' . $over->form_id . '/' . $over->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
           </td>
         @elseif($over->status == 2)
           <td>Denied</td>
-          <td><a href="{{URL::to('inbox/edit/' . $over->form_type . '/' .$over->tbl_oasid )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
+          <td><a href="{{URL::to('inbox/edit/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
         @endif
         </tr>
         @endif

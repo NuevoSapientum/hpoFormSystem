@@ -36,28 +36,29 @@
     </thead>
     <tbody>
       @foreach($exitApprovals as $exit)
-        <tr>
-          <td>{{$exit->emp_name}}</td>
-          <td>{{$exit->dateCreated}}</td>
-          <td>{{$exit->dateUpdated}}</td>
-          <td>Exit Pass</td>
-          @if($exit->status === 0)
-            <td>Pending</td>
-          @elseif($exit->status === 1)
-            <td>Approved</td>
-          @elseif($exit->status === 2)
-            <td>Denied</td>
-          @endif
-          <td>
-            <a href="{{URL::to('approval/view/' . $exit->form_type . '/' . $exit->tbl_epid)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
-          </td>
-        </tr>
+      <tr>
+        <td>{{$exit->users->emp_name}}</td>
+        <td>{{date('F d, Y', strtotime($exit->created_at))}}</td>
+        <td>{{date('F d, Y', strtotime($exit->updated_at))}}</td>
+        <td>Exit Pass</td>
+        @if($exit->status === 0)
+          <td>Pending</td>
+        @elseif($exit->status === 1)
+          <td>Approved</td>
+        @elseif($exit->status === 2)
+          <td>Denied</td>
+        @endif
+        <td>
+            <a href="{{URL::to('approval/view/' . $exit->form_id . '/' . $exit->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+        </td>
+      </tr>
       @endforeach
+
       @foreach($leaveApprovals as $leave)
         <tr>
-          <td>{{$leave->emp_name}}</td>
-          <td>{{$leave->date_created}}</td>
-          <td>{{$leave->dateUpdated}}</td>
+          <td>{{$leave->users->emp_name}}</td>
+          <td>{{date('F d, Y', strtotime($leave->created_at))}}</td>
+          <td>{{date('F d, Y', strtotime($leave->updated_at))}}</td>
           <td>Request for Leave of Absence</td>
           @if($leave->status === 0)
             <td>Pending</td>
@@ -67,15 +68,16 @@
             <td>Denied</td>
           @endif
           <td>
-            <a href="{{URL::to('approval/view/' . $leave->form_type . '/' . $leave->tbl_leaveid)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('approval/view/' . $leave->form_id . '/' . $leave->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
           </td>
         </tr>
       @endforeach
+
       @foreach($changeApprovals as $change)
         <tr>
-          <td>{{$change->emp_name}}</td>
-          <td>{{$change->date_created}}</td>
-          <td>{{$change->dateUpdated}}</td>
+          <td>{{$change->users->emp_name}}</td>
+          <td>{{date('F d, Y', strtotime($change->created_at))}}</td>
+          <td>{{date('F d, Y', strtotime($change->updated_at))}}</td>
           <td>Change of Schedule</td>
           @if($change->status === 0)
             <td>Pending</td>
@@ -85,7 +87,7 @@
             <td>Denied</td>
           @endif
           <td>
-            <a href="{{URL::to('approval/view/' . $change->form_type . '/' . $change->chgschd_id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+            <a href="{{URL::to('approval/view/' . $change->form_id . '/' . $change->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
           </td>
         </tr>
       @endforeach

@@ -6,7 +6,7 @@
 
 @section('content')
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_leaveid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Type of Leave:</label>
 		<div class="radio">
@@ -85,7 +85,7 @@
       @endif
       <br/>
       <label>Note:</label>
-        <textarea class="form-control" disabled >{{$content->requestNote}}</textarea>
+        <textarea class="form-control" disabled >{{$content->reason}}</textarea>
       <hr/>
 	</form>
 	<script type="text/javascript">

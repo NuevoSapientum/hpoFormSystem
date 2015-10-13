@@ -156,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <a href="<?php echo e(URL::to('/approval')); ?>">Approvals&nbsp;<span class="label label-default"><?php echo e($approvalNotif); ?></span></a>
                     </div>
                   </li>
-                  <?php if(Auth::user()->position_id == 1): ?>
+                  <?php if($empDepartment->department_name == "Human Resource"): ?>
                   <li class="user-body">
                     <a href="<?php echo e(URL::to('auth/register')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Create Account</a><br/>
                     <a href="<?php echo e(URL::to('accounts')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Manage Accounts</a>

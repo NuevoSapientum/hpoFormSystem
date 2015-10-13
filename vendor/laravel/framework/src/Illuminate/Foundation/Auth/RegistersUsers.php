@@ -5,7 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
-
+use App\Positions;
 
 trait RegistersUsers
 {
@@ -18,7 +18,7 @@ trait RegistersUsers
      */
     public function getRegister()
     {
-        $positions = DB::select("select * FROM position");
+        $positions = Positions::all();
         return view('auth.register')->with('positions_all', $positions);
     }
 
@@ -39,14 +39,7 @@ trait RegistersUsers
         }
 
         $this->create($request->all());
-        $image = "blank";
-        $name = "blank";
-        $users = DB::select("SELECT id FROM users ORDER BY id DESC LIMIT 1");
-        $id;
-        foreach ($users as $user) {
-            $id = $user->id;
-        }
-        DB::insert("INSERT into `profile_image`(`name`, `image`, `id`) values(?, ?, ?)", [$name, $image, $id]);
+        
         return redirect($this->redirectPath());
     }
 }

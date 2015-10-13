@@ -17,14 +17,14 @@
     @endif
     @foreach($contents as $content)
 
-	<form method="POST" id="approvalExit" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" id="approvalExit" name="editProfile" enctype="multipart/form-data">
 		<hr/>
 		<label>From:</label>
-	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
+	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->date_from}}" class="form-control"/><br/> 
 	    <label>To:</label>
-	    <input type="date" disabled="true" id="toDate" name="dateTo" value="{{$content->dateTo}}" class="form-control"/><br/>       
+	    <input type="date" disabled="true" id="toDate" name="dateTo" value="{{$content->date_to}}" class="form-control"/><br/>       
 	    <label>Purpose:</label>
-	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose">{{$content->textPurpose}}</textarea><br/>
+	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose">{{$content->purpose}}</textarea><br/>
 	    <label>Supervisor Signature:</label>
 	      @foreach($Supervisors as $Supervisor)
 	      	@if($Supervisor->id === $content->permission_id1)
@@ -102,7 +102,7 @@
 	      </div>
 	      <br/>
 	      <label>Note:</label>
-	      <textarea disabled class="form-control">{{$content->exitNote}}</textarea>
+	      <textarea disabled class="form-control">{{$content->reason}}</textarea>
 		<hr/>
 	</form>
 	<script>

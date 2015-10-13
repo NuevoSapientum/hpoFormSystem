@@ -22,7 +22,7 @@
 		<label>Position:</label>
 		<select class="form-control" name="position">
               @foreach($positions_all as $post)
-                <option id="{{$post->position_id}}" value="{{$post->position_id}}">{{$post->position_name}}</option>
+                <option id="{{$post->id}}" value="{{$post->id}}">{{$post->position_name}}</option>
               @endforeach
         </select><br/>
         <label>Email:</label>

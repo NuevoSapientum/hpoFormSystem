@@ -16,14 +16,14 @@
     </div>
     @endif
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_epid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>From:</label>
-	    <input type="date" id="fromDate" name="dateFrom" value="{{$content->dateFrom}}" class="form-control"/><br/> 
+	    <input type="date" id="fromDate" name="dateFrom" value="{{$content->date_from}}" class="form-control"/><br/> 
 	    <label>To:</label>
-	    <input type="date" id="toDate" name="dateTo" value="{{$content->dateTo}}" class="form-control"/><br/>       
+	    <input type="date" id="toDate" name="dateTo" value="{{$content->date_to}}" class="form-control"/><br/>       
 	    <label>Purpose:</label>
-	    <textarea class="form-control" id="textArea" name="textPurpose"></textarea><br/>
+	    <textarea class="form-control" id="textArea" name="textPurpose">{{$content->purpose}}</textarea><br/>
 	    <label>Supervisor Signature:</label>
 	      <select class="form-control" id="supervisor" name="supervisor">
 	          @foreach($Supervisors as $Supervisor)
@@ -71,7 +71,6 @@
 		<button type="submit" name="submit" class="btn btn-primary">Save</button>
 	</form>
 	<script type="text/javascript">
-			document.getElementById('textArea').value = "{{$content->textPurpose}}";
 			if({{$content->status}} === 1){
 				// getElementsByName('dateFrom').disabled = "true";
 				document.getElementById('fromDate').disabled = true;

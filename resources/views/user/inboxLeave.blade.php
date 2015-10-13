@@ -6,7 +6,7 @@
 
 @section('content')
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_leaveid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Type of Leave:</label>
 		<div class="radio">
@@ -34,7 +34,7 @@
         </div>
         <br/>
       <label>Reason(s) for Absence:</label>
-      <textarea class="form-control" id="textPurpose" name="reason"></textarea>
+      <textarea class="form-control" id="textPurpose" name="reasonforAbsence">{{$content->purpose}}</textarea>
       <br/>
       <label>Recommending Approval:</label>
       <select class="form-control" name="recommendApproval">
@@ -65,24 +65,24 @@
       <label>Days Applied For:</label> 
       <br/>
       <select class="form-control" name="days_applied">
-        {{$balance = Auth::user()->entitlement - Auth::user()->days_taken + $content->days_applied}}
-        {{$preBalance = Auth::user()->days_taken - $content->days_applied}}
+      <?php $balance = Auth::user()->entitlement - Auth::user()->days_taken ?>
         @if($balance == 0)
-          <option value="0">No days left</option>
+          <option>No days left</option>
         @else
-          @for($i = 1; $i <= $balance; $i++)
+          @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
             @if($i == 1)
-            	@if($i === $content->days_applied)
-            		<option selected="true" value="{{$i}}">{{$i}} Day</option>
-            	@else
-              		<option value="{{$i}}">{{$i}} Day</option>
-              	@endif
+              @if($i === $content->days_applied)
+              <option selected="true" value="{{$i}}">{{$i}} Day</option>
+              @else
+              <option value="{{$i}}">{{$i}} Day</option>
+              @endif
             @else
-              	@if($i === $content->days_applied)
-            		<option selected="true" value="{{$i}}">{{$i}} Days</option>
-	        	@else
-	          		<option value="{{$i}}">{{$i}} Days</option>
-	          	@endif
+              @if($i === $content->days_applied)
+              <option selected="true" value="{{$i}}">{{$i}} Days</option>
+              @else
+              <option value="{{$i}}">{{$i}} Days</option>
+              @endif
+              
             @endif
           @endfor
         @endif
@@ -91,8 +91,5 @@
       <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
         <button type="submit" name="submit" class="btn btn-primary">Save</button>
 	</form>
-	<script type="text/javascript">
-		document.getElementById('textPurpose').value = "{{$content->reason}}";
-	</script>
 	@endforeach
 @endsection

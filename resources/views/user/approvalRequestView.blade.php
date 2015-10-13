@@ -6,7 +6,7 @@
 
 @section('content')
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->tbl_leaveid)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('approval/view/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<hr/>
     <input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Type of Leave:</label>
@@ -35,7 +35,7 @@
         </div>
         <br/>
       <label>Reason(s) for Absence:</label>
-      <textarea class="form-control" disabled="true">{{$content->reason}}</textarea>
+      <textarea class="form-control" disabled="true">{{$content->purpose}}</textarea>
       <br/>
       <label>Recommending Approval:</label>
       @foreach($permissioners as $permissioner)
@@ -121,7 +121,7 @@
                   <h4>Note:</h4>
                 </div>
                 <div class="modal-body">
-                  <textarea class="form-control" id="note" name="note">{{$content->requestNote}}</textarea>
+                  <textarea class="form-control" id="note" name="note">{{$content->reason}}</textarea>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

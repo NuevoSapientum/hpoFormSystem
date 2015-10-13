@@ -21,12 +21,6 @@
       </ul>
       </div>
       @endif
-      <label>Department:</label>
-      <select class="form-control" name="department">
-        @foreach($department_user as $user_department)
-          <option value="{{$user_department->department_id}}">{{$user_department->department_name}}</option>
-        @endforeach
-      </select>
       <hr/>
       <label><u>Date of Effectivity:</u></label><br/>
       <label>From:</label>
@@ -43,7 +37,7 @@
       <input type="date" name="dateToShift" class="form-control"/>
       <hr/>
       <label>Reason:</label>
-      <textarea class="form-control" name="reason"></textarea>
+      <textarea class="form-control" name="reasonforChangeSchedule"></textarea>
       <hr/>
       <label><u>Approved by:</u></label>
       <br/>

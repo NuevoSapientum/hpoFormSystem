@@ -24,7 +24,7 @@ class Positions extends Model
         return $this->belongsTo('App\Departments');
     }
 
-    public function user(){
-        return $this->belongsTo('App\User');
+    public function users(){
+        return $this->hasMany('App\User');
     }
 }

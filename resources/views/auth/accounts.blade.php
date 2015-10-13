@@ -1,5 +1,26 @@
 @extends('layout.default')
 
+@section('head')
+  @if(session('status') == "Success!")
+    <div class="alert alert-success">
+      <h4>{{session('status')}}</h4>
+    </div>
+  @elseif(session('status') == "Failed!")
+    <div class="alert alert-warning">
+      <h4>{{session('status')}}</h4>
+    </div>
+  @elseif(session('status') == "Nothing to Show.")
+    <div class="alert alert-danger">
+        <h4>{{session('status')}}</h4>
+    </div>
+  @endif
+  <div class="well well-sm">
+    <h1>
+      Manage Employee Accounts
+    </h1>  
+  </div>
+@endsection
+
 @section('content')
   <table id="example">
     <thead>
@@ -20,7 +41,7 @@
         <td>{{$user->email}}</td>
         <td>
           <a href="{{URL::to('accounts/show/' . $user->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-          <a href="{{URL::to('accounts/resetPassword/' . $user->id)}}"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Change Password</a>
+          <a href="{{URL::to('accounts/resetPassword/' . $user->id)}}"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Reset Password</a>
         </td>
         </tr>
     @endforeach

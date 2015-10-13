@@ -61,7 +61,7 @@
             <label>Position:</label>
             <select class="form-control" name="position" value="{{old('position')}}">
               @foreach($positions_all as $positions)
-                <option value="{{$positions->position_id}}">{{$positions->position_name}}</option>
+                <option value="{{$positions->id}}">{{$positions->position_name}}</option>
               @endforeach
             </select>
             <br/>

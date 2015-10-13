@@ -1,0 +1,47 @@
+public function postProfile(Request $request){
+        $file = array('image' => Input::file('image'));
+        $rules = array('name' => 'required|max:255',
+                       'position' => 'required',
+                       'email' => 'required|email|max:255');
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        if(implode($file)){
+            if(getimagesize($_FILES['image']['tmp_name']) == FALSE){
+                echo "Please select an image.";
+            }else{
+                $image = addslashes($_FILES['image']['tmp_name']);
+                $name = addslashes($_FILES['image']['tmp_name']);
+                $image = file_get_contents($image);
+                $image = base64_encode($image);
+            }
+        }else{
+            echo "2";
+        }
+
+        
+        // return redirect('/');
+    }
+
+    public function updateImage($name, $image){
+        DB::update("UPDATE `profile_image` SET `picture_name` = :name, `image` = :image WHERE `id` = :user", ['name' => $name, 'image' => $image, 'user' => Auth::user()->img_id]);
+    }
+
+    // public function saveImage($name, $image){
+    //     DB::insert("INSERT into `profile_image`(`name`, `image`, `id`) values(?, ?, ?)", [$name, $image, Auth::user()->id]);
+    // }
+
+    protected function edit(array $data)
+    {
+        Auth::user()->emp_name = $data['name'];
+        Auth::user()->position_id = $data['position'];
+        Auth::user()->email = $data['email'];
+        return Auth::user()->save();
+    }
+
+    /*Managing Accounts*/

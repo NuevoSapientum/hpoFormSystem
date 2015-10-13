@@ -116,7 +116,7 @@
             </div>
             <hr/>
           <label>Note:</label>
-      	     <textarea class="form-control" disabled >{{$content->changeNote}}</textarea>
+      	     <textarea class="form-control" disabled >{{$content->reason}}</textarea>
         <hr/>
 	</form>
 	<script type="text/javascript">

@@ -27,79 +27,99 @@ Route::get('/history', [
 	'uses' => 'PagesController@history'
 ]);
 
+Route::get('history/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
+Route::post('history/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@postForm'
+]);
+
+Route::get('history/delete/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@deleteForm'
+]);
+
+Route::get('history/view/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@viewForm'
+]);
+
 Route::get('/inbox',[
 	'middleware' => 'auth',
-	'uses' => 'PagesController@inbox'
+	'uses' => 'InboxController@inbox'
 ]);
 
 Route::get('inbox/edit/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@editInbox'
+	'uses' => 'InboxController@editForm'
 ]);
 
 Route::post('inbox/edit/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@postInbox'
+	'uses' => 'InboxController@postForm'
 ]);
 
 Route::get('inbox/delete/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@deleteInbox'
+	'uses' => 'InboxController@deleteForm'
 ]);
 
 Route::get('approval',[
 	'middleware' => 'auth',
-	'uses' => 'PagesController@approval'
+	'uses' => 'ApprovalController@index'
 ]);
 
 Route::get('approval/view/{type}/{id}',[
 	'middleware' => 'auth',
-	'uses' => 'PagesController@viewApproval'
+	'uses' => 'ApprovalController@viewApproval'
 ]);
 
 Route::post('approval/view/{type}/{id}',[
 	'middleware' => 'auth',
-	'uses' => 'PagesController@permissionerApproval'
+	'uses' => 'ApprovalController@permissionerApproval'
 ]);
 
 Route::get('/exitForm', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@exitForm'
+	'uses' => 'FormController@exitForm'
 ]);
 
 Route::post('/exitForm', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@postexitForm'
+	'uses' => 'FormController@postexitForm'
 ]);
 
 Route::get('/requestForLeave', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@requestForLeave'
+	'uses' => 'FormController@requestForLeave'
 ]);
 
 Route::post('/requestForLeave', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@postrequestForLeave'
+	'uses' => 'FormController@postrequestForLeave'
 ]);
 
 Route::get('/changeSchedule', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@changeSchedule'
+	'uses' => 'FormController@changeSchedule'
 ]);
 
 Route::post('/changeSchedule',[
 	'middleware' => 'auth',
-	'uses' => 'PagesController@postchangeSchedule'
+	'uses' => 'FormController@postchangeSchedule'
 ]);
 
 Route::get('/overtimeAuthSlip', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@overtimeAuthSlip'
+	'uses' => 'FormController@overtimeAuthSlip'
 ]);
 
 Route::post('/overtimeAuthSlip', [
 	'middleware' => 'auth',
-	'uses' => 'PagesController@postovertimeAuthSlip'
+	'uses' => 'FormController@postovertimeAuthSlip'
 ]);
 
 // Authentication routes...
@@ -125,44 +145,39 @@ Route::post('auth/register', [
 	'uses' => 'Auth\AuthController@postRegister'
 ]);
 
-// Controller for password
-// Route::controllers([
-//    'password' => 'Auth\PasswordController',
-// ]);
-
 /*Routes for editing a profile of the user*/
 Route::get('/editProfile',[
 	'middleware' => 'auth','admin',
-	'uses' => 'PagesController@getProfile'
+	'uses' => 'ProfileController@index'
 ]);
 
 Route::post('/editProfile',[
 	'middleware' => 'auth','admin',
-	'uses' => 'PagesController@postProfile'
+	'uses' => 'ProfileController@update'
 ]);
 
 /*Route to managing accounts*/
 Route::get('/accounts', [
 	'middleware' => 'admin',
-	'uses' => 'PagesController@accounts'
+	'uses' => 'AccountController@index'
 ]);
 
 Route::get('accounts/show/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'PagesController@show'
+	'uses' => 'AccountController@show'
 ]);
 
 Route::post('accounts/show/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'PagesController@postShow'
+	'uses' => 'AccountController@update'
 ]);
 
 Route::get('accounts/resetPassword/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'PagesController@resetPassword'
+	'uses' => 'AccountController@resetPassword'
 ]);
 
 Route::post('accounts/resetPassword/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'PagesController@postResetPassword'
+	'uses' => 'AccountController@postResetPassword'
 ]);

@@ -33,7 +33,7 @@
       
       <br/>
       <label>Reason(s) for Absence:</label>
-      <textarea class="form-control" name="reason"></textarea>
+      <textarea class="form-control" name="reasonforAbsence"></textarea>
       <br/>
       <label>Recommending Approval:</label>
       <select class="form-control" name="recommendApproval">
@@ -52,15 +52,15 @@
         <!-- Inclusive Dates of Leave -->
       </table>
       <label>Entitlement:</label> 
-      <input type="text" class="form-control" name="entitlement" disabled="true" value="{{Auth::user()->entitlement}} Days" /><br/>
+      <input type="text" class="form-control" name="entitlement" disabled value="{{Auth::user()->entitlement}} Days" /><br/>
       <label>Days Already Taken:</label> 
-      <input type="text" class="form-control" disabled="true" value="{{Auth::user()->days_taken}}"/><br/>
+      <input type="text" class="form-control" disabled value="{{Auth::user()->days_taken}}"/><br/>
       <label>Days Applied For:</label> 
       <br/>
       <select class="form-control" name="days_applied">
-        {{$balance = Auth::user()->entitlement - Auth::user()->days_taken}}
+        <?php $balance = Auth::user()->entitlement - Auth::user()->days_taken ?>
         @if($balance == 0)
-          <option value="0">No days left</option>
+          <option>No days left</option>
         @else
           @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
             @if($i == 1)

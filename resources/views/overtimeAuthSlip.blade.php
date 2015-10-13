@@ -19,15 +19,9 @@
       </ul>
       </div>
       @endif
+      <hr/>
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
       <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
-      <br/>
-      <label>Department:</label>
-      <select class="form-control" name="department">
-          @foreach($department_user as $user_department)
-          <option value="{{$user_department->department_id}}">{{$user_department->department_name}}</option>
-        @endforeach
-      </select>
       <br/>
       <label>Client:</label>
       <br/>
@@ -38,9 +32,10 @@
       </select>
       <br/>
       <label>Detailed Purpose of Overtime:</label>
-      <textarea class="form-control" name="reason"></textarea>
+      <textarea class="form-control" name="purpose"></textarea>
 
       <br/>
+      <hr/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 @endsection

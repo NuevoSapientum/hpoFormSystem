@@ -1,6 +1,19 @@
 @extends('layout.default')
 
 @section('head')
+  @if(session('status') == "Success!")
+    <div class="alert alert-success">
+      <h4>{{session('status')}}</h4>
+    </div>
+  @elseif(session('status') == "Failed!")
+    <div class="alert alert-warning">
+      <h4>{{session('status')}}</h4>
+    </div>
+  @elseif(session('status') == "Please Upload you Profile Picture.")
+    <div class="alert alert-warning">
+        <h4>{{session('status')}}</h4>
+    </div>
+  @endif
 	<h1>Edit Profile</h1>
 @endsection
 
@@ -18,9 +31,7 @@
 	<form method="POST" action="{{URL::to('/editProfile')}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Image Upload:</label>
-		<input type="file" name="image" id="file" />
-		<br/>
-		<img src="" id="preview" />
+		<input type="file" name="image" id="image" />
 		<br/>
 	<label>Name:</label>
 		<input type="text" name="name" class="form-control" value="{{Auth::user()->emp_name}}"/>
@@ -28,7 +39,7 @@
 	<label>Position:</label>
 		<select class="form-control" name="position">
               @foreach($positions_all as $post)
-                <option id="{{$post->position_id}}" value="{{$post->position_id}}">{{$post->position_name}}</option>
+                <option id="{{$post->id}}" value="{{$post->id}}">{{$post->position_name}}</option>
               @endforeach
         </select>
 		<br/>

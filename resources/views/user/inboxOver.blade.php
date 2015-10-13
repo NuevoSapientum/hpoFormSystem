@@ -2,13 +2,13 @@
 
 @section('head')
   <h1>
-    EdiT Overtime Authorization Slip
+    Edit Overtime Authorization Slip
   </h1>
 @endsection
 
 @section('content')
   @foreach($contents as $content)
-    <form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->tbl_oasid)}}">
+    <form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}">
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
         <br/>
         <label>Client:</label>
@@ -30,12 +30,9 @@
         </select>
         <br/>
         <label>Detailed Purpose of Overtime:</label>
-        <textarea class="form-control" id="reason" name="reason"></textarea>
+        <textarea class="form-control" id="reasonforChangeSchedule" name="reasonforChangeSchedule">{{$content->purpose}}</textarea>
         <br/>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-  <script type="text/javascript">
-    document.getElementById('reason').value = "{{$content->reason}}";
-  </script>
   @endforeach
 @endsection

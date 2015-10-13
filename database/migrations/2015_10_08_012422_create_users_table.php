@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->integer('permissioners');
             $table->integer('entitlement');
             $table->integer('days_taken')->default(0);
+            $table->rememberToken();
             $table->timestamps();
            
            

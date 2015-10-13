@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use DB;
 
 class AuthController extends Controller
 {
@@ -59,10 +60,21 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        $image = "blank";
+        $name = "blank";
+
+        DB::insert("INSERT into `profile_image`(`picture_name`, `image`) values(?, ?)", [$name, $image]);
+        $id = DB::select("SELECT id FROM profile_image");
+        foreach ($id as $ids) {
+            $id = $ids;
+        }
         return User::create([
             'username' => $data['username'],
             'emp_name' => $data['name'],
             'position_id' => $data['position'],
+            'permissioners' => 0,
+            'entitlement' => 7,
+            'img_id' => $id->id,
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);

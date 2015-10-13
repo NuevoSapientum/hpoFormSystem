@@ -16,7 +16,7 @@
     </div>
     @endif
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->chgschd_id)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('approval/view/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<hr/>
 		<label><u>Date of Effectivity:</u></label><br/>
@@ -34,7 +34,7 @@
 	    <input type="text" disabled="" value="{{$content->shift_to}}" class="form-control"/>
 	    <hr/>
 	    <label>Reason:</label>
-	    <textarea class="form-control" id="reason" disabled>{{$content->reason}}</textarea>
+	    <textarea class="form-control" id="reason" disabled>{{$content->purpose}}</textarea>
 	    <hr/>
 	    <label><u>Approved by:</u></label>
 	    <br/>
@@ -178,7 +178,7 @@
                   <h4>Note:</h4>
                 </div>
                 <div class="modal-body">
-                  <textarea class="form-control" id="note" name="note">{{$content->changeNote}}</textarea>
+                  <textarea class="form-control" id="note" name="note">{{$content->reason}}</textarea>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

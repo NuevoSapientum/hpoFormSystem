@@ -34,6 +34,7 @@ class CreateChangeSchedulesTable extends Migration
             $table->integer('permission_id4')->unsigned();
             $table->foreign('permission_id4')->references('id')
                   ->on('users')->onDelete('cascade');
+            $table->text('purpose');
             $table->text('reason');
             $table->integer('permission_1');
             $table->integer('permission_2');

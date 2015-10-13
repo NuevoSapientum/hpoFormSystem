@@ -21,6 +21,7 @@ class CreateOvertimeLeavesTable extends Migration
             $table->foreign('department_id')->references('id')
                   ->on('departments')->onDelete('cascade');
             $table->integer('leave_type');
+            $table->text('purpose');
             $table->text('reason');
             $table->integer('form_id')->unsigned();
             $table->foreign('form_id')->references('id')

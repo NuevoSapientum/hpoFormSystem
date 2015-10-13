@@ -16,7 +16,7 @@
     </div>
     @endif
     @foreach($contents as $content)
-	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_type . '/' . $content->chgschd_id)}}" name="editProfile" enctype="multipart/form-data">
+	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<hr/>
 		<label><u>Date of Effectivity:</u></label><br/>
@@ -34,7 +34,7 @@
 	    <input type="date" name="dateToShift" value="{{$content->shift_to}}" class="form-control"/>
 	    <hr/>
 	    <label>Reason:</label>
-	    <textarea class="form-control" id="reason" name="reason"></textarea>
+	    <textarea class="form-control" id="reasonforChangeSchedule" name="reasonforChangeSchedule">{{$content->purpose}}</textarea>
 	    <hr/>
 	    <label><u>Approved by:</u></label>
 	    <br/>
@@ -86,8 +86,5 @@
       	<hr/>
 		<button type="submit" name="submit" class="btn btn-primary">Save</button>
 	</form>
-	<script type="text/javascript">
-			document.getElementById('reason').value = "{{$content->reason}}";
-	</script>
 	@endforeach
 @endsection

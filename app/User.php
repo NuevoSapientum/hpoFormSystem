@@ -24,19 +24,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['emp_name', 'position_id', 'email', 'username', 'password'];
-
-    public function positions(){
-        return $this->hasOne('hpoforms/Positions');
-    }
-
-    public function ProfileImage(){
-        return $this->hasOne('App\ProfileImage');
-    }
+    protected $fillable = ['emp_name', 'position_id', 'email', 'username', 'password', 'entitlement', 'permissioners', 'img_id', 'days_taken'];
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['id', 'password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token'];
+
+    public function exitPass(){
+        return $this->hasMany('App\ExitPass');
+    }
+
+    public function leaves(){
+        return $this->hasMany('App\Leaves');
+    }
+
+    public function change(){
+        return $this->hasMany('App\Change');
+    }
 }

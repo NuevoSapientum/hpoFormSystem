@@ -23,6 +23,7 @@ class CreateOvertimeAuthorizationTable extends Migration
             $table->integer('form_id')->unsigned();
             $table->foreign('form_id')->references('id')
                     ->on('form_types')->onDelete('cascade');
+            $table->text('purpose');
             $table->text('reason');    
             $table->integer('status')->default(0);
             $table->integer('client_id');
