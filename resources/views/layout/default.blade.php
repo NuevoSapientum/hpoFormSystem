@@ -37,7 +37,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
     <script src="{{URL::asset('js/app.js')}}"></script>
-
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/filthypillow/jquery.filthypillow.css')}}">
+    <script src="{{URL::asset('plugins/filthypillow/jquery.filthypillow.min.js')}}"></script>
+    <script src="{{URL::asset('plugins/filthypillow/moment.js')}}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -348,6 +350,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{{URL::asset('bootstrap/js/bootstrap-multiselect.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    
     <script>
     function goBack() {
             window.history.back();
@@ -363,6 +366,8 @@ $(document).ready(function() {
     buttonClass: 'form-control'
   });
 });
+
+
     </script>
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the

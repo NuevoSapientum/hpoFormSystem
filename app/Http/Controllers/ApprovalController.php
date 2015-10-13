@@ -69,7 +69,9 @@ class ApprovalController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        return count($exitPass) + count($leaveForm) + count($changeSchedule);
+        $overtime = Overtime::where('status', '!=', 3)
+                            ->where('permission_id1', $id);
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 
     protected function position(){
@@ -108,7 +110,7 @@ class ApprovalController extends Controller
     }
 
     public function changeApprovals($id){
-        return User::find(1)->change()->where('status', '!=', 3)
+        return Change::where('status', '!=', 3)
                     ->where(function($query){
                         $id = Auth::user()->id;
                         $query->where('permission_id1', $id)
@@ -117,6 +119,15 @@ class ApprovalController extends Controller
                         ->orWhere('permission_id4', $id);
                     })
                     ->get();
+    }
+
+    public function overtimeApproval($id){
+        return Overtime::where('status', '!=', 3)
+                       ->where(function($query){
+                        $id = Auth::user()->id;
+                        $query->where('permission_id1', $id);
+                       })
+                       ->get();
     }
 
     public function index(){
@@ -129,6 +140,7 @@ class ApprovalController extends Controller
         $exitApprovals = $this->exitApprovals(Auth::user()->id);
         $leaveApprovals = $this->leaveApprovals(Auth::user()->id);
         $changeApprovals = $this->changeApprovals(Auth::user()->id);
+        $overtimeApprovals = $this->overtimeApproval(Auth::user()->id);
         $data = array(
                 'title' => "Need Approvals",
                 'inboxNotif' => $inboxNotif,
@@ -137,6 +149,7 @@ class ApprovalController extends Controller
                 'exitApprovals' => $exitApprovals,
                 'leaveApprovals' => $leaveApprovals,
                 'changeApprovals' => $changeApprovals,
+                'overtimeApprovals' => $overtimeApprovals,
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment
             );
@@ -221,6 +234,19 @@ class ApprovalController extends Controller
                 );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalChangeView')->with($data);
+        }elseif($type == 4){
+            $contents = Overtime::where('id', $id)->get();
+            $Supervisors = User::where('permissioners', 1)->get();
+            $user_position = Auth::user()->position_id;
+            $empDepartment = Positions::find($user_position)->departments;
+            $dataSecond = array(
+                            'title' => "Edit Change Schedule",
+                            'contents' => $contents,
+                            'Supervisors' => $Supervisors,
+                            'empDepartment' => $empDepartment
+                );
+            $data = array_merge($dataFirst, $dataSecond);
+            return view('user.approvalOvertimeView')->with($data);
         }else{
             $status = "Nothing to Show.";
             return redirect('approval')->with('status', $status);
@@ -253,9 +279,17 @@ class ApprovalController extends Controller
             }else{
                 $status = "Failed!";
             }
-            echo $result;
-            // dd($request->all());
+
             return redirect('approval')->with('status', $status);
+        }elseif($type == 4){
+            $result = $this->approvaOvertime($request->all(), $id);
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+
+            // return redirect('approval')->with('status', $status);
         }else{
             $status = "Nothing to Show.";
             return redirect('approval')->with('status', $status);
@@ -536,4 +570,36 @@ class ApprovalController extends Controller
         }
     }
 
+
+    public function approvaOvertime(array $data, $id){
+        $dateUpdate = date("Y-m-d H:i:s");
+
+        if(isset($data['permission_1'])){
+            if($data['permission_1'] == 2){
+                return Leaves::where('id', $id)
+                              ->update(array(
+                                    'permission_1' => $data['permission_1'],
+                                    'reason' => $data['note'],
+                                    'status' => 2,
+                                    'updated_at' => $dateUpdate
+                                ));
+                // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
+                //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                //                     'id' => $id, 'status' => 2, 'note' => $data['note']]);
+            }elseif($data['permission_1'] == 1){
+                // return Leaves::where('id', $id)
+                //              ->update(array(
+                //                 'permission_1' => $data['permission_1'],
+                //                 'reason' => '',
+                //                 'status' => 0,
+                //                 'updated_at' => $dateUpdate
+                //             ));
+                // dd($data);
+                echo $id;
+                // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
+                //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
+                //                     'id' => $id, 'status' => 0, 'note' => '']);
+            }
+        }
+    }
 }

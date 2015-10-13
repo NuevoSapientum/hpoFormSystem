@@ -69,7 +69,9 @@ class InboxController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        return count($exitPass) + count($leaveForm) + count($changeSchedule);
+        $overtime = Overtime::where('status', '!=', 3)
+                            ->where('permission_id1', $id);
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
@@ -224,10 +226,12 @@ class InboxController extends Controller
             $contents = Overtime::where('id', $id)->get();
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
+            $Supervisors = User::where('permissioners', 1)->get();
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
                             'contents' => $contents,
-                            'empDepartment' => $empDepartment
+                            'empDepartment' => $empDepartment,
+                            'Supervisors' => $Supervisors
                 );
             $data = array_merge($dataFirst, $dataSecond);
             // dd($data);

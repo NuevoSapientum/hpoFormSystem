@@ -27,7 +27,7 @@
 	    <label>Supervisor Signature:</label>
 	      <select class="form-control" id="supervisor" name="supervisor">
 	          @foreach($Supervisors as $Supervisor)
-	          	@if($Supervisor === $content->permission_id1)
+	          	@if($Supervisor->id === $content->permission_id1)
 		          	<option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
 	          	@else
 		            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>

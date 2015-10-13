@@ -29,6 +29,16 @@
           @endif
         </select>
         <br/>
+        <label>Supervisor Signature:</label>
+        <select class="form-control" id="supervisor" name="supervisor">
+            @foreach($Supervisors as $Supervisor)
+              @if($Supervisor->id === $content->permission_id1)
+                <option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+              @else
+                <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+              @endif
+            @endforeach
+        </select>
         <label>Detailed Purpose of Overtime:</label>
         <textarea class="form-control" id="reasonforChangeSchedule" name="reasonforChangeSchedule">{{$content->purpose}}</textarea>
         <br/>

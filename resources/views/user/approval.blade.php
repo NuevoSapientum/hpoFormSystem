@@ -91,6 +91,25 @@
           </td>
         </tr>
       @endforeach
+
+      @foreach($overtimeApprovals as $over)
+        <tr>
+          <td>{{$over->users->emp_name}}</td>
+          <td>{{date('F d, Y', strtotime($over->created_at))}}</td>
+          <td>{{date('F d, Y', strtotime($over->updated_at))}}</td>
+          <td>Change of Schedule</td>
+          @if($over->status === 0)
+            <td>Pending</td>
+          @elseif($over->status === 1)
+            <td>Approved</td>
+          @elseif($over->status === 2)
+            <td>Denied</td>
+          @endif
+          <td>
+            <a href="{{URL::to('approval/view/' . $over->form_id . '/' . $over->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+          </td>
+        </tr>
+      @endforeach
     </tbody>
   </table>
   <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>

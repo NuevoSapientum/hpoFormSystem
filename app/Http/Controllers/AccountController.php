@@ -72,7 +72,9 @@ class AccountController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        return count($exitPass) + count($leaveForm) + count($changeSchedule);
+        $overtime = Overtime::where('status', '!=', 3)
+                            ->where('permission_id1', $id);
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 
     protected function position(){

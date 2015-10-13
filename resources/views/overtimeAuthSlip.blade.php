@@ -31,6 +31,12 @@
           <option value="3">Jerrymae Noya</option>
       </select>
       <br/>
+      <label>Supervisor Signature:</label>
+      <select class="form-control" name="supervisor">
+          @foreach($Supervisors as $Supervisor)
+            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+          @endforeach
+      </select>
       <label>Detailed Purpose of Overtime:</label>
       <textarea class="form-control" name="purpose"></textarea>
 

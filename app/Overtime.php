@@ -17,6 +17,12 @@ class Overtime extends Model
    			'client_id',
    			'status',
    			'created_at',
-   			'updated_at'
+   			'updated_at',
+        'permission_id1',
+        'permission_1'
     ];
+
+    public function users(){
+      return $this->belongsTo('App\User', 'user_id');
+    }
 }

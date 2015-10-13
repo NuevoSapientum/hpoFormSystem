@@ -20,14 +20,14 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
+      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d h:i:s');?>"/>
       <hr/>
       
       <br/>
       <label>From:</label>
-      <input type="date" id="fromDate" name="dateFrom" class="form-control"/><br/> 
+      <input id="dateFrom" name="dateFrom" class="form-control"/><br/> 
       <label>To:</label>
-      <input type="date" id="toDate" name="dateTo" class="form-control"/><br/>       
+      <input id="dateTo" name="dateTo" class="form-control"/><br/>       
       <label>Purpose:</label>
       <textarea class="form-control" name="purpose"></textarea><br/>
       <label>Supervisor Signature:</label>
@@ -60,4 +60,35 @@
       <hr/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  <script type="text/javascript">
+    var $fpf = $( "#dateFrom" ),
+        now = moment( ).subtract( "seconds", 1 );
+    $fpf.filthypillow( { 
+      minDateTime: function( ) {
+        return now;
+      } 
+    } );
+    $fpf.on( "focus", function( ) {
+      $fpf.filthypillow( "show" );
+    } );
+    $fpf.on( "fp:save", function( e, dateObj ) {
+      $fpf.val( dateObj.format( "MMM DD YYYY hh:mm A" ) );
+      $fpf.filthypillow( "hide" );
+    } );
+
+    var $fp = $( "#dateTo" ),
+        now = moment( ).subtract( "seconds", 1 );
+    $fp.filthypillow( { 
+      minDateTime: function( ) {
+        return now;
+      } 
+    } );
+    $fp.on( "focus", function( ) {
+      $fp.filthypillow( "show" );
+    } );
+    $fp.on( "fp:save", function( e, dateObj ) {
+      $fp.val( dateObj.format( "MMM DD YYYY hh:mm A" ) );
+      $fp.filthypillow( "hide" );
+    } );
+  </script>
 @endsection

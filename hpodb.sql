@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.2.7.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2015 at 02:15 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Generation Time: Oct 13, 2015 at 08:02 AM
+-- Server version: 5.6.20
+-- PHP Version: 5.5.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `change_schedules` (
   `date_to` date NOT NULL,
   `shift_from` date NOT NULL,
   `shift_to` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `change_schedules`
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `department_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `departments`
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `exit_pass` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_from` date NOT NULL,
   `date_to` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `exit_pass`
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `form_types` (
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `form_types`
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   `status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `leaves`
@@ -212,6 +212,8 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 CREATE TABLE IF NOT EXISTS `overtime_authorization` (
 `id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
+  `permission_id1` int(10) unsigned NOT NULL,
+  `permission_1` int(10) NOT NULL,
   `department_id` int(10) unsigned NOT NULL,
   `form_id` int(10) unsigned NOT NULL DEFAULT '4',
   `purpose` text COLLATE utf8_unicode_ci NOT NULL,
@@ -220,14 +222,15 @@ CREATE TABLE IF NOT EXISTS `overtime_authorization` (
   `client_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `overtime_authorization`
 --
 
-INSERT INTO `overtime_authorization` (`id`, `user_id`, `department_id`, `form_id`, `purpose`, `reason`, `status`, `client_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 8, 4, 'asd', '', 0, 1, '2015-10-13 07:00:00', '2015-10-13 15:53:48');
+INSERT INTO `overtime_authorization` (`id`, `user_id`, `permission_id1`, `permission_1`, `department_id`, `form_id`, `purpose`, `reason`, `status`, `client_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 13, 0, 8, 4, 'asd', '', 0, 1, '2015-10-13 07:00:00', '2015-10-12 21:29:17'),
+(5, 1, 12, 0, 8, 4, 'asd', '', 0, 1, '2015-10-12 16:00:00', '2015-10-12 21:29:22');
 
 -- --------------------------------------------------------
 
@@ -253,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `positions` (
   `departments_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `positions`
@@ -276,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `profile_image` (
 `id` int(10) unsigned NOT NULL,
   `picture_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `image` longblob
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `profile_image`
@@ -315,18 +318,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `position_id`, `img_id`, `email`, `username`, `password`, `permissioners`, `entitlement`, `days_taken`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2a$10$jc0PKh5EJ2Aa26i7W3hw1un9bIV6vpKBCVui17LT/4zfW9nkOnxAa', 0, 7, 2, 'ZBvWcgxDyIM5rWTh3ZN6pwmnLR6au4o0D1qsIBSVDczZunm35fmvhxiPn8cf', '2015-10-09 07:00:00', '2015-10-13 19:14:13'),
-(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 0, 'WTeGptBKIdI1L8wa93P2nI38VJN7f0kg20f3Lztte9BGua4NTa8mqL7ccMJE', '2015-10-10 11:19:53', '2015-10-13 19:10:03'),
-(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 0, 'F0VFGVk2TaGMdDXnC0T4L8AwtWByRZ0kbcHSTvEliyXLavgi4Dz9I8dAoBx2', '2015-10-10 16:21:16', '2015-10-10 16:33:39'),
-(14, 'Marshall Eriksen', 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, 0, '4IddBMbj4pxUqoZm9T2MJv3DCsH8AF8eEp7X979VfDDoMCGyan15OyRlnY7w', '2015-10-10 16:22:24', '2015-10-13 19:14:43'),
-(16, 'Lily Aldrin', 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 0, 'gtYDv4mdzu91tgfaectQ0fmQAWaDTRwQOPnoiA85ZO9IXoFMXlpeyotLupk9', '2015-10-10 16:23:24', '2015-10-13 19:13:40');
+(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2a$10$jc0PKh5EJ2Aa26i7W3hw1un9bIV6vpKBCVui17LT/4zfW9nkOnxAa', 0, 7, 2, '2J7hotJ3sxgvMcqZ3Ouo3DF41Sxd9eMzb2K9kZQxN8W1wNCRsF6aCZy4qWY6', '2015-10-09 07:00:00', '2015-10-12 21:37:40'),
+(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 0, 'a1XPVzy9porCnXsJaZ4gdOwwZaALN9CCw1I0yNfQdHjwIJyLXVRErlKmKJFl', '2015-10-10 11:19:53', '2015-10-12 21:39:03'),
+(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 0, 'TDgWiSufZ1od1LgwJsj3oim0L5ufJi0XMTGTlcJRJB1szcUrt5AvNoeNBPhi', '2015-10-10 16:21:16', '2015-10-12 22:01:42'),
+(14, 'Marshall Eriksen', 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, 0, 'FAGCTkJOF9hXUaumVdaqVCf2ORt87kJhBb8UEiFrfosBWqYMXNBMRcw6FywO', '2015-10-10 16:22:24', '2015-10-12 21:30:31'),
+(16, 'Lily Aldrin', 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 0, 'uT4OwMZo6ui189C1msPbUCswxidCyXRmgYFwUpV0r3YJhBhfjhpT1xHllKXv', '2015-10-10 16:23:24', '2015-10-12 21:30:48');
 
 --
 -- Indexes for dumped tables
@@ -366,7 +369,7 @@ ALTER TABLE `leaves`
 -- Indexes for table `overtime_authorization`
 --
 ALTER TABLE `overtime_authorization`
- ADD PRIMARY KEY (`id`), ADD KEY `overtime_authorization_user_id_foreign` (`user_id`), ADD KEY `overtime_authorization_department_id_foreign` (`department_id`), ADD KEY `overtime_authorization_form_id_foreign` (`form_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `overtime_authorization_user_id_foreign` (`user_id`), ADD KEY `overtime_authorization_department_id_foreign` (`department_id`), ADD KEY `overtime_authorization_form_id_foreign` (`form_id`), ADD KEY `permission_id1` (`permission_id1`);
 
 --
 -- Indexes for table `password_resets`
@@ -425,7 +428,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 -- AUTO_INCREMENT for table `overtime_authorization`
 --
 ALTER TABLE `overtime_authorization`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `positions`
 --
@@ -484,6 +487,7 @@ ADD CONSTRAINT `leaves_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user
 ALTER TABLE `overtime_authorization`
 ADD CONSTRAINT `overtime_authorization_department_id_foreign` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `overtime_authorization_form_id_foreign` FOREIGN KEY (`form_id`) REFERENCES `form_types` (`id`) ON DELETE CASCADE,
+ADD CONSTRAINT `overtime_authorization_ibfk_1` FOREIGN KEY (`permission_id1`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `overtime_authorization_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --

@@ -73,7 +73,11 @@ class PagesController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        return count($exitPass) + count($leaveForm) + count($changeSchedule);
+        $overtime = Overtime::where('status', '!=', 3)
+                            ->where('permission_id1', $id);
+        
+        echo count($overtime);
+        // return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 
     protected function position(){
@@ -109,7 +113,7 @@ class PagesController extends Controller
                     'empDepartment' => $empDepartment
             );
 
-        return view('dashboard')->with($data);
+        // return view('dashboard')->with($data);
     }
 
 

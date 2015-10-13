@@ -66,9 +66,10 @@ class FormController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        return count($exitPass) + count($leaveForm) + count($changeSchedule);
+        $overtime = Overtime::where('status', '!=', 3)
+                            ->where('permission_id1', $id);
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
-
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
         return $positions; 
@@ -149,14 +150,24 @@ class FormController extends Controller
         ));
 
 
-        $save = $exitPass->save();
+        // dd($request->all());
 
-        if($save){
-            $status = "Success!";
-        }else{
-            $status = "Failed!";
-        } 
-        return redirect('/inbox')->with('status', $status);
+        $newDate = "2011-01-07";
+        $newDate = $request->input('dateFrom');
+
+        // echo $newDate;
+        $newFormat = date('Y-m-d H:i:s', strtotime($newDate));
+        echo $newFormat;
+
+        // echo $request->input('dateFrom');
+        // $save = $exitPass->save();
+
+        // if($save){
+        //     $status = "Success!";
+        // }else{
+        //     $status = "Failed!";
+        // } 
+        // return redirect('/inbox')->with('status', $status);
     }
 
     /*Request for Leave of Absence Form Functions*/
@@ -320,13 +331,15 @@ class FormController extends Controller
         $positions = $this->position();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
+        $Supervisors = User::where('permissioners', 1)->get();
         $data = array(
                     'title' => 'Overtime Authorization Slip',
                     'positions' => $positions,
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'Supervisors' => $Supervisors
             );
         return view('overtimeAuthSlip')->with($data);
     }
@@ -334,7 +347,8 @@ class FormController extends Controller
     public function postovertimeAuthSlip(Request $request){
         $rules = array('dateCreated' => 'required',
                        'client' => 'required',
-                       'purpose' => 'required');
+                       'purpose' => 'required',
+                       'supervisor' => 'required');
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -353,7 +367,8 @@ class FormController extends Controller
                         'purpose' => $request->input('purpose'),
                         'client_id' => $request->input('client'),
                         'created_at' => $request->input('dateCreated'),
-                        'updated_at' => $dateUpdate
+                        'updated_at' => $dateUpdate,
+                        'permission_id1' => $request->input('supervisor')
         ));
 
         $result = $overtime->save();
