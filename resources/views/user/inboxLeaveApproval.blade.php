@@ -79,9 +79,9 @@
       </table>
       <label>Days Applied For:</label> 
       @if($content->days_applied == 1)
-        <input type="text" class="form-control" value="{{$content->days_applied}} Day" />
+        <input disabled class="form-control" value="{{$content->days_applied}} Day" />
       @else
-        <input type="text" class="form-control" value="{{$content->days_applied}} Days" />
+        <input disabled class="form-control" value="{{$content->days_applied}} Days" />
       @endif
       <br/>
       <label>Note:</label>

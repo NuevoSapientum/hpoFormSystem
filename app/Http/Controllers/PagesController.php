@@ -42,8 +42,6 @@ class PagesController extends Controller
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        // $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
         $exitPass = ExitPass::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
@@ -53,18 +51,14 @@ class PagesController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        // $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
-                                // ['id1' => $id, 'id2' => $id]);
-        $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
-        $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -74,10 +68,10 @@ class PagesController extends Controller
                             })
                             ->get();
         $overtime = Overtime::where('status', '!=', 3)
-                            ->where('permission_id1', $id);
+                            ->where('permission_id1', $id)
+                            ->get();
         
-        echo count($overtime);
-        // return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 
     protected function position(){
@@ -113,7 +107,7 @@ class PagesController extends Controller
                     'empDepartment' => $empDepartment
             );
 
-        // return view('dashboard')->with($data);
+        return view('dashboard')->with($data);
     }
 
 

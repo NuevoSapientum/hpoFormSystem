@@ -19,9 +19,11 @@
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>From:</label>
-	    <input type="date" id="fromDate" name="dateFrom" value="{{$content->date_from}}" class="form-control"/><br/> 
-	    <label>To:</label>
-	    <input type="date" id="toDate" name="dateTo" value="{{$content->date_to}}" class="form-control"/><br/>       
+		<?php  $date_from = date('M d Y h:i A',strtotime($content->date_from));
+			   $date_to = date('M d Y h:i A', strtotime($content->date_to)) ?>
+	  	<input id="dateFrom" name="dateFrom" value="{{$date_from}}" class="form-control"/><br/> 
+      	<label>To:</label>
+      	<input id="dateTo" name="dateTo" value="{{$date_to}}" class="form-control"/><br/>         
 	    <label>Purpose:</label>
 	    <textarea class="form-control" id="textArea" name="textPurpose">{{$content->purpose}}</textarea><br/>
 	    <label>Supervisor Signature:</label>
@@ -81,6 +83,38 @@
 				document.getElementById('HR').disabled = true;
 				document.getElementById('companyRep').disabled = true;
 			}
+
+			var $fpf = $( "#dateFrom" ),
+		        now = moment( ).subtract( "seconds", 1 );
+		    $fpf.filthypillow( { 
+		      minDateTime: function( ) {
+		        return now;
+		      } 
+		    } );
+		    $fpf.on( "focus", function( ) {
+		      $fpf.filthypillow( "show" );
+		    } );
+		    $fpf.on( "fp:save", function( e, dateObj ) {
+		      $fpf.val( dateObj.format( "MMM DD YYYY hh:mm A" ) );
+		      $fpf.filthypillow( "hide" );
+		    } );
+
+		    var $fp = $( "#dateTo" ),
+		        now = moment( ).subtract( "seconds", 1 );
+		    $fp.filthypillow( { 
+		      minDateTime: function( ) {
+		        return now;
+		      } 
+		    } );
+		    $fp.on( "focus", function( ) {
+		      $fp.filthypillow( "show" );
+		    } );
+		    $fp.on( "fp:save", function( e, dateObj ) {
+		      $fp.val( dateObj.format( "MMM DD YYYY hh:mm A" ) );
+		      $fp.filthypillow( "hide" );
+		    } );
+
+
 	</script>
 	@endforeach
 @endsection

@@ -35,8 +35,6 @@ class FormController extends Controller
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        // $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
         $exitPass = ExitPass::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
@@ -46,18 +44,14 @@ class FormController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        // $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
-                                // ['id1' => $id, 'id2' => $id]);
-        $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
-        $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -67,9 +61,12 @@ class FormController extends Controller
                             })
                             ->get();
         $overtime = Overtime::where('status', '!=', 3)
-                            ->where('permission_id1', $id);
+                            ->where('permission_id1', $id)
+                            ->get();
+        
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
+
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
         return $positions; 
@@ -135,11 +132,17 @@ class FormController extends Controller
         $id = Auth::user()->id;
         $department = Positions::find(Auth::user()->position_id)->departments;
         $dateUpdate = date("Y-m-d H:i:s");
+        $dateFrom = $request->input('dateFrom');
+        $dateTo = $request->input('dateTo');
+        // echo $newDate;
+        $newFormatdateFrom = date('Y-m-d H:i:s', strtotime($dateFrom));
+        $newFormatdateTo = date('Y-m-d H:i:s', strtotime($dateTo));
+
         $exitPass = new ExitPass(array(
             'user_id' => $id,
             'created_at' => $request->input('dateCreated'),
-            'date_from' => $request->input('dateFrom'),
-            'date_to' => $request->input('dateTo'),
+            'date_from' => $newFormatdateFrom,
+            'date_to' => $newFormatdateTo,
             'purpose' => $request->input('purpose'),
             'updated_at' => $dateUpdate,
             'department_id' => $department->id,
@@ -150,24 +153,20 @@ class FormController extends Controller
         ));
 
 
-        // dd($request->all());
-
-        $newDate = "2011-01-07";
-        $newDate = $request->input('dateFrom');
-
-        // echo $newDate;
-        $newFormat = date('Y-m-d H:i:s', strtotime($newDate));
-        echo $newFormat;
-
+        // $timezone = date_default_timezone_get();
+        // $date = date('Y-m-d H:i:s', time());
+        // echo $date;
+        // echo "<br/>";
+        // echo $dateUpdate;
         // echo $request->input('dateFrom');
-        // $save = $exitPass->save();
+        $save = $exitPass->save();
 
-        // if($save){
-        //     $status = "Success!";
-        // }else{
-        //     $status = "Failed!";
-        // } 
-        // return redirect('/inbox')->with('status', $status);
+        if($save){
+            $status = "Success!";
+        }else{
+            $status = "Failed!";
+        } 
+        return redirect('/inbox')->with('status', $status);
     }
 
     /*Request for Leave of Absence Form Functions*/

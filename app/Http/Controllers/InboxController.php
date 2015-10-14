@@ -38,8 +38,6 @@ class InboxController extends Controller
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        // $exitPass = DB::select("SELECT * FROM tbl_epform JOIN users ON tbl_epform.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
         $exitPass = ExitPass::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
@@ -49,18 +47,14 @@ class InboxController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        // $leaveForm = DB::select("SELECT * FROM tbl_leave JOIN users ON tbl_leave.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2", 
-                                // ['id1' => $id, 'id2' => $id]);
-        $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-        // $changeSchedule = DB::select("SELECT * FROM tbl_chgschd JOIN users ON tbl_chgschd.id = users.id WHERE permission_id1 = :id1 OR permission_id2 = :id2 OR permission_id3 = :id3
-                            // OR permission_id4 = :id4", ['id1' => $id, 'id2' => $id, 'id3' => $id, 'id4' => $id]);
-        $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', '!=', 3)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -70,9 +64,12 @@ class InboxController extends Controller
                             })
                             ->get();
         $overtime = Overtime::where('status', '!=', 3)
-                            ->where('permission_id1', $id);
+                            ->where('permission_id1', $id)
+                            ->get();
+        
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
+    
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
         return $positions; 
@@ -157,6 +154,7 @@ class InboxController extends Controller
                         'empDepartment' => $empDepartment
                 );
             $data = array_merge($dataFirst, $dataSecond);
+            // dd($contents);
             foreach ($contents as $content) {
                 if($content->permission_1 != 0 || $content->status == 1){
                     return view('user.inboxExitApproval')->with($data);
@@ -389,6 +387,7 @@ class InboxController extends Controller
             $contents = Leaves::where('id', $id)->get();
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
+            $permissioners = User::where('permissioners', '!=', 0)->get();
             $dataSecond = array(
                                     'title' => "Edit Request for Leave of Absence",
                                     'contents' => $contents,

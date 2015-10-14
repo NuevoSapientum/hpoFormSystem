@@ -111,9 +111,9 @@
       @endforeach
         
       @foreach($oas as $over)
-      @if($over->status != 3)
+      <tr>
         <td>{{date('F d, Y', strtotime($over->created_at))}}</td>
-        <td>{{date('F d, Y', strtotime($exit->updated_at))}}</td>
+        <td>{{date('F d, Y', strtotime($over->updated_at))}}</td>
         <td>Overtime Authorization</td>
         @if($over->status == 0)
         <td>Pending</td>
@@ -137,7 +137,7 @@
           <a href="{{URL::to('history/view/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
         </td>
         @endif
-      @endif
+      </tr>
       @endforeach
     </tbody>
   </table>

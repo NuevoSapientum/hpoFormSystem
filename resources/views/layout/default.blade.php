@@ -13,7 +13,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Load the Realtime JavaScript library -->
     <script src="https://apis.google.com/js/api.js"></script>
-
+    
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/filthypillow/jquery.filthypillow.css')}}">
     <!-- Load the utility library -->
     <script src="https://www.gstatic.com/realtime/realtime-client-utils.js"></script>
     <!-- Bootstrap 3.3.4 -->
@@ -33,11 +34,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect.
     -->
     <script src="{{URL::asset('plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
-
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
     <script src="{{URL::asset('js/app.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/filthypillow/jquery.filthypillow.css')}}">
+        
     <script src="{{URL::asset('plugins/filthypillow/jquery.filthypillow.min.js')}}"></script>
     <script src="{{URL::asset('plugins/filthypillow/moment.js')}}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -350,7 +350,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{{URL::asset('bootstrap/js/bootstrap-multiselect.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-    
+
     <script>
     function goBack() {
             window.history.back();
