@@ -47,6 +47,11 @@ Route::get('history/view/{type}/{id}', [
 	'uses' => 'InboxController@viewForm'
 ]);
 
+Route::get('submittedforms', [
+	'middleware' => 'auth',
+	'uses' => 'PagesController@submittedForms'
+]);
+
 Route::get('/inbox',[
 	'middleware' => 'auth',
 	'uses' => 'InboxController@inbox'

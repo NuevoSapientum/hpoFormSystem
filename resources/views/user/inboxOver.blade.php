@@ -11,23 +11,8 @@
     <form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}">
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
         <br/>
-        <label>Client:</label>
-        <br/>
-        <select class="form-control" name="client">
-          @if($content->client_id == 1)
-            <option selected="true" value="1">Jay Timbal</option>
-            <option value="2">Solis Roltaire</option>
-            <option value="3">Jerrymae Noya</option>
-          @elseif($content->client_id == 2)
-            <option value="1">Jay Timbal</option>
-            <option selected="true" value="2">Solis Roltaire</option>
-            <option value="3">Jerrymae Noya</option>
-          @elseif($content->client_id == 3)
-            <option value="1">Jay Timbal</option>
-            <option value="2">Solis Roltaire</option>
-            <option selected="true" value="3">Jerrymae Noya</option>
-          @endif
-        </select>
+        <label>Employee Name:</label>
+        <p>{{$content->users->emp_name}}</p>
         <br/>
         <label>Supervisor Signature:</label>
         <select class="form-control" id="supervisor" name="supervisor">

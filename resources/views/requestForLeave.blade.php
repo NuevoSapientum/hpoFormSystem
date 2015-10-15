@@ -25,12 +25,64 @@
       <label>Type of Leave:</label>
       <br/>
       <div class="radio">
-        <label><input type="radio" name="typeofLeave" checked="checked" value="1" />Vacation Leave</label>
-        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
+        <label><input type="radio" name="typeofLeave" id="VL" value="1" />Vacation Leave</label>
+        <label><input type="radio" name="typeofLeave" id="SL" value="2" />Sick Leave </label>
+        <label><input type="radio" name="typeofLeave" id="ML" value="3" />Maternity Leave </label>
+        <label><input type="radio" name="typeofLeave" id="PL" value="4" />Paternity Leave </label>
       </div>
-      
+        
+        <div id="VLShow">
+          <?php $balance = Auth::user()->VL_entitlement - Auth::user()->VL_taken ?>
+          <label>Vacation Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="VL" disabled value="{{Auth::user()->VL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->VL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <input type="number" class="form-control" name="days_applied" value="0" />
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>  
+
+        <div id="SLShow">
+          <?php $balance = Auth::user()->SL_entitlement - Auth::user()->SL_taken ?>
+          <label>Sick Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="SL" disabled value="{{Auth::user()->SL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->SL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <input type="number" class="form-control" name="days_applied" value="0" />
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+
+        <div id="MLShow">
+          <?php $balance = Auth::user()->ML_entitlement - Auth::user()->ML_taken ?>
+          <label>Maternal Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="ML" disabled value="{{Auth::user()->ML_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->ML_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <input type="number" class="form-control" name="days_applied" value="0" />
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+
+        <div id="PLShow">
+          <?php $balance = Auth::user()->PL_entitlement - Auth::user()->PL_taken ?>
+          <label>Paternal Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="PL" disabled value="{{Auth::user()->PL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->PL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <input type="number" class="form-control" name="days_applied" value="0" />
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+        
       <br/>
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" name="reasonforAbsence"></textarea>
@@ -48,31 +100,45 @@
             <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
           @endforeach
       </select><br/>
-      <table>
-        <!-- Inclusive Dates of Leave -->
-      </table>
-      <label>Entitlement:</label> 
-      <input type="text" class="form-control" name="entitlement" disabled value="{{Auth::user()->entitlement}} Days" /><br/>
-      <label>Days Already Taken:</label> 
-      <input type="text" class="form-control" disabled value="{{Auth::user()->days_taken}}"/><br/>
-      <label>Days Applied For:</label> 
-      <br/>
-      <select class="form-control" name="days_applied">
-        <?php $balance = Auth::user()->entitlement - Auth::user()->days_taken ?>
-        @if($balance == 0)
-          <option>No days left</option>
-        @else
-          @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
-            @if($i == 1)
-              <option value="{{$i}}">{{$i}} Day</option>
-            @else
-              <option value="{{$i}}">{{$i}} Days</option>
-            @endif
-          @endfor
-        @endif
-      </select><br/>
-      <label>Balance:</label> 
-      <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#VLShow').attr('style', 'display:none');
+      $('#SLShow').attr('style', 'display:none');
+      $('#MLShow').attr('style', 'display:none');
+      $('#PLShow').attr('style', 'display:none');
+       $('input[type="radio"]').click(function() {
+          // alert($(this).attr('id') == 'permission_2no');
+           if($(this).attr('id') == 'VL') {
+                $('#VLShow').attr('style', 'display:');
+                $('#SLShow').attr('style', 'display:none');
+                $('#MLShow').attr('style', 'display:none');
+                $('#PLShow').attr('style', 'display:none');
+           }else if($(this).attr('id') == 'SL'){
+                $('#SLShow').attr('style', 'display:');
+                $('#VLShow').attr('style', 'display:none');
+                $('#MLShow').attr('style', 'display:none');
+                $('#PLShow').attr('style', 'display:none');
+           }else if($(this).attr('id') == 'ML'){
+                $('#MLShow').attr('style', 'display:');
+                $('#VLShow').attr('style', 'display:none');
+                $('#SLShow').attr('style', 'display:none');
+                $('#PLShow').attr('style', 'display:none');
+           }else if($(this).attr('id') == 'PL'){
+                $('#PLShow').attr('style', 'display:');
+                $('#VLShow').attr('style', 'display:none');
+                $('#SLShow').attr('style', 'display:none');
+                $('#MLShow').attr('style', 'display:none');
+           }else{
+                $('#VLShow').attr('style', 'display:none');
+                $('#SLShow').attr('style', 'display:none');
+                $('#MLShow').attr('style', 'display:none');
+                $('#PLShow').attr('style', 'display:none');
+           }
+       });
+    });
+    
+  </script>
 @endsection

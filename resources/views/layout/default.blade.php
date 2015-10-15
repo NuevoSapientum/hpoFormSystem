@@ -35,11 +35,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     -->
     <script src="{{URL::asset('plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
+    
     <script src="{{URL::asset('js/app.js')}}"></script>
         
     <script src="{{URL::asset('plugins/filthypillow/jquery.filthypillow.min.js')}}"></script>
     <script src="{{URL::asset('plugins/filthypillow/moment.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -150,12 +151,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-xs-4 text-center">
                       <a href="{{URL::to('/inbox')}}">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
                     </div>
+                    @if(Auth::user()->permissioners != 0 || $empDepartment->department_name == "Human Resource")
                     <div class="col-xs-3 text-center">
                       <a href="#">Forms</a>
                     </div>
                     <div class="col-xs-4 text-center">
                       <a href="{{URL::to('/approval')}}">Approvals&nbsp;<span class="label label-default">{{$approvalNotif}}</span></a>
                     </div>
+                    @else
+                    <div class="col-xs-4">
+                      
+                    </div>
+                    <div class="col-xs-4 text-center">
+                      <a href="#">Forms</a>
+                    </div>
+                    @endif
                   </li>
                   @if($empDepartment->department_name == "Human Resource")
                   <li class="user-body">
@@ -235,6 +245,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <li>
             @endif
             <a href="{{URL::to('/history')}}"><i class="fa fa-link"></i> <span>History</span></a></li>
+
+            @if($empDepartment->department_name == "Human Resource")
+              @if($title == 'Submitted Forms')
+              <li class="active">
+              @else
+              <li>
+              @endif
+              <a href="{{URL::to('/submittedforms')}}"><i class="fa fa-link"></i> <span>Submitted Forms</span></a></li>
+            @endif
 
             @if($title == 'Exit Pass' || $title == 'Request for Leave of Absence' || $title == 'Change Schedule' || $title == 'Overtime Authorization Slip')
             <li class="treeview active">

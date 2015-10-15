@@ -137,6 +137,10 @@ class ProfileController extends Controller
         Auth::user()->emp_name = $data['name'];
         Auth::user()->position_id = $data['position'];
         Auth::user()->email = $data['email'];
+        if($data['password'] != ''){
+            Auth::user()->password = bcrypt($data['password']);
+        }
+        // dd($data);
         return Auth::user()->save();
     }
 
@@ -175,9 +179,10 @@ class ProfileController extends Controller
         $file = array('image' => Input::file('image'));
         $rules = array('name' => 'required|max:255',
                        'position' => 'required',
-                       'email' => 'required|email|max:255');
+                       'email' => 'required|email|max:255',
+                       'password' => 'confirmed|min:6|max:50');
         $validator = Validator::make($request->all(), $rules);
-
+        // dd($request->all());
         if ($validator->fails()) {
             $this->throwValidationException(
                 $request, $validator
@@ -194,28 +199,21 @@ class ProfileController extends Controller
                 $image = base64_encode($image);
                 $this->updateImage($name, $image);
                 $result = $this->store($request->all());
-                echo "1";
                 if($result){
-                    echo "2";
                     $status = "Success!";
                 }else{
-                    echo "3";
                     $status = "Failed!";
                 }
             }
         }else{
-            echo "4";
             $result = $this->store($request->all());
             if($result){
-                echo "5";
                 $status = "Success!";
             }else{
-                echo "6";
                 $status = "Failed!";
             }
         }
 
-        echo $status;
         return redirect('/dashboard')->with('status', $status);
         
     }

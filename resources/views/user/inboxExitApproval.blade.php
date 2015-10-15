@@ -19,12 +19,18 @@
 
 	<form method="POST" id="approvalExit" name="editProfile" enctype="multipart/form-data">
 		<hr/>
+		<?php 
+			$date_from = date('M d Y h:i A',strtotime($content->date_from));
+			$date_to = date('M d Y h:i A', strtotime($content->date_to));
+		?>
+		<label>Employee Name:</label>
+      	<p>{{$content->users->emp_name}}</p>
 		<label>From:</label>
-	    <input type="date" disabled="true" id="fromDate" name="dateFrom" value="{{$content->date_from}}" class="form-control"/><br/> 
+	    <input disabled="true" value="{{$date_from}}" class="form-control"/><br/> 
 	    <label>To:</label>
-	    <input type="date" disabled="true" id="toDate" name="dateTo" value="{{$content->date_to}}" class="form-control"/><br/>       
+	    <input disabled="true" value="{{$date_to}}" class="form-control"/><br/>       
 	    <label>Purpose:</label>
-	    <textarea disabled="true" class="form-control" id="textArea" name="textPurpose">{{$content->purpose}}</textarea><br/>
+	    <textarea disabled="true" class="form-control">{{$content->purpose}}</textarea><br/>
 	    <label>Supervisor Signature:</label>
 	      @foreach($Supervisors as $Supervisor)
 	      	@if($Supervisor->id === $content->permission_id1)

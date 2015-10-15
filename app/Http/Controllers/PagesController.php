@@ -35,7 +35,6 @@ class PagesController extends Controller
                           ->where('status', '!=', '3')->get();
         $oas = Overtime::where('user_id', Auth::user()->id)
                ->where('status', '!=', '3')->get();
-        // dd($oas);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
 
@@ -141,6 +140,46 @@ class PagesController extends Controller
             );
 
         return view('history')->with($data);
+    }
+
+    public function exitApprovals($id){
+        return ExitPass::where('status', '!=', 3)
+                    ->get();
+        // return ExitPass::all();
+    }
+
+    public function submittedForms(){
+        $positions = $this->position();
+        $profileImage = $this->getImage();
+        $inboxNotif = $this->inboxNotif();
+        $approvalNotif = $this->approvalNotif();
+        $id = Auth::user()->position_id;
+        $empDepartment = Positions::find($id)->departments;
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        $data = array(
+            'title' => 'Submitted Forms',
+            'positions' => $positions,
+            'profileImage' => $profileImage,
+            'inboxNotif' => $inboxNotif,
+            'approvalNotif' => $approvalNotif,
+            'empDepartment' => $empDepartment,
+            'exitPass' => $exitPass,
+            'leaveForm' => $leaveForm,
+            'changeSchedule' => $changeSchedule,
+            'oas' => $oas
+        );
+
+        // echo $exitPass->users->emp_name;
+        // $exit = $this->exitApprovals(Auth::user()->id);
+        // dd($exit);
+        // foreach ($exitPass as $exit) {
+        //     echo $exit->users->emp_name;
+        // }
+
+        return view('submittedForms')->with($data);
     }
 
 }

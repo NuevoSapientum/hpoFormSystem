@@ -197,7 +197,8 @@ class FormController extends Controller
                        'typeofLeave' => 'required',
                        'reasonforAbsence' => 'required',
                        'recommendApproval' => 'required',
-                       'approvedBy' => 'required');
+                       'approvedBy' => 'required',
+                       'VL' => 'max|Auth::user()->VL_entitlement');
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -210,7 +211,8 @@ class FormController extends Controller
         $dateUpdate = date("Y-m-d H:i:s");
         if($request->input('days_applied') != 0 && $request->input('days_applied') <= 7){
             $days_taken = Auth::user()->days_taken + $request->input('days_applied');
-            if(Auth::user()->days_taken == Auth::user()->entitlement){
+            if(Auth::user()->days_taken == Auth::user()->VL_entitlement || Auth::user()->days_taken == Auth::user()->SL_entitlement
+                || Auth::user()->days_taken == Auth::user()->ML_entitlement || Auth::user()->days_taken == Auth::user()->PL_entitlement){
                 $status = "Failed!";
             }else{
                 Auth::user()->days_taken = $days_taken;
@@ -229,15 +231,15 @@ class FormController extends Controller
                 ));
 
 
-                $save = $requestAdd->save();
-                if($save){
-                    $status = "Success!";
-                }else{
-                   $status = "Failed!";
-                }
+                // $save = $requestAdd->save();
+                // if($save){
+                //     $status = "Success!";
+                // }else{
+                //    $status = "Failed!";
+                // }
             }
             
-            return redirect('/inbox')->with('status', $status);
+            // return redirect('/inbox')->with('status', $status);
         }        
     }
 

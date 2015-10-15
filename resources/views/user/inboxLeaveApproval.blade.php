@@ -8,7 +8,9 @@
     @foreach($contents as $content)
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-		<label>Type of Leave:</label>
+		<label>Employee Name:</label>
+    <p>{{$content->users->emp_name}}</p>
+    <label>Type of Leave:</label>
 		<div class="radio">
 			@if($content->leave_type == 1)
 		        <label><input type="radio" disabled name="typeofLeave" checked="checked" value="1" />Vacation Leave</label>

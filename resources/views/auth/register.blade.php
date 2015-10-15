@@ -74,6 +74,18 @@
             <label>Confirm Password:</label>
             <input type="password" name="password_confirmation" placeholder="Confirm Password" class="form-control" />
             <br/>
+            <label>Vacation Leave Entitlement:</label>
+            <input type="number" name="vacation_leave" value="0" class="form-control" />
+            <br/>
+            <label>Sick Leave Entitlement:</label>
+            <input type="number" name="sick_leave" value="0" class="form-control" />
+            <br/>
+            <label>Maternity Leave Entitlement:</label>
+            <input type="number" name="maternity_leave" value="0" class="form-control" />
+            <br/>
+            <label>Paternity Leave Entitlement:</label>
+            <input type="number" name="paternity_leave" value="0" class="form-control" />
+            <br/>
             <button class="btn-reg">Submit</button>
             <a href="{{URL::to('/dashboard')}}" class="btn-flat">Back</a>
           </form>

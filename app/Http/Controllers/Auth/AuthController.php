@@ -49,6 +49,10 @@ class AuthController extends Controller
             'position' => 'required',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
+            'vacation_leave' => 'required|max:30',
+            'sick_leave' => 'required|max:30',
+            'maternity_leave' => 'required|max:60',
+            'paternity_leave' => 'required|max:30'
         ]);
     }
 
@@ -73,10 +77,13 @@ class AuthController extends Controller
             'emp_name' => $data['name'],
             'position_id' => $data['position'],
             'permissioners' => 0,
-            'entitlement' => 7,
             'img_id' => $id->id,
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'VL_entitlement' => $data['vacation_leave'],
+            'SL_entitlement' => $data['sick_leave'],
+            'ML_entitlement' => $data['maternity_leave'],
+            'PL_entitlement' => $data['paternity_leave']
         ]);
     }
 }
