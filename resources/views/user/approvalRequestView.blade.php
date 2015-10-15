@@ -9,6 +9,9 @@
 	<form method="POST" action="{{URL::to('approval/view/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<hr/>
     <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+    <label>Employee Name:</label>
+    <input disabled value="{{$content->users->emp_name}}" class="form-control" />
+    <br/>
 		<label>Type of Leave:</label>
 		<div class="radio" >
         @if($content->leave_type == 1)

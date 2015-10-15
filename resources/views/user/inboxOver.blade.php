@@ -10,9 +10,8 @@
   @foreach($contents as $content)
     <form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}">
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-        <br/>
         <label>Employee Name:</label>
-        <p>{{$content->users->emp_name}}</p>
+        <input disabled value="{{$content->users->emp_name}}" class="form-control" />
         <br/>
         <label>Supervisor Signature:</label>
         <select class="form-control" id="supervisor" name="supervisor">

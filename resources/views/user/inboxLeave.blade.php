@@ -9,7 +9,8 @@
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Employee Name:</label>
-    <p>{{$content->users->emp_name}}</p>
+    <input disabled value="{{$content->users->emp_name}}" class="form-control" />
+    <br/>
     <label>Type of Leave:</label>
 		<div class="radio">
 			@if($content->leave_type == 1)

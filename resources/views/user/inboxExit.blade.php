@@ -19,7 +19,8 @@
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Employee Name:</label>
-      	<p>{{$content->users->emp_name}}</p>
+      	<input disabled value="{{$content->users->emp_name}}" class="form-control" />
+      	<br/>
 		<label>From:</label>
 		<?php  $date_from = date('M d Y h:i A',strtotime($content->date_from));
 			   $date_to = date('M d Y h:i A', strtotime($content->date_to)) ?>

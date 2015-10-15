@@ -47,8 +47,8 @@
 </head>
 <body>
     <div class="container">
-        <form action="{{URL::to('/auth/login')}}" method="POST">
-             @if (count($errors) > 0)
+        <br/>
+        @if (count($errors) > 0)
              <div class="alert alert-danger">
              <strong>Whoops! </strong> There were some problems with your input. <br> <br>
              <ul>
@@ -59,11 +59,12 @@
              </ul>
              </div>
              @endif
+        <form action="{{URL::to('/auth/login')}}" method="POST">
+             
              <img src="img/logo.png" class="hpLogo">
                 <div class="form-group">
                 <hr/>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-                
                 <input type="number" class="form-control" name="username" placeholder="ID Number"  value="{{old('username')}}" autofocus/><br/>
                 <input type="password" class="form-control" name="password" placeholder="Password" value="{{old('password')}}"/><hr/>
                 <button type="submit" class="btn-login">Login</button>

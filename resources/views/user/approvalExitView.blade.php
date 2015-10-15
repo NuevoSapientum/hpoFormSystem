@@ -25,7 +25,8 @@
 			$date_to = date('M d Y h:i A', strtotime($content->date_to));
 		?>
 		<label>Employee Name:</label>
-      	<p>{{$content->users->emp_name}}</p>
+      	<input disabled value="{{$content->users->emp_name}}" class="form-control" />
+      	<br/>
 		<label>From:</label>
 	    <input disabled="true" value="{{$date_from}}" class="form-control"/><br/> 
 	    <label>To:</label>

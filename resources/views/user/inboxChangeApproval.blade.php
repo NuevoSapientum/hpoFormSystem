@@ -18,6 +18,9 @@
     @foreach($contents as $content)
 	<form method="POST" action="{{URL::to('approval/view/' . $content->form_type . '/' . $content->chgschd_id)}}" name="editProfile" enctype="multipart/form-data">
 		<hr/>
+      <label>Employee Name:</label>
+      <input disabled value="{{$content->users->emp_name}}" class="form-control" />
+      <br/>
 		<label><u>Date of Effectivity:</u></label><br/>
 	    <label>From:</label>
 	    <input type="text" disabled value="{{$content->date_from}}" class="form-control"/>
