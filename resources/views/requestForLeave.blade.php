@@ -82,7 +82,6 @@
           <label>Balance:</label> 
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
         </div>
-        
       <br/>
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" name="reasonforAbsence"></textarea>
