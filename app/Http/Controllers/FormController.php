@@ -17,6 +17,7 @@ use App\Departments;
 use DB;
 use App\PagesController;
 use Validator;
+use App\DateTimeOvertime;
 
 class FormController extends Controller
 {
@@ -193,63 +194,127 @@ class FormController extends Controller
     }
 
     public function postrequestForLeave(Request $request){
-        // dd($request->all());
-        // $rules = array('dateCreated' => 'required',
-        //                'typeofLeave' => 'required',
-        //                'reasonforAbsence' => 'required',
-        //                'recommendApproval' => 'required',
-        //                'approvedBy' => 'required');
-        // $validator = Validator::make($request->all(), $rules);
+        $rules = array('dateCreated' => 'required',
+                       'typeofLeave' => 'required',
+                       'reasonforAbsence' => 'required',
+                       'recommendApproval' => 'required',
+                       'approvedBy' => 'required');
+        $validator = Validator::make($request->all(), $rules);
 
-        // if ($validator->fails()) {
-        //     $this->throwValidationException(
-        //         $request, $validator
-        //     );
-        // }
-        // if($request->input('days_applied') != 0 && $request->input('days_applied') <= Auth){
-        //     echo "2";
-        //     $days_taken = Auth::user()->days_taken + $request->input('days_applied');
-        //     if(Auth::user()->days_taken == Auth::user()->VL_entitlement || Auth::user()->days_taken == Auth::user()->SL_entitlement
-        //         || Auth::user()->days_taken == Auth::user()->ML_entitlement || Auth::user()->days_taken == Auth::user()->PL_entitlement){
-        //         $status = "Failed!";
-        //     }else{
-        //         Auth::user()->days_taken = $days_taken;
-        //         Auth::user()->save();
-        //         $department = Positions::find(Auth::user()->position_id)->departments;
-        //         $requestAdd = new Leaves(array(
-        //             'user_id' => $id,
-        //             'leave_type' => $request->input('typeofLeave'),
-        //             'purpose' => $request->input('reasonforAbsence'),
-        //             'department_id' => $department->id,
-        //             'permission_id1' => $request->input('recommendApproval'),
-        //             'permission_id2' => $request->input('approvedBy'),
-        //             'days_applied' => $request->input('days_applied'),
-        //             'created_at' => $request->input('dateCreated'),
-        //             'updated_at' => $dateUpdate
-        //         ));
-
-
-        //         $save = $requestAdd->save();
-        //         if($save){
-        //             $status = "Success!";
-        //         }else{
-        //            $status = "Failed!";
-        //         }
-        //     }
-        echo "1";
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
         $id = Auth::user()->id;
         $dateUpdate = date("Y-m-d H:i:s");
         if($request->input('typeofLeave') == 1){
-            
+
+            $days_taken = Auth::user()->VL_taken + $request->input('VL_daysApplied');
+            if($days_taken < Auth::user()->VL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = new Leaves(array(
+                    'user_id' => $id,
+                    'leave_type' => $request->input('typeofLeave'),
+                    'purpose' => $request->input('reasonforAbsence'),
+                    'department_id' => $department->id,
+                    'permission_id1' => $request->input('recommendApproval'),
+                    'permission_id2' => $request->input('approvedBy'),
+                    'days_applied' => $request->input('VL_daysApplied'),
+                    'created_at' => $request->input('dateCreated'),
+                    'updated_at' => $dateUpdate
+                ));
+
+                $save = $requestAdd->save();
+                if($save){
+                    $status = "Success!";
+                }else{
+                   $status = "Failed!";
+                }
+            }else{
+                $status = "Failed!";
+            }
+
         }elseif($request->input('typeofLeave') == 2){
-            echo "2";
+            $days_taken = Auth::user()->SL_taken + $request->input('SL_daysApplied');
+            if($days_taken < Auth::user()->SL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = new Leaves(array(
+                    'user_id' => $id,
+                    'leave_type' => $request->input('typeofLeave'),
+                    'purpose' => $request->input('reasonforAbsence'),
+                    'department_id' => $department->id,
+                    'permission_id1' => $request->input('recommendApproval'),
+                    'permission_id2' => $request->input('approvedBy'),
+                    'days_applied' => $request->input('SL_daysApplied'),
+                    'created_at' => $request->input('dateCreated'),
+                    'updated_at' => $dateUpdate
+                ));
+
+                $save = $requestAdd->save();
+                if($save){
+                    $status = "Success!";
+                }else{
+                   $status = "Failed!";
+                }
+            }else{
+                $status = "Failed!";
+            }
         }elseif($request->input('typeofLeave') == 3){
-            echo "3";
+            $days_taken = Auth::user()->ML_taken + $request->input('ML_daysApplied');
+            if($days_taken < Auth::user()->ML_entitlement){
+                // Auth::user()->ML_taken = $days_taken;
+                // Auth::user()->save();
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = new Leaves(array(
+                    'user_id' => $id,
+                    'leave_type' => $request->input('typeofLeave'),
+                    'purpose' => $request->input('reasonforAbsence'),
+                    'department_id' => $department->id,
+                    'permission_id1' => $request->input('recommendApproval'),
+                    'permission_id2' => $request->input('approvedBy'),
+                    'days_applied' => $request->input('ML_daysApplied'),
+                    'created_at' => $request->input('dateCreated'),
+                    'updated_at' => $dateUpdate
+                ));
+
+                $save = $requestAdd->save();
+                if($save){
+                    $status = "Success!";
+                }else{
+                   $status = "Failed!";
+                }
+            }else{
+                $status = "Failed!";
+            }
         }elseif($request->input('typeofLeave') == 4){
-            echo "4";
+            $days_taken = Auth::user()->PL_taken + $request->input('PL_daysApplied');
+            if($days_taken < Auth::user()->PL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = new Leaves(array(
+                    'user_id' => $id,
+                    'leave_type' => $request->input('typeofLeave'),
+                    'purpose' => $request->input('reasonforAbsence'),
+                    'department_id' => $department->id,
+                    'permission_id1' => $request->input('recommendApproval'),
+                    'permission_id2' => $request->input('approvedBy'),
+                    'days_applied' => $request->input('PL_daysApplied'),
+                    'created_at' => $request->input('dateCreated'),
+                    'updated_at' => $dateUpdate
+                ));
+
+                $save = $requestAdd->save();
+                if($save){
+                    $status = "Success!";
+                }else{
+                   $status = "Failed!";
+                }
+            }else{
+                $status = "Failed!";
+            }
         }
         // dd($request->all());
-        // return redirect('/inbox')->with('status', $status);
+        return redirect('/inbox')->with('status', $status);
     }        
 
     /*Change Schedule Form Functions*/
@@ -357,42 +422,65 @@ class FormController extends Controller
     }
 
     public function postovertimeAuthSlip(Request $request){
-        // $rules = array('dateCreated' => 'required',
-        //                'client' => 'required',
-        //                'purpose' => 'required',
-        //                'supervisor' => 'required');
+        $rules = array('purpose' => 'required',
+                       'supervisor' => 'required',
+                       'dateOvertime' => 'required',
+                       'timeOvertime' => 'required');
 
-        // $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-        // if ($validator->fails()) {
-        //     $this->throwValidationException(
-        //         $request, $validator
-        //     );
-        // }
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
 
-        // $dateUpdate = date("Y-m-d H:i:s");
-        // $department = Positions::find(Auth::user()->position_id)->departments;
+        $dateUpdate = date("Y-m-d H:i:s");
+        $department = Positions::find(Auth::user()->position_id)->departments;
 
-        // $overtime = new Overtime(array(
-        //                 'user_id' => Auth::user()->id,
-        //                 'department_id' => $department->id,
-        //                 'purpose' => $request->input('purpose'),
-        //                 'client_id' => $request->input('client'),
-        //                 'created_at' => $request->input('dateCreated'),
-        //                 'updated_at' => $dateUpdate,
-        //                 'permission_id1' => $request->input('supervisor')
-        // ));
+        $result = Overtime::insertGetId(
+                        ['user_id' => Auth::user()->id,
+                        'department_id' => $department->id,
+                        'purpose' => $request->input('purpose'),
+                        'created_at' => $request->input('dateCreated'),
+                        'updated_at' => $dateUpdate,
+                        'permission_id1' => $request->input('supervisor')]
+        );
 
-        // $result = $overtime->save();
+        if($result){
+            $status = "Success!";
+        }else{
+            $status = "Failed";
+        }
 
-        // if($result){
-        //     $status = "Success!";
-        // }else{
-        //     $status = "Failed";
-        // }
+        $var = $request->input('number');
+        // dd($request->all());
+        $i = 1;
+        $firstdateTime = new DateTimeOvertime(array(
+                        'user_id' => Auth::user()->id,
+                        'date_overtime' => $request->input('dateOvertime'),
+                        'time_overtime' => $request->input('timeOvertime'),
+                        'overtime_id' => $result
+        ));
 
-        // return redirect('inbox')->with('status', $status);
-        dd($request->all());
+        $firstdateTime->save();
+
+        while($var != 0){
+            if($request->input('dateovertime' . $i) != "" && $request->input('timeovertime' . $i) != ""){
+                $over = new DateTimeOvertime(array(
+                                'user_id' => Auth::user()->id,
+                                'date_overtime' => $request->input('dateovertime' . $i),
+                                'time_overtime' => $request->input('timeovertime' . $i),
+                                'overtime_id' => $result
+                    ));
+                $over->save();
+            }
+            $i++;
+            $var--;
+        }
+
+        return redirect('inbox')->with('status', $status);
+        // dd($request->all());
     }
 
 }

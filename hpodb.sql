@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2015 at 05:16 AM
+-- Generation Time: Oct 16, 2015 at 12:29 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -48,14 +48,32 @@ CREATE TABLE IF NOT EXISTS `change_schedules` (
   `date_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `shift_from` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `shift_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `change_schedules`
+-- Table structure for table `datetime_overtime`
 --
 
-INSERT INTO `change_schedules` (`id`, `user_id`, `department_id`, `form_id`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `purpose`, `reason`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `created_at`, `updated_at`, `date_from`, `date_to`, `shift_from`, `shift_to`) VALUES
-(2, 1, 8, 3, 12, 16, 12, 1, 'Test', '', 1, 0, 0, 0, 0, '2015-10-13 07:00:00', '2015-10-13 19:08:29', '2015-10-11 16:00:00', '2015-10-12 16:00:00', '2015-10-11 16:00:00', '2015-10-12 16:00:00');
+CREATE TABLE IF NOT EXISTS `datetime_overtime` (
+`id` int(10) unsigned NOT NULL,
+  `date_overtime` date NOT NULL,
+  `time_overtime` time NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `overtime_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `datetime_overtime`
+--
+
+INSERT INTO `datetime_overtime` (`id`, `date_overtime`, `time_overtime`, `user_id`, `overtime_id`, `created_at`, `updated_at`) VALUES
+(10, '2016-10-15', '01:01:00', 17, 16, '2015-10-16 06:41:35', '2015-10-16 22:41:35'),
+(11, '2015-10-16', '15:22:00', 17, 17, '2015-10-16 06:40:00', '2015-10-16 22:40:00'),
+(12, '2015-12-22', '02:00:00', 17, 17, '2015-10-16 06:40:00', '2015-10-16 22:40:00');
 
 -- --------------------------------------------------------
 
@@ -111,18 +129,14 @@ CREATE TABLE IF NOT EXISTS `exit_pass` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_from` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `exit_pass`
 --
 
 INSERT INTO `exit_pass` (`id`, `user_id`, `department_id`, `form_id`, `reason`, `purpose`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `days_applied`, `status`, `created_at`, `updated_at`, `date_from`, `date_to`) VALUES
-(4, 1, 8, 1, '', 'Testing =)', 12, 16, 1, 14, 0, 0, 0, 0, 0, 3, '2015-10-10 07:00:00', '2015-10-13 15:22:42', '2015-10-10 07:00:00', '2015-10-10 07:00:00'),
-(5, 1, 8, 1, '', 'Testing =)', 12, 16, 1, 14, 1, 1, 1, 1, 0, 1, '2015-10-13 07:00:00', '2015-10-13 19:14:34', '2015-10-13 07:00:00', '2015-10-21 07:00:00'),
-(6, 14, 6, 1, '', 'errand', 12, 16, 1, 14, 0, 0, 0, 0, 0, 0, '2015-10-13 04:47:24', '2015-10-13 04:47:57', '2015-10-13 07:00:00', '2015-10-15 07:00:00'),
-(7, 14, 6, 1, '', 'errand 2 much', 12, 16, 1, 14, 0, 0, 0, 0, 0, 0, '2015-10-13 00:59:48', '2015-10-13 13:00:07', '2015-10-14 07:00:00', '2015-10-15 07:00:00'),
-(8, 1, 8, 1, '', 'Errand', 12, 16, 1, 14, 0, 0, 0, 0, 0, 0, '2015-10-15 09:56:13', '2015-10-15 09:57:10', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(9, 17, 2, 1, '', 'Errand', 13, 16, 1, 14, 1, 0, 0, 0, 0, 0, '2015-10-15 18:42:11', '2015-10-15 18:55:31', '2015-10-15 02:42:00', '2015-10-15 06:42:00');
 
 -- --------------------------------------------------------
 
@@ -170,14 +184,15 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   `status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `leaves`
 --
 
 INSERT INTO `leaves` (`id`, `user_id`, `department_id`, `leave_type`, `purpose`, `reason`, `form_id`, `permission_id1`, `permission_id2`, `permission_1`, `permission_2`, `days_applied`, `status`, `created_at`, `updated_at`) VALUES
-(13, 1, 8, 2, 'ASD', '', 2, 12, 12, 1, 0, 2, 0, '2015-10-13 07:00:00', '2015-10-13 19:08:11');
+(4, 17, 2, 1, 'Testing =)', '', 2, 12, 12, 1, 1, 4, 1, '2015-10-16 08:00:00', '2015-10-17 02:19:22'),
+(5, 17, 2, 2, 'Dungue', '', 2, 13, 12, 1, 1, 6, 1, '2015-10-16 08:00:00', '2015-10-17 02:28:09');
 
 -- --------------------------------------------------------
 
@@ -222,18 +237,18 @@ CREATE TABLE IF NOT EXISTS `overtime_authorization` (
   `purpose` text COLLATE utf8_unicode_ci NOT NULL,
   `reason` text COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
-  `client_id` int(11) NOT NULL,
+  `client_paid` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `overtime_authorization`
 --
 
-INSERT INTO `overtime_authorization` (`id`, `user_id`, `permission_id1`, `permission_1`, `department_id`, `form_id`, `purpose`, `reason`, `status`, `client_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 13, 0, 8, 4, 'asd', '', 0, 1, '2015-10-13 07:00:00', '2015-10-12 21:29:17'),
-(5, 1, 12, 0, 8, 4, 'asd', '', 0, 1, '2015-10-12 16:00:00', '2015-10-12 21:29:22');
+INSERT INTO `overtime_authorization` (`id`, `user_id`, `permission_id1`, `permission_1`, `department_id`, `form_id`, `purpose`, `reason`, `status`, `client_paid`, `created_at`, `updated_at`) VALUES
+(16, 17, 12, 0, 2, 4, 'Client', '', 0, 0, '2015-10-16 08:00:00', '2015-10-16 22:41:35'),
+(17, 17, 12, 1, 2, 4, 'Testingasd', '', 1, 1, '2015-10-16 08:00:00', '2015-10-16 23:16:36');
 
 -- --------------------------------------------------------
 
@@ -340,12 +355,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `position_id`, `img_id`, `email`, `username`, `password`, `permissioners`, `SL_entitlement`, `remember_token`, `created_at`, `updated_at`, `VL_entitlement`, `PL_entitlement`, `ML_entitlement`, `SL_taken`, `VL_taken`, `ML_taken`, `PL_taken`) VALUES
-(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2y$10$kEJ4hdado/OFQGWh7zr02uUV4itNlZkOaXPlC.fafHQ1dJN/uGCX6', 0, 7, 'zIcfkCcdHKugOH11Jjq40FmDuCynFeUNPE98RpYvFmLa8fZrBoTZM6nbkvH7', '2015-10-09 07:00:00', '2015-10-15 13:08:30', 0, 0, 0, 0, 0, 0, 0),
-(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'a1XPVzy9porCnXsJaZ4gdOwwZaALN9CCw1I0yNfQdHjwIJyLXVRErlKmKJFl', '2015-10-10 11:19:53', '2015-10-12 21:39:03', 0, 0, 0, 0, 0, 0, 0),
-(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 'TDgWiSufZ1od1LgwJsj3oim0L5ufJi0XMTGTlcJRJB1szcUrt5AvNoeNBPhi', '2015-10-10 16:21:16', '2015-10-12 22:01:42', 0, 0, 0, 0, 0, 0, 0),
+(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2y$10$kEJ4hdado/OFQGWh7zr02uUV4itNlZkOaXPlC.fafHQ1dJN/uGCX6', 0, 7, 'j4otIUAl6qF2ZElmrdDfgHMc38PgiVyubfhlUH0yQoDZWG6XgfrEocQTKI45', '2015-10-09 07:00:00', '2015-10-17 02:29:07', 0, 0, 0, 0, 0, 0, 0),
+(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'mYPTdJ3kz4aKSXWoRdk4z8Jbya042Xl5znF5l7yTR4FgLOPFtZWGlQ04e29i', '2015-10-10 11:19:53', '2015-10-17 02:28:28', 0, 0, 0, 0, 0, 0, 0),
+(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 'm3D2rEOa5j7teDjivXHu1gYT3lBQqiiddNo2wpQYmpbWcCXAq68fkXBE8T7d', '2015-10-10 16:21:16', '2015-10-17 02:27:53', 0, 0, 0, 0, 0, 0, 0),
 (14, 'Marshall Eriksen', 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, 'ZIkGF37k77kuClYb2gwacC5ayZ9d3oUSjAj32t9lXYu5ZPEstNc1P0jYbPfi', '2015-10-10 16:22:24', '2015-10-15 13:17:25', 0, 0, 0, 0, 0, 0, 0),
 (16, 'Lily Aldrin', 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'uT4OwMZo6ui189C1msPbUCswxidCyXRmgYFwUpV0r3YJhBhfjhpT1xHllKXv', '2015-10-10 16:23:24', '2015-10-12 21:30:48', 0, 0, 0, 0, 0, 0, 0),
-(17, 'Erwin Mark D. Añora', 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$91RPE/IZ05Nw3srchY/0W.zJIW8dqSIhRu.R3ciotU4Ey9ojyxT0.', 0, 7, 'vpxKS3GwodOFctnuSLb90RF1Iq4CvcwKja9wbewPyH9fkI974ErK8BBGk0pK', '2015-10-15 10:13:21', '2015-10-15 12:16:19', 7, 12, 0, 0, 0, 0, 0);
+(17, 'Erwin Mark D. Añora', 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$91RPE/IZ05Nw3srchY/0W.zJIW8dqSIhRu.R3ciotU4Ey9ojyxT0.', 0, 7, 'M2hUomAs79jAdfTw10nMwK1ni8poS5h9k9XcLdhFGXVvYjiC72HyhZvbawuA', '2015-10-15 10:13:21', '2015-10-17 02:28:09', 7, 12, 0, 6, 4, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -356,6 +371,12 @@ INSERT INTO `users` (`id`, `emp_name`, `position_id`, `img_id`, `email`, `userna
 --
 ALTER TABLE `change_schedules`
  ADD PRIMARY KEY (`id`), ADD KEY `change_schedules_user_id_foreign` (`user_id`), ADD KEY `change_schedules_form_id_foreign` (`form_id`), ADD KEY `change_schedules_permission_id1_foreign` (`permission_id1`), ADD KEY `change_schedules_permission_id2_foreign` (`permission_id2`), ADD KEY `change_schedules_permission_id3_foreign` (`permission_id3`), ADD KEY `change_schedules_permission_id4_foreign` (`permission_id4`);
+
+--
+-- Indexes for table `datetime_overtime`
+--
+ALTER TABLE `datetime_overtime`
+ ADD PRIMARY KEY (`id`), ADD KEY `user_id` (`user_id`), ADD KEY `overtime_id` (`overtime_id`);
 
 --
 -- Indexes for table `departments`
@@ -419,7 +440,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `change_schedules`
 --
 ALTER TABLE `change_schedules`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `datetime_overtime`
+--
+ALTER TABLE `datetime_overtime`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `departments`
 --
@@ -429,7 +455,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 -- AUTO_INCREMENT for table `exit_pass`
 --
 ALTER TABLE `exit_pass`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `form_types`
 --
@@ -439,12 +465,12 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `overtime_authorization`
 --
 ALTER TABLE `overtime_authorization`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `positions`
 --
@@ -474,6 +500,13 @@ ADD CONSTRAINT `change_schedules_permission_id2_foreign` FOREIGN KEY (`permissio
 ADD CONSTRAINT `change_schedules_permission_id3_foreign` FOREIGN KEY (`permission_id3`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_permission_id4_foreign` FOREIGN KEY (`permission_id4`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `datetime_overtime`
+--
+ALTER TABLE `datetime_overtime`
+ADD CONSTRAINT `datetime_overtime_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+ADD CONSTRAINT `datetime_overtime_ibfk_2` FOREIGN KEY (`overtime_id`) REFERENCES `overtime_authorization` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `exit_pass`

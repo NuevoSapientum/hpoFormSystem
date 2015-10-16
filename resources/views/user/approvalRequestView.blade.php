@@ -13,29 +13,100 @@
     <input disabled value="{{$content->users->emp_name}}" class="form-control" />
     <br/>
 		<label>Type of Leave:</label>
-		<div class="radio" >
         @if($content->leave_type == 1)
+          <div class="radio" >
             <label><input type="radio" disabled checked="checked" />Vacation Leave</label>
             <label><input type="radio" disabled />Sick Leave </label>
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled />Paternity Leave </label>
+          </div>
+            <label>Vacation Leave Entitlement:</label> 
+            @if($content->users->VL_entitlement == 1)
+              <input class="form-control" disabled value="{{$content->users->VL_entitlement}} Day" /><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->users->VL_entitlement}} Days" /><br/>
+            @endif
+
+            <label>Days Already Taken:</label> 
+            <input class="form-control" disabled value="{{$content->users->VL_taken}}"/><br/>
+            <label>Days Applied For:</label> 
+            @if($content->days_applied == 1)
+              <input class="form-control" disabled value="{{$content->days_applied}} Day"/><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->days_applied}} Days"/><br/>
+            @endif
+              <input type="hidden" name="VLDays" value="{{$content->days_applied + $content->users->days_taken}}" />
         @elseif($content->leave_type == 2)
-          <label><input type="radio" disabled />Vacation Leave</label>
+          <div class="radio">
+            <label><input type="radio" disabled />Vacation Leave</label>
             <label><input type="radio" disabled checked="checked" />Sick Leave </label>
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled />Paternity Leave </label>
+          </div>
+          <label>Sick Leave Entitlement:</label> 
+            @if($content->users->SL_entitlement == 1)
+              <input class="form-control" disabled value="{{$content->users->SL_entitlement}} Day" /><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->users->SL_entitlement}} Days" /><br/>
+            @endif
+
+            <label>Days Already Taken:</label> 
+            <input class="form-control" disabled value="{{$content->users->SL_taken}}"/><br/>
+            <label>Days Applied For:</label> 
+            @if($content->days_applied == 1)
+              <input class="form-control" disabled value="{{$content->days_applied}} Day"/><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->days_applied}} Days"/><br/>
+            @endif
+            <input type="hidden" name="SLDays" value="{{$content->days_applied + $content->users->days_taken}}" />
         @elseif($content->leave_type == 3)
-          <label><input type="radio" disabled />Vacation Leave</label>
+          <div class="radio">
+            <label><input type="radio" disabled />Vacation Leave</label>
             <label><input type="radio" disabled />Sick Leave </label>
             <label><input type="radio" disabled checked="checked" />Maternity Leave </label>
             <label><input type="radio" disabled value="4" />Paternity Leave </label>
+          </div>
+          <label>Maternity Leave Entitlement:</label> 
+            @if($content->users->ML_entitlement == 1)
+              <input class="form-control" disabled value="{{$content->users->ML_entitlement}} Day" /><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->users->ML_entitlement}} Days" /><br/>
+            @endif
+
+            <label>Days Already Taken:</label> 
+            <input class="form-control" disabled value="{{$content->users->ML_taken}}"/><br/>
+            <label>Days Applied For:</label> 
+            @if($content->days_applied == 1)
+              <input class="form-control" disabled value="{{$content->days_applied}} Day"/><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->days_applied}} Days"/><br/>
+            @endif
+            <input type="hidden" name="MLDays" value="{{$content->days_applied + $content->users->days_taken}}" />
         @elseif($content->leave_type == 4)
-          <label><input type="radio" disabled />Vacation Leave</label>
+          <div class="radio">
+            <label><input type="radio" disabled />Vacation Leave</label>
             <label><input type="radio" disabled />Sick Leave </label>
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled checked="checked" />Paternity Leave </label>
+          </div>
+
+          <label>Paternal Leave Entitlement:</label> 
+            @if($content->users->VL_entitlement == 1)
+              <input class="form-control" disabled value="{{$content->users->PL_entitlement}} Day" /><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->users->PL_entitlement}} Days" /><br/>
+            @endif
+
+            <label>Days Already Taken:</label> 
+            <input class="form-control" disabled value="{{$content->users->PL_taken}}"/><br/>
+            <label>Days Applied For:</label> 
+            @if($content->days_applied == 1)
+              <input class="form-control" disabled value="{{$content->days_applied}} Day"/><br/>
+            @else
+              <input class="form-control" disabled value="{{$content->days_applied}} Days"/><br/>
+            @endif
+            <input type="hidden" name="PLDays" value="{{$content->days_applied + $content->users->days_taken}}" />
         @endif
-        </div>
         <br/>
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" disabled="true">{{$content->purpose}}</textarea>
@@ -104,17 +175,6 @@
           @endif
         @endif
       </div>
-      <br/>
-      <table>
-        <!-- Inclusive Dates of Leave -->
-      </table>
-      <label>Days Applied For:</label> 
-      <br/>
-      @if($content->days_applied === 1)
-      <input class="form-control" disabled value="{{$content->days_applied}} Day" />
-      @else
-      <input class="form-control" disabled value="{{$content->days_applied}} Days" />
-      @endif
       <hr/>
       @if($content->permission_1 == 2 || $content->permission_2 == 2)
           <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
@@ -167,27 +227,6 @@
            }
        });
     });
-    // if({{$content->permission_1}} === 1){
-    //   document.getElementById('permission_1yes').checked = 'true';
-    //   //Check if the user is the next permissioner
-    //   if({{$content->permission_id1}} == {{Auth::user()->id}}){
-    //     document.getElementById('permission_2yes').disabled = false;
-    //     document.getElementById('permission_2no').disabled = false;
-    //   }
-    // }else if({{$content->permission_1}} === 2){
-    //   document.getElementById('permission_1no').checked = 'true';
-    // }
-    // if({{$content->permission_id1}} === {{Auth::user()->id}}){
-    //   document.getElementById('permission_1yes').disabled = false;
-    //   document.getElementById('permission_1no').disabled = false;
-    // }
-
-    // if({{$content->permission_2}} === 1){
-    //   document.getElementById('permission_2yes').checked = 'true';
-    // }else if({{$content->permission_2}} === 2){
-    //   document.getElementById('permission_2no').checked = 'true';
-    // }
-
 	</script>
 	@endforeach
 @endsection

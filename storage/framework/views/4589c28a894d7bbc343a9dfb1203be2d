@@ -70,32 +70,6 @@
                 <button type="submit" class="btn-login">Login</button>
             </div>
         </form>
-        <!-- <button class="example-p-2">Try me</button> -->
     </div>
-    <script type="text/javascript">
-        // $('.example-p-2').on('click', function () {
-        //                         $.confirm({
-        //                             title: 'A critical action',
-        //                             content: 'You can queue confirms, you\'ll be asked again for a confirmation.',
-        //                             confirmButton: 'Proceed',
-        //                             confirmButtonClass: 'btn-info',
-        //                             icon: 'fa fa-question-circle',
-        //                             animation: 'scale',
-        //                             confirm: function () {
-        //                                 $.confirm({
-        //                                     title: 'A very critical action',
-        //                                     content: 'Are you sure you want to proceed?',
-        //                                     confirmButton: 'Hell, yes!',
-        //                                     icon: 'fa fa-warning',
-        //                                     confirmButtonClass: 'btn-warning',
-        //                                     animation: 'zoom',
-        //                                     confirm: function () {
-        //                                         alert('A very critical action triggered!');
-        //                                     }
-        //                                 });
-        //                             }
-        //                         });
-        //                     });
-    </script>
 </body>
 </html>

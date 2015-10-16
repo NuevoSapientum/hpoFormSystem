@@ -19,15 +19,16 @@
       </ul>
       </div>
       @endif
-      <hr/>
-      <button type="button" id="dateTime" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Date/Time</button>
-      <input type="hidden" id="number" value="0" />
-      <br/>
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
       <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
+      <hr/>
+      <button type="button" id="dateTime" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Date/Time</button>
+      <input type="hidden" name="number" id="number" value="1" />
+      <br/>
       <br/>
       <div id="datesTime">
-        
+        <input type='date' class='form-control' name='dateOvertime' /> <br/>
+        <input type='time' class='form-control' name='timeOvertime' /><hr/>  
       </div>
       <br/>
       <label>Supervisor Signature:</label>
@@ -46,13 +47,5 @@
 
   <script type="text/javascript">
 
-    $("#dateTime").click(function(){
-      var value = parseInt(document.getElementById('number').value, 10);
-      value = isNaN(value) ? 0 : value;
-      value++;
-      document.getElementById('number').value = value;
-      $("#datesTime").append("<input type='date' class='form-control' name='dateovertime" + value + "' /> <br/>");
-      $("#datesTime").append("<input type='time' class='form-control' name='timeovertime" + value + "' /><hr/>");
-    });
   </script>
 @endsection

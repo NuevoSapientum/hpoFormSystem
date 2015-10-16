@@ -1,7 +1,7 @@
 @extends('layout.default')
 
 @section('head')
-	<h1>Edit Request for Leave of Absence Form</h1>
+	<h1>Edit Overtime Authorization Slip</h1>
 @endsection
 
 @section('content')
@@ -11,13 +11,21 @@
         <label>Employee Name:</label>
         <input disabled value="{{$content->users->emp_name}}" class="form-control" />
         <br/>
+        <label>Date/Time:</label>
+        @foreach($dateTime as $dateAndtime)
+        <?php $count++ ?>
+        <div id="datesTime">
+          <input type="date" disabled class='form-control' value="{{$dateAndtime->date_overtime}}"/> <br/>
+          <input type="time" disabled class='form-control' value="{{$dateAndtime->time_overtime}}" /><hr/>
+        </div>
+        @endforeach
         <label>Supervisor Signature:</label>
-        <select class="form-control" id="supervisor" name="supervisor">
+        <select disabled class="form-control">
             @foreach($Supervisors as $Supervisor)
               @if($Supervisor->id === $content->permission_id1)
-                <option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+                <option disabled selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
               @else
-                <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
+                <option disabled value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
               @endif
             @endforeach
         </select>
@@ -48,7 +56,7 @@
         @endif
         </div>
         <label>Detailed Purpose of Overtime:</label>
-        <textarea class="form-control" id="reasonforChangeSchedule" name="reasonforChangeSchedule">{{$content->purpose}}</textarea>
+        <textarea class="form-control" disabled>{{$content->purpose}}</textarea>
         <br/>
       <hr/>
       @if($content->permission_1 == 2)
@@ -86,6 +94,33 @@
               </div>
             </div>
           </div>
+      <label>Client Paid:</label>
+      <div class="radio">
+          @if($content->permission_id1 === Auth::user()->id)
+            @if($content->client_paid === 1)
+              <label><input type="radio" name="client_paid" checked="true" value="1" />Yes</label>
+              <label><input type="radio" name="client_paid" value="2" />No</label>
+            @elseif($content->client_paid === 2)
+              <label><input type="radio" name="client_paid" value="1" />Yes</label>
+              <label><input type="radio" name="client_paid" checked="true" value="2" />No</label>
+          @else
+              <label><input type="radio" name="client_paid" value="1" />Yes</label>
+              <label><input type="radio" name="client_paid" value="2" />No</label>
+          @endif
+          
+        @else
+          @if($content->client_paid === 1)
+              <label><input type="radio" disabled checked="true"/>Yes</label>
+              <label><input type="radio" disabled />No</label>
+            @elseif($content->client_paid === 2)
+              <label><input type="radio" disabled />Yes</label>
+              <label><input type="radio" disabled checked="true"/>No</label>
+          @else
+              <label><input type="radio" disabled />Yes</label>
+              <label><input type="radio" disabled />No</label>
+          @endif
+        @endif
+        </div>
     <button type="submit" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
 	 @endif
   </form>
@@ -102,27 +137,6 @@
            }
        });
     });
-    // if({{$content->permission_1}} === 1){
-    //   document.getElementById('permission_1yes').checked = 'true';
-    //   //Check if the user is the next permissioner
-    //   if({{$content->permission_id1}} == {{Auth::user()->id}}){
-    //     document.getElementById('permission_2yes').disabled = false;
-    //     document.getElementById('permission_2no').disabled = false;
-    //   }
-    // }else if({{$content->permission_1}} === 2){
-    //   document.getElementById('permission_1no').checked = 'true';
-    // }
-    // if({{$content->permission_id1}} === {{Auth::user()->id}}){
-    //   document.getElementById('permission_1yes').disabled = false;
-    //   document.getElementById('permission_1no').disabled = false;
-    // }
-
-    // if({{$content->permission_2}} === 1){
-    //   document.getElementById('permission_2yes').checked = 'true';
-    // }else if({{$content->permission_2}} === 2){
-    //   document.getElementById('permission_2no').checked = 'true';
-    // }
-
 	</script>
 	@endforeach
 @endsection

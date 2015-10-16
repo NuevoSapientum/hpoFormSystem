@@ -14,28 +14,144 @@
     <label>Type of Leave:</label>
 		<div class="radio">
 			@if($content->leave_type == 1)
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="VL" checked="checked" value="1" />Vacation Leave</label>
+		        <label><input type="radio" name="typeofLeave" id="SL" value="2" />Sick Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="ML" value="3" />Maternity Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="PL" value="4" />Paternity Leave </label>
 		    @elseif($content->leave_type == 2)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
+		    	<label><input type="radio" name="typeofLeave" id="VL" value="1" />Vacation Leave</label>
+		        <label><input type="radio" name="typeofLeave" id="SL" checked="checked" value="2" />Sick Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="ML" value="3" />Maternity Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="PL" value="4" />Paternity Leave </label>
 		    @elseif($content->leave_type == 3)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="4" />Paternity Leave </label>
+		    	<label><input type="radio" name="typeofLeave" id="VL" value="1" />Vacation Leave</label>
+		        <label><input type="radio" name="typeofLeave" id="SL" value="2" />Sick Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="ML" checked="checked" value="3" />Maternity Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="PL" value="4" />Paternity Leave </label>
 		    @elseif($content->leave_type == 4)
-		    	<label><input type="radio" name="typeofLeave" value="1" />Vacation Leave</label>
-		        <label><input type="radio" name="typeofLeave" value="2" />Sick Leave </label>
-		        <label><input type="radio" name="typeofLeave" value="3" />Maternity Leave </label>
-		        <label><input type="radio" name="typeofLeave" checked="checked" value="4" />Paternity Leave </label>
+		    	<label><input type="radio" name="typeofLeave" id="VL" value="1" />Vacation Leave</label>
+		        <label><input type="radio" name="typeofLeave" id="SL" value="2" />Sick Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="ML" value="3" />Maternity Leave </label>
+		        <label><input type="radio" name="typeofLeave" id="PL" checked="checked" value="4" />Paternity Leave </label>
 		    @endif
         </div>
-        <br/>
+        <hr/>
+        <div id="VLShow">
+          <?php $balance = Auth::user()->VL_entitlement - Auth::user()->VL_taken ?>
+          <label>Vacation Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="VL" disabled value="{{Auth::user()->VL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->VL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <select class="form-control" name="VL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == $content->days_applied)
+                @if($i == 1)
+                  <option selected value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option selected value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @else
+                @if($i == 1)
+                  <option value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @endif
+            @endfor
+          </select>
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>  
+
+        <div id="SLShow">
+          <?php $balance = Auth::user()->SL_entitlement - Auth::user()->SL_taken ?>
+          <label>Sick Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="SL" disabled value="{{Auth::user()->SL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->SL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <select class="form-control" id="SL_daysApplied" name="SL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == $content->days_applied)
+                @if($i == 1)
+                  <option selected value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option selected value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @else
+                @if($i == 1)
+                  <option value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @endif
+            @endfor
+          </select>
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+
+        <div id="MLShow">
+          <?php $balance = Auth::user()->ML_entitlement - Auth::user()->ML_taken ?>
+          <label>Maternal Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="ML" disabled value="{{Auth::user()->ML_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->ML_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <select class="form-control" name="ML_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == $content->days_applied)
+                @if($i == 1)
+                  <option selected value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option selected value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @else
+                @if($i == 1)
+                  <option value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @endif
+            @endfor
+          </select>
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+
+        <div id="PLShow">
+          <?php $balance = Auth::user()->PL_entitlement - Auth::user()->PL_taken ?>
+          <label>Paternal Leave Entitlement:</label> 
+          <input type="text" class="form-control" name="PL" disabled value="{{Auth::user()->PL_entitlement}} Days" /><br/>
+          <label>Days Already Taken:</label> 
+          <input type="text" class="form-control" disabled value="{{Auth::user()->PL_taken}}"/><br/>
+          <label>Days Applied For:</label> 
+          <select class="form-control" name="PL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == $content->days_applied)
+                @if($i == 1)
+                  <option selected value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option selected value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @else
+                @if($i == 1)
+                  <option value="{{$i}}">{{$i}} Day</option>
+                @else
+                  <option value="{{$i}}">{{$i}} Days</option>
+                @endif
+              @endif
+            @endfor
+          </select>
+          <br/>
+          <label>Balance:</label> 
+          <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
+        </div>
+        <hr/>
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" id="textPurpose" name="reasonforAbsence">{{$content->purpose}}</textarea>
       <br/>
@@ -60,38 +176,6 @@
           @endif
           @endforeach
       </select><br/>
-      <table>
-        <!-- Inclusive Dates of Leave -->
-      </table>
-      <label>Entitlement:</label> 
-      <input type="text" class="form-control" name="entitlement" disabled="true" value="{{Auth::user()->entitlement}} Days" /><br/>
-      <label>Days Applied For:</label> 
-      <br/>
-      <select class="form-control" name="days_applied">
-      <?php $balance = Auth::user()->entitlement - Auth::user()->days_taken ?>
-        @if($balance == 0)
-          <option>No days left</option>
-        @else
-          @for($i = 1; $i <= $balance = Auth::user()->entitlement - Auth::user()->days_taken; $i++)
-            @if($i == 1)
-              @if($i === $content->days_applied)
-              <option selected="true" value="{{$i}}">{{$i}} Day</option>
-              @else
-              <option value="{{$i}}">{{$i}} Day</option>
-              @endif
-            @else
-              @if($i === $content->days_applied)
-              <option selected="true" value="{{$i}}">{{$i}} Days</option>
-              @else
-              <option value="{{$i}}">{{$i}} Days</option>
-              @endif
-              
-            @endif
-          @endfor
-        @endif
-      </select><br/>
-      <label>Balance:</label> 
-      <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
         <button type="submit" name="submit" class="btn btn-primary">Save</button>
 	</form>
 	@endforeach

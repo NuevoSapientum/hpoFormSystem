@@ -18,6 +18,7 @@ use App\Change;
 use App\Overtime;
 use App\Departments;
 use App\Users;
+use App\DateTimeOvertime;
 
 class ApprovalController extends Controller
 {
@@ -149,11 +150,6 @@ class ApprovalController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment
             );
-        // dd($leaveApprovals);
-        // foreach ($leaveApprovals as $leave) {
-        //     echo $leave->users->emp_name;
-        //     echo $leave->status;
-        // }
 
         return view('user.approval')->with($data);
     }
@@ -235,11 +231,15 @@ class ApprovalController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
+            $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
+            $count = 0;
             $dataSecond = array(
                             'title' => "Edit Change Schedule",
                             'contents' => $contents,
                             'Supervisors' => $Supervisors,
-                            'empDepartment' => $empDepartment
+                            'empDepartment' => $empDepartment,
+                            'dateTime' => $dateTime,
+                            'count' => $count
                 );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalOvertimeView')->with($data);
@@ -278,14 +278,14 @@ class ApprovalController extends Controller
 
             return redirect('approval')->with('status', $status);
         }elseif($type == 4){
-            $result = $this->approvaOvertime($request->all(), $id);
+            $result = $this->approveOvertime($request->all(), $id);
             if($result){
                 $status = "Success!";
             }else{
                 $status = "Failed!";
             }
-
-            // return redirect('approval')->with('status', $status);
+            // echo $result;
+            return redirect('approval')->with('status', $status);
         }else{
             $status = "Nothing to Show.";
             return redirect('approval')->with('status', $status);
@@ -404,6 +404,7 @@ class ApprovalController extends Controller
 
     public function approveLeave(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
+        $contents = Leaves::where('id', $id)->get();
         if(isset($data['permission_1'])){
             if($data['permission_1'] == 2){
                 return Leaves::where('id', $id)
@@ -441,13 +442,75 @@ class ApprovalController extends Controller
                 //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
                 //                     'id' => $id, 'status' => 2, 'note' => $data['note']]);
             }elseif($data['permission_2'] == 1){
-                return Leaves::where('id', $id)
-                             ->update(array(
-                                'permission_2' => $data['permission_2'],
-                                'reason' => '',
-                                'status' => 1,
-                                'updated_at' => $dateUpdate
-                            ));
+                if(isset($data['VLDays'])){
+                    foreach ($contents as $content) {
+                        $user = User::where('id', $content->users->id)
+                                    ->update(array(
+                                        'VL_taken' => $data['VLDays']
+                                    ));
+                    }
+                    return Leaves::where('id', $id)
+                                 ->update(array(
+                                    'permission_2' => $data['permission_2'],
+                                    'reason' => '',
+                                    'status' => 1,
+                                    'updated_at' => $dateUpdate
+                                ));  
+                }elseif(isset($data['SLDays'])){
+                    foreach ($contents as $content) {
+                        $user = User::where('id', $content->users->id)
+                                    ->update(array(
+                                        'SL_taken' => $data['SLDays']
+                                    ));
+                    }
+                    return Leaves::where('id', $id)
+                                 ->update(array(
+                                    'permission_2' => $data['permission_2'],
+                                    'reason' => '',
+                                    'status' => 1,
+                                    'updated_at' => $dateUpdate
+                                )); 
+                }elseif(isset($data['MLDays'])){
+                    foreach ($contents as $content) {
+                        $user = User::where('id', $content->users->id)
+                                    ->update(array(
+                                        'ML_taken' => $data['MLDays']
+                                    ));
+                    }
+                    return Leaves::where('id', $id)
+                                 ->update(array(
+                                    'permission_2' => $data['permission_2'],
+                                    'reason' => '',
+                                    'status' => 1,
+                                    'updated_at' => $dateUpdate
+                                )); 
+                }elseif(isset($data['PLDays'])){
+                    foreach ($contents as $content) {
+                        $user = User::where('id', $content->users->id)
+                                    ->update(array(
+                                        'PL_taken' => $data['PLDays']
+                                    ));
+                    }
+                    return Leaves::where('id', $id)
+                                 ->update(array(
+                                    'permission_2' => $data['permission_2'],
+                                    'reason' => '',
+                                    'status' => 1,
+                                    'updated_at' => $dateUpdate
+                                )); 
+                }
+                // foreach ($contents as $content) {
+                //     echo $content->users->emp_name;
+                // }
+                // dd($contents);
+                // return Leaves::where('id', $id)
+                //              ->update(array(
+                //                 'permission_2' => $data['permission_2'],
+                //                 'reason' => '',
+                //                 'status' => 1,
+                //                 'updated_at' => $dateUpdate
+                //             ));
+                // dd($data);
                 // return DB::update("UPDATE tbl_leave SET permission_2 = :answer, requestNote = :note, status = :status,
                 //                     dateUpdated = :dateUpdated WHERE tbl_leaveid = :id", 
                 //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'], 
@@ -567,35 +630,41 @@ class ApprovalController extends Controller
     }
 
 
-    public function approvaOvertime(array $data, $id){
+    public function approveOvertime(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
-
         if(isset($data['permission_1'])){
             if($data['permission_1'] == 2){
-                return Leaves::where('id', $id)
+                return Overtime::where('id', $id)
                               ->update(array(
                                     'permission_1' => $data['permission_1'],
                                     'reason' => $data['note'],
                                     'status' => 2,
-                                    'updated_at' => $dateUpdate
+                                    'updated_at' => $dateUpdate,
+                                    'client_paid' => 0
                                 ));
                 // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
                 //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
                 //                     'id' => $id, 'status' => 2, 'note' => $data['note']]);
             }elseif($data['permission_1'] == 1){
-                // return Leaves::where('id', $id)
-                //              ->update(array(
-                //                 'permission_1' => $data['permission_1'],
-                //                 'reason' => '',
-                //                 'status' => 0,
-                //                 'updated_at' => $dateUpdate
-                //             ));
-                // dd($data);
-                echo $id;
+                return Overtime::where('id', $id)
+                             ->update(array(
+                                'permission_1' => $data['permission_1'],
+                                'reason' => '',
+                                'status' => 1,
+                                'updated_at' => $dateUpdate,
+                                'client_paid' => $data['client_paid']
+                            ));
+
                 // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
                 //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
                 //                     'id' => $id, 'status' => 0, 'note' => '']);
             }
         }
+
+        return Overtime::where('id', $id)
+                            ->update(array(
+                                'client_paid' => $data['client_paid'],
+                                'updated_at' => $dateUpdate
+                            ));
     }
 }

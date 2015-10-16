@@ -97,7 +97,7 @@
           <td>{{$over->users->emp_name}}</td>
           <td>{{date('F d, Y', strtotime($over->created_at))}}</td>
           <td>{{date('F d, Y', strtotime($over->updated_at))}}</td>
-          <td>Change of Schedule</td>
+          <td>Overtime Authorization</td>
           @if($over->status === 0)
             <td>Pending</td>
           @elseif($over->status === 1)

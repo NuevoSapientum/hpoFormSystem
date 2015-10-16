@@ -38,7 +38,15 @@
           <label>Days Already Taken:</label> 
           <input type="text" class="form-control" disabled value="{{Auth::user()->VL_taken}}"/><br/>
           <label>Days Applied For:</label> 
-          <input type="number" class="form-control" name="days_applied" value="0" />
+          <select class="form-control" name="VL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == 1)
+                <option value="{{$i}}">{{$i}} Day</option>
+              @else
+                <option value="{{$i}}">{{$i}} Days</option>
+              @endif
+            @endfor
+          </select>
           <br/>
           <label>Balance:</label> 
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
@@ -51,7 +59,15 @@
           <label>Days Already Taken:</label> 
           <input type="text" class="form-control" disabled value="{{Auth::user()->SL_taken}}"/><br/>
           <label>Days Applied For:</label> 
-          <input type="number" class="form-control" name="days_applied" value="0" />
+          <select class="form-control" name="SL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == 1)
+                <option value="{{$i}}">{{$i}} Day</option>
+              @else
+                <option value="{{$i}}">{{$i}} Days</option>
+              @endif
+            @endfor
+          </select>
           <br/>
           <label>Balance:</label> 
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
@@ -64,7 +80,15 @@
           <label>Days Already Taken:</label> 
           <input type="text" class="form-control" disabled value="{{Auth::user()->ML_taken}}"/><br/>
           <label>Days Applied For:</label> 
-          <input type="number" class="form-control" name="days_applied" value="0" />
+          <select class="form-control" name="ML_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == 1)
+                <option value="{{$i}}">{{$i}} Day</option>
+              @else
+                <option value="{{$i}}">{{$i}} Days</option>
+              @endif
+            @endfor
+          </select>
           <br/>
           <label>Balance:</label> 
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
@@ -77,7 +101,15 @@
           <label>Days Already Taken:</label> 
           <input type="text" class="form-control" disabled value="{{Auth::user()->PL_taken}}"/><br/>
           <label>Days Applied For:</label> 
-          <input type="number" class="form-control" name="days_applied" value="0" />
+          <select class="form-control" name="PL_daysApplied">
+            @for($i = 1; $i<=$balance; $i++)
+              @if($i == 1)
+                <option value="{{$i}}">{{$i}} Day</option>
+              @else
+                <option value="{{$i}}">{{$i}} Days</option>
+              @endif
+            @endfor
+          </select>
           <br/>
           <label>Balance:</label> 
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
@@ -101,43 +133,4 @@
       </select><br/>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#VLShow').attr('style', 'display:none');
-      $('#SLShow').attr('style', 'display:none');
-      $('#MLShow').attr('style', 'display:none');
-      $('#PLShow').attr('style', 'display:none');
-       $('input[type="radio"]').click(function() {
-          // alert($(this).attr('id') == 'permission_2no');
-           if($(this).attr('id') == 'VL') {
-                $('#VLShow').attr('style', 'display:');
-                $('#SLShow').attr('style', 'display:none');
-                $('#MLShow').attr('style', 'display:none');
-                $('#PLShow').attr('style', 'display:none');
-           }else if($(this).attr('id') == 'SL'){
-                $('#SLShow').attr('style', 'display:');
-                $('#VLShow').attr('style', 'display:none');
-                $('#MLShow').attr('style', 'display:none');
-                $('#PLShow').attr('style', 'display:none');
-           }else if($(this).attr('id') == 'ML'){
-                $('#MLShow').attr('style', 'display:');
-                $('#VLShow').attr('style', 'display:none');
-                $('#SLShow').attr('style', 'display:none');
-                $('#PLShow').attr('style', 'display:none');
-           }else if($(this).attr('id') == 'PL'){
-                $('#PLShow').attr('style', 'display:');
-                $('#VLShow').attr('style', 'display:none');
-                $('#SLShow').attr('style', 'display:none');
-                $('#MLShow').attr('style', 'display:none');
-           }else{
-                $('#VLShow').attr('style', 'display:none');
-                $('#SLShow').attr('style', 'display:none');
-                $('#MLShow').attr('style', 'display:none');
-                $('#PLShow').attr('style', 'display:none');
-           }
-       });
-    });
-    
-  </script>
 @endsection

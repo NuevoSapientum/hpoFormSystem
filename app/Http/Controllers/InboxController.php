@@ -18,6 +18,7 @@ use App\Change;
 use App\Overtime;
 use App\Departments;
 use App\Users;
+use App\DateTimeOvertime;
 
 class InboxController extends Controller
 {
@@ -80,7 +81,7 @@ class InboxController extends Controller
         $qry = "select * from profile_image where id = '".Auth::user()->img_id."'";
         
         return $result = mysqli_query($con, $qry);
-}
+    }
 
     public function inbox(){
         $profileImage = $this->getImage();
@@ -225,15 +226,26 @@ class InboxController extends Controller
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
             $Supervisors = User::where('permissioners', 1)->get();
+            $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
+            $count = 0;
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
                             'contents' => $contents,
                             'empDepartment' => $empDepartment,
-                            'Supervisors' => $Supervisors
+                            'Supervisors' => $Supervisors,
+                            'dateTime' => $dateTime,
+                            'count' => $count
                 );
             $data = array_merge($dataFirst, $dataSecond);
-            // dd($data);
-            return view('user.inboxOver')->with($data);
+            
+            foreach ($contents as $content) {
+                if($content->permission_1 != 0){
+                    return view('user.inboxOverApproval')->with($data);
+                }else{
+                    return view('user.inboxOver')->with($data);
+                }
+            }
+            
         }else{
             $status = "Nothing to Show.";
             return redirect('inbox')->with('status', $status);
@@ -454,35 +466,98 @@ class InboxController extends Controller
 
     public function editLeave(array $data, $id){
         $datas = Leaves::where('id', $id)->get();
-        foreach ($datas as $leave) {
-            $days = $leave->days_applied;
-        }
-        // $days -= $data['days_applied'];
-        if($days != $data['days_applied']){
-            $diff = $days - $data['days_applied'];
-            if($diff < 0){
-                //Add the difference
-                $days_taken = Auth::user()->days_taken + abs($diff);
-                Auth::user()->days_taken = $days_taken;
-                Auth::user()->save();
-            }else{
-                //Minus the Difference
-                $days_taken = Auth::user()->days_taken - abs($diff);
-                Auth::user()->days_taken = $days_taken;
-                Auth::user()->save();
-            }
-        }
+        // foreach ($datas as $leave) {
+        //     $days = $leave->days_applied;
+        // }
+        // // $days -= $data['days_applied'];
+        // if($days != $data['days_applied']){
+        //     $diff = $days - $data['days_applied'];
+        //     if($diff < 0){
+        //         //Add the difference
+        //         $days_taken = Auth::user()->days_taken + abs($diff);
+        //         Auth::user()->days_taken = $days_taken;
+        //         Auth::user()->save();
+        //     }else{
+        //         //Minus the Difference
+        //         $days_taken = Auth::user()->days_taken - abs($diff);
+        //         Auth::user()->days_taken = $days_taken;
+        //         Auth::user()->save();
+        //     }
+        // }
+        // $dateUpdate = date("Y-m-d H:i:s");
+        // return Leaves::where('id', $id)
+        //                 ->update(array(
+        //                 'leave_type' => $data['typeofLeave'],
+        //                 'purpose' => $data['reasonforAbsence'],
+        //                 'permission_id1' => $data['recommendApproval'],
+        //                 'permission_id2' => $data['approvedBy'],
+        //                 'days_applied' => $data['days_applied'],
+        //                 'updated_at' => $dateUpdate
+        //                 ));
+        
         $dateUpdate = date("Y-m-d H:i:s");
-        return Leaves::where('id', $id)
-                        ->update(array(
-                        'leave_type' => $data['typeofLeave'],
-                        'purpose' => $data['reasonforAbsence'],
-                        'permission_id1' => $data['recommendApproval'],
-                        'permission_id2' => $data['approvedBy'],
-                        'days_applied' => $data['days_applied'],
-                        'updated_at' => $dateUpdate
-                        ));
+        if($data['typeofLeave'] == 1){
+            $days_taken = Auth::user()->VL_taken + $data['VL_daysApplied'];
+            if($days_taken < Auth::user()->VL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                return Leaves::where('id', $id)
+                            ->update(array(
+                            'leave_type' => $data['typeofLeave'],
+                            'purpose' => $data['reasonforAbsence'],
+                            'permission_id1' => $data['recommendApproval'],
+                            'permission_id2' => $data['approvedBy'],
+                            'days_applied' => $data['VL_daysApplied'],
+                            'updated_at' => $dateUpdate
+                            ));
+            }
+        }else if($data['typeofLeave'] == 2){
+            $days_taken = Auth::user()->SL_taken + $data['SL_daysApplied'];
+            if($days_taken < Auth::user()->SL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = Leaves::where('id', $id)
+                            ->update(array(
+                            'leave_type' => $data['typeofLeave'],
+                            'purpose' => $data['reasonforAbsence'],
+                            'permission_id1' => $data['recommendApproval'],
+                            'permission_id2' => $data['approvedBy'],
+                            'days_applied' => $data['SL_daysApplied'],
+                            'updated_at' => $dateUpdate
+                            ));
+            }
+        }else if($data['typeofLeave'] == 3){
+            $days_taken = Auth::user()->ML_taken + $data['ML_daysApplied'];
+            if($days_taken < Auth::user()->ML_entitlement){
+                // Auth::user()->ML_taken = $days_taken;
+                // Auth::user()->save();
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = Leaves::where('id', $id)
+                            ->update(array(
+                            'leave_type' => $data['typeofLeave'],
+                            'purpose' => $data['reasonforAbsence'],
+                            'permission_id1' => $data['recommendApproval'],
+                            'permission_id2' => $data['approvedBy'],
+                            'days_applied' => $data['ML_daysApplied'],
+                            'updated_at' => $dateUpdate
+                            ));
+            }
+        }else if($data['typeofLeave'] == 4){
+            $days_taken = Auth::user()->PL_taken + $data['PL_daysApplied'];
+            if($days_taken < Auth::user()->PL_entitlement){
+                $department = Positions::find(Auth::user()->position_id)->departments;
+                $requestAdd = Leaves::where('id', $id)
+                            ->update(array(
+                            'leave_type' => $data['typeofLeave'],
+                            'purpose' => $data['reasonforAbsence'],
+                            'permission_id1' => $data['recommendApproval'],
+                            'permission_id2' => $data['approvedBy'],
+                            'days_applied' => $data['PL_daysApplied'],
+                            'updated_at' => $dateUpdate
+                            ));
+        }   
     }
+
+    return 0;
+}
 
     public function editChange(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
@@ -503,12 +578,26 @@ class InboxController extends Controller
 
     public function editOver(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
+        // dd($data);
+        $count = $data['count'];
+        $i = 1;
+        echo $count;
+        while($count != 0){
+            $dateTime = DateTimeOvertime::where('id', $data['id' . $i])
+                                        ->update(array(
+                                            'date_overtime' => $data['dateOvertime' . $i],
+                                            'time_overtime' => $data['timeOvertime' . $i],
+                                            'updated_at' => $dateUpdate
+                                        ));   
+            $i++;
+            $count--;
+        }
         return Overtime::where('id', $id)
-                        ->update(array(
-                        'purpose' => $data['reasonforChangeSchedule'],
-                        'client_id' => $data['client'],
-                        'updated_at' => $dateUpdate
-                        ));
+                          ->update(array(
+                                    'permission_id1' => $data['supervisor'],
+                                    'purpose' => $data['purpose'],
+                                    'updated_at' => $dateUpdate
+                            ));
     }
 
 }
