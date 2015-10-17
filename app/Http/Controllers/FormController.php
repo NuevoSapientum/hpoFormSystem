@@ -196,6 +196,7 @@ class FormController extends Controller
     public function postrequestForLeave(Request $request){
         $rules = array('dateCreated' => 'required',
                        'typeofLeave' => 'required',
+                       'startDate' => 'required',
                        'reasonforAbsence' => 'required',
                        'recommendApproval' => 'required',
                        'approvedBy' => 'required');
@@ -209,108 +210,131 @@ class FormController extends Controller
         $id = Auth::user()->id;
         $dateUpdate = date("Y-m-d H:i:s");
         if($request->input('typeofLeave') == 1){
-
             $days_taken = Auth::user()->VL_taken + $request->input('VL_daysApplied');
-            if($days_taken < Auth::user()->VL_entitlement){
-                $department = Positions::find(Auth::user()->position_id)->departments;
-                $requestAdd = new Leaves(array(
-                    'user_id' => $id,
-                    'leave_type' => $request->input('typeofLeave'),
-                    'purpose' => $request->input('reasonforAbsence'),
-                    'department_id' => $department->id,
-                    'permission_id1' => $request->input('recommendApproval'),
-                    'permission_id2' => $request->input('approvedBy'),
-                    'days_applied' => $request->input('VL_daysApplied'),
-                    'created_at' => $request->input('dateCreated'),
-                    'updated_at' => $dateUpdate
-                ));
+            $balance = Auth::user()->VL_entitlement - Auth::user()->VL_taken;
+            if($balance != 0){
+                if($days_taken <= Auth::user()->VL_entitlement){
+                    $department = Positions::find(Auth::user()->position_id)->departments;
+                    $requestAdd = new Leaves(array(
+                        'user_id' => $id,
+                        'leave_type' => $request->input('typeofLeave'),
+                        'purpose' => $request->input('reasonforAbsence'),
+                        'department_id' => $department->id,
+                        'permission_id1' => $request->input('recommendApproval'),
+                        'permission_id2' => $request->input('approvedBy'),
+                        'days_applied' => $request->input('VL_daysApplied'),
+                        'start_date' => $request->input('startDate'),
+                        'created_at' => $request->input('dateCreated'),
+                        'updated_at' => $dateUpdate
+                    ));
 
-                $save = $requestAdd->save();
-                if($save){
-                    $status = "Success!";
+                    $save = $requestAdd->save();
+                    if($save){
+                        $status = "Success!";
+                    }else{
+                       $status = "Failed!";
+                    }
                 }else{
-                   $status = "Failed!";
+                    $status = "Failed!";
                 }
             }else{
-                $status = "Failed!";
+                $status = "You don't have any days of leave left.";
             }
 
         }elseif($request->input('typeofLeave') == 2){
             $days_taken = Auth::user()->SL_taken + $request->input('SL_daysApplied');
-            if($days_taken < Auth::user()->SL_entitlement){
-                $department = Positions::find(Auth::user()->position_id)->departments;
-                $requestAdd = new Leaves(array(
-                    'user_id' => $id,
-                    'leave_type' => $request->input('typeofLeave'),
-                    'purpose' => $request->input('reasonforAbsence'),
-                    'department_id' => $department->id,
-                    'permission_id1' => $request->input('recommendApproval'),
-                    'permission_id2' => $request->input('approvedBy'),
-                    'days_applied' => $request->input('SL_daysApplied'),
-                    'created_at' => $request->input('dateCreated'),
-                    'updated_at' => $dateUpdate
-                ));
+            $balance = Auth::user()->SL_entitlement - Auth::user()->SL_taken;
+            if($balance != 0){
+                if($days_taken <= Auth::user()->SL_entitlement){
+                    $department = Positions::find(Auth::user()->position_id)->departments;
+                    $requestAdd = new Leaves(array(
+                        'user_id' => $id,
+                        'leave_type' => $request->input('typeofLeave'),
+                        'purpose' => $request->input('reasonforAbsence'),
+                        'department_id' => $department->id,
+                        'permission_id1' => $request->input('recommendApproval'),
+                        'permission_id2' => $request->input('approvedBy'),
+                        'days_applied' => $request->input('SL_daysApplied'),
+                        'start_date' => $request->input('startDate'),
+                        'created_at' => $request->input('dateCreated'),
+                        'updated_at' => $dateUpdate
+                    ));
 
-                $save = $requestAdd->save();
-                if($save){
-                    $status = "Success!";
+                    $save = $requestAdd->save();
+                    if($save){
+                        $status = "Success!";
+                    }else{
+                       $status = "Failed!";
+                    }
                 }else{
-                   $status = "Failed!";
+                    $status = "Failed!";
                 }
             }else{
-                $status = "Failed!";
+                $status = "You don't have any days of leave left.";
             }
         }elseif($request->input('typeofLeave') == 3){
             $days_taken = Auth::user()->ML_taken + $request->input('ML_daysApplied');
-            if($days_taken < Auth::user()->ML_entitlement){
-                // Auth::user()->ML_taken = $days_taken;
-                // Auth::user()->save();
-                $department = Positions::find(Auth::user()->position_id)->departments;
-                $requestAdd = new Leaves(array(
-                    'user_id' => $id,
-                    'leave_type' => $request->input('typeofLeave'),
-                    'purpose' => $request->input('reasonforAbsence'),
-                    'department_id' => $department->id,
-                    'permission_id1' => $request->input('recommendApproval'),
-                    'permission_id2' => $request->input('approvedBy'),
-                    'days_applied' => $request->input('ML_daysApplied'),
-                    'created_at' => $request->input('dateCreated'),
-                    'updated_at' => $dateUpdate
-                ));
+            $balance = Auth::user()->ML_entitlement - Auth::user()->ML_taken;
+            if($balance != 0){
+                if($days_taken <= Auth::user()->ML_entitlement){
+                    // Auth::user()->ML_taken = $days_taken;
+                    // Auth::user()->save();
+                    $department = Positions::find(Auth::user()->position_id)->departments;
+                    $requestAdd = new Leaves(array(
+                        'user_id' => $id,
+                        'leave_type' => $request->input('typeofLeave'),
+                        'purpose' => $request->input('reasonforAbsence'),
+                        'department_id' => $department->id,
+                        'permission_id1' => $request->input('recommendApproval'),
+                        'permission_id2' => $request->input('approvedBy'),
+                        'days_applied' => $request->input('ML_daysApplied'),
+                        'start_date' => $request->input('startDate'),
+                        'created_at' => $request->input('dateCreated'),
+                        'updated_at' => $dateUpdate
+                    ));
 
-                $save = $requestAdd->save();
-                if($save){
-                    $status = "Success!";
+                    $save = $requestAdd->save();
+                    if($save){
+                        $status = "Success!";
+                    }else{
+                       $status = "Failed!";
+                    }
                 }else{
-                   $status = "Failed!";
+                    $status = "Failed!";
                 }
             }else{
-                $status = "Failed!";
+                $status = "You don't have any days of leave left.";
             }
         }elseif($request->input('typeofLeave') == 4){
             $days_taken = Auth::user()->PL_taken + $request->input('PL_daysApplied');
-            if($days_taken < Auth::user()->PL_entitlement){
-                $department = Positions::find(Auth::user()->position_id)->departments;
-                $requestAdd = new Leaves(array(
-                    'user_id' => $id,
-                    'leave_type' => $request->input('typeofLeave'),
-                    'purpose' => $request->input('reasonforAbsence'),
-                    'department_id' => $department->id,
-                    'permission_id1' => $request->input('recommendApproval'),
-                    'permission_id2' => $request->input('approvedBy'),
-                    'days_applied' => $request->input('PL_daysApplied'),
-                    'created_at' => $request->input('dateCreated'),
-                    'updated_at' => $dateUpdate
-                ));
+            $balance = Auth::user()->PL_entitlement - Auth::user()->PL_taken;
+            if($balance != 0){
+                if($days_taken <= Auth::user()->PL_entitlement){
+                    $department = Positions::find(Auth::user()->position_id)->departments;
+                    $requestAdd = new Leaves(array(
+                        'user_id' => $id,
+                        'leave_type' => $request->input('typeofLeave'),
+                        'purpose' => $request->input('reasonforAbsence'),
+                        'department_id' => $department->id,
+                        'permission_id1' => $request->input('recommendApproval'),
+                        'permission_id2' => $request->input('approvedBy'),
+                        'days_applied' => $request->input('PL_daysApplied'),
+                        'start_date' => $request->input('startDate'),
+                        'created_at' => $request->input('dateCreated'),
+                        'updated_at' => $dateUpdate
+                    ));
 
-                $save = $requestAdd->save();
-                if($save){
-                    $status = "Success!";
+                    $save = $requestAdd->save();
+                    if($save){
+                        $status = "Success!";
+                    }else{
+                       $status = "Failed!";
+                    }
                 }else{
-                   $status = "Failed!";
+                    $status = "Failed!";
                 }
             }else{
-                $status = "Failed!";
+                $status = "You don't have any days of leave left.";
             }
         }
         // dd($request->all());

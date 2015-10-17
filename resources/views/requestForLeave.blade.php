@@ -115,6 +115,9 @@
           <input type="text" class="form-control" disabled value="{{$balance}}"/><br/>
         </div>
       <br/>
+      <label>Start Date:</label>
+      <input type="date" name="startDate" class="form-control" />
+      <br/>
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" name="reasonforAbsence"></textarea>
       <br/>

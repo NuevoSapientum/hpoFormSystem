@@ -48,8 +48,48 @@ Route::get('history/view/{type}/{id}', [
 ]);
 
 Route::get('submittedforms', [
-	'middleware' => 'auth',
+	'middleware' => 'admin',
 	'uses' => 'PagesController@submittedForms'
+]);
+
+Route::get('record/vacation',[
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@vacationRecord'
+]);
+
+Route::get('record/sick',[
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@sickRecord'
+]);
+
+Route::get('record/maternal',[
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@maternalRecord'
+]);
+
+Route::get('record/paternal',[
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@paternalRecord'
+]);
+
+Route::get('record/vacation/view/{type}/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@view'
+]);
+
+Route::get('record/sick/view/{type}/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@view'
+]);
+
+Route::get('record/maternal/view/{type}/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@view'
+]);
+
+Route::get('record/paternal/view/{type}/{id}', [
+	'middleware' => 'admin',
+	'uses' => 'LeaveController@view'
 ]);
 
 Route::get('/inbox',[
@@ -185,4 +225,9 @@ Route::get('accounts/resetPassword/{id}', [
 Route::post('accounts/resetPassword/{id}', [
 	'middleware' => 'admin',
 	'uses' => 'AccountController@postResetPassword'
+]);
+
+Route::post('accounts/changeEntitlement', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@changeEntitlement'
 ]);

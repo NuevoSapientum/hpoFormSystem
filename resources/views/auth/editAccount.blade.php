@@ -16,6 +16,7 @@
     </div>
     @endif
 	<form method="POST" action="{{URL::to('accounts/show/' . $user->id)}}">
+		<hr/>
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<label>Name:</label>
 		<input type="text" class="form-control" name="name" value="{{$user->emp_name}}" /><br/>
@@ -50,12 +51,18 @@
 				<label><input type="radio" value="3" name="permissioners" />Company Representative</label>
 			@endif
 		</div>
-		<label>Entitlement:</label>
-		<input type="number" name="entitlement" value="{{$user->entitlement}}" class="form-control" />
+		<label>Vacation Entitlement:</label>
+		<input type="number" name="VL_entitlement" value="{{$user->VL_entitlement}}" class="form-control" />
 		<br/>
-		<label>Days Taken:</label>
-		<input type="number" name="days_taken" value="{{$user->days_taken}}" class="form-control" />
+		<label>Sick Entitlement:</label>
+		<input type="number" name="SL_entitlement" value="{{$user->SL_entitlement}}" class="form-control" />
 		<br/>
+		<label>Maternal Entitlement:</label>
+		<input type="number" name="ML_entitlement" value="{{$user->ML_entitlement}}" class="form-control" />
+		<br/>
+		<label>Parental Entitlement:</label>
+		<input type="number" name="PL_entitlement" value="{{$user->PL_entitlement}}" class="form-control" />
+		<hr/>
 	<button type="submit" class="btn btn-primary confirm">Save</button>
 	</form>
 

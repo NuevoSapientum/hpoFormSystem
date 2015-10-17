@@ -253,6 +253,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <a href="{{URL::to('/submittedforms')}}"><i class="fa fa-link"></i> <span>Submitted Forms</span></a></li>
             @endif
 
+            @if($empDepartment->department_name == "Human Resource")
+              @if($title == 'Vacation Leave' || $title == 'Sick Leave' || $title == 'Maternal Leave' || $title == 'Paternal Leave')
+              <li class="treeview active">
+              @else
+              <li class="treeview">
+              @endif
+                <a href="#"><i class="fa fa-link"></i> <span>Records of Leave</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="{{URL::to('record/vacation')}}">Vacation Leave</a></li>
+                  <li><a href="{{URL::to('record/sick')}}">Sick Leave</a></li>
+                  <li><a href="{{URL::to('record/maternal')}}">Maternal Leave</a></li>
+                  <li><a href="{{URL::to('record/paternal')}}">Paternal Leave</a></li>
+                </ul>
+              </li>
+            @endif
+
             @if($title == 'Exit Pass' || $title == 'Request for Leave of Absence' || $title == 'Change Schedule' || $title == 'Overtime Authorization Slip')
             <li class="treeview active">
             @else

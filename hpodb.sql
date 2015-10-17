@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2015 at 12:29 PM
+-- Generation Time: Oct 17, 2015 at 01:59 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -181,18 +181,11 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   `permission_1` int(11) NOT NULL,
   `permission_2` int(11) NOT NULL,
   `days_applied` int(11) NOT NULL,
+  `start_date` date NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `leaves`
---
-
-INSERT INTO `leaves` (`id`, `user_id`, `department_id`, `leave_type`, `purpose`, `reason`, `form_id`, `permission_id1`, `permission_id2`, `permission_1`, `permission_2`, `days_applied`, `status`, `created_at`, `updated_at`) VALUES
-(4, 17, 2, 1, 'Testing =)', '', 2, 12, 12, 1, 1, 4, 1, '2015-10-16 08:00:00', '2015-10-17 02:19:22'),
-(5, 17, 2, 2, 'Dungue', '', 2, 13, 12, 1, 1, 6, 1, '2015-10-16 08:00:00', '2015-10-17 02:28:09');
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -355,12 +348,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `position_id`, `img_id`, `email`, `username`, `password`, `permissioners`, `SL_entitlement`, `remember_token`, `created_at`, `updated_at`, `VL_entitlement`, `PL_entitlement`, `ML_entitlement`, `SL_taken`, `VL_taken`, `ML_taken`, `PL_taken`) VALUES
-(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2y$10$kEJ4hdado/OFQGWh7zr02uUV4itNlZkOaXPlC.fafHQ1dJN/uGCX6', 0, 7, 'j4otIUAl6qF2ZElmrdDfgHMc38PgiVyubfhlUH0yQoDZWG6XgfrEocQTKI45', '2015-10-09 07:00:00', '2015-10-17 02:29:07', 0, 0, 0, 0, 0, 0, 0),
-(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'mYPTdJ3kz4aKSXWoRdk4z8Jbya042Xl5znF5l7yTR4FgLOPFtZWGlQ04e29i', '2015-10-10 11:19:53', '2015-10-17 02:28:28', 0, 0, 0, 0, 0, 0, 0),
-(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 'm3D2rEOa5j7teDjivXHu1gYT3lBQqiiddNo2wpQYmpbWcCXAq68fkXBE8T7d', '2015-10-10 16:21:16', '2015-10-17 02:27:53', 0, 0, 0, 0, 0, 0, 0),
-(14, 'Marshall Eriksen', 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, 'ZIkGF37k77kuClYb2gwacC5ayZ9d3oUSjAj32t9lXYu5ZPEstNc1P0jYbPfi', '2015-10-10 16:22:24', '2015-10-15 13:17:25', 0, 0, 0, 0, 0, 0, 0),
-(16, 'Lily Aldrin', 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'uT4OwMZo6ui189C1msPbUCswxidCyXRmgYFwUpV0r3YJhBhfjhpT1xHllKXv', '2015-10-10 16:23:24', '2015-10-12 21:30:48', 0, 0, 0, 0, 0, 0, 0),
-(17, 'Erwin Mark D. Añora', 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$91RPE/IZ05Nw3srchY/0W.zJIW8dqSIhRu.R3ciotU4Ey9ojyxT0.', 0, 7, 'M2hUomAs79jAdfTw10nMwK1ni8poS5h9k9XcLdhFGXVvYjiC72HyhZvbawuA', '2015-10-15 10:13:21', '2015-10-17 02:28:09', 7, 12, 0, 6, 4, 0, 0);
+(1, 'Robin Scherbatsky', 5, 1, 'himym@example.com', 1200289, '$2y$10$kEJ4hdado/OFQGWh7zr02uUV4itNlZkOaXPlC.fafHQ1dJN/uGCX6', 0, 7, 'z7AtEa4isGHtniS2j9OVpSWrY8WOIRQoayMaObWb7cRSFX52AKcBuyvtWRCj', '2015-10-09 07:00:00', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0),
+(12, 'Barney Stinson', 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'wMDt0j8B7eVaFcXA9zyRLCb6qsboeE6vj5PMCJDwgsGOM6Q3bxGIzQ92OReJ', '2015-10-10 11:19:53', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0),
+(13, 'Ted Mosby', 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 'g7YCGOla5zRXiyLCIeCGd2Xu9JUyiFXVQnuy8EjAqwNMkPsWW4pHRBeo9kZk', '2015-10-10 16:21:16', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0),
+(14, 'Marshall Eriksen', 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, 'ZIkGF37k77kuClYb2gwacC5ayZ9d3oUSjAj32t9lXYu5ZPEstNc1P0jYbPfi', '2015-10-10 16:22:24', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0),
+(16, 'Lily Aldrin', 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'uT4OwMZo6ui189C1msPbUCswxidCyXRmgYFwUpV0r3YJhBhfjhpT1xHllKXv', '2015-10-10 16:23:24', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0),
+(17, 'Erwin Mark D. Añora', 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$91RPE/IZ05Nw3srchY/0W.zJIW8dqSIhRu.R3ciotU4Ey9ojyxT0.', 0, 8, 'fac8e1enewfoYEmfi38JLvGqGg5YYzpHGUoBQ7gDoXuUpz4lY76hNn4huQ4V', '2015-10-15 10:13:21', '2015-10-17 15:58:57', 7, 30, 0, 0, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -465,7 +458,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `overtime_authorization`
 --

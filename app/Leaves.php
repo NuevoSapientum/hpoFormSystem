@@ -17,6 +17,7 @@ class Leaves extends Model
    			'permission_1',
    			'permission_2',
    			'days_applied',
+        'start_date',
    			'status',
    			'leave_type',
    			'created_at',

@@ -13,6 +13,10 @@
     <div class="alert alert-danger">
         <h4>{{session('status')}}</h4>
     </div>
+  @elseif(session('status') == "You don't have any days of leave left.")
+    <div class="alert alert-danger">
+        <h4>{{session('status')}}</h4>
+    </div>
   @endif
   <div class="well well-sm">
     <h1>

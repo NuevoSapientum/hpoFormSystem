@@ -20,6 +20,7 @@
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled />Paternity Leave </label>
           </div>
+            <hr/>
             <label>Vacation Leave Entitlement:</label> 
             @if($content->users->VL_entitlement == 1)
               <input class="form-control" disabled value="{{$content->users->VL_entitlement}} Day" /><br/>
@@ -42,6 +43,7 @@
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled />Paternity Leave </label>
           </div>
+          <hr/>
           <label>Sick Leave Entitlement:</label> 
             @if($content->users->SL_entitlement == 1)
               <input class="form-control" disabled value="{{$content->users->SL_entitlement}} Day" /><br/>
@@ -64,6 +66,7 @@
             <label><input type="radio" disabled checked="checked" />Maternity Leave </label>
             <label><input type="radio" disabled value="4" />Paternity Leave </label>
           </div>
+          <hr/>
           <label>Maternity Leave Entitlement:</label> 
             @if($content->users->ML_entitlement == 1)
               <input class="form-control" disabled value="{{$content->users->ML_entitlement}} Day" /><br/>
@@ -87,7 +90,7 @@
             <label><input type="radio" disabled />Maternity Leave </label>
             <label><input type="radio" disabled checked="checked" />Paternity Leave </label>
           </div>
-
+          <hr/>
           <label>Paternal Leave Entitlement:</label> 
             @if($content->users->VL_entitlement == 1)
               <input class="form-control" disabled value="{{$content->users->PL_entitlement}} Day" /><br/>
@@ -105,6 +108,10 @@
             @endif
         @endif
         <br/>
+        <label>Start Date:</label>
+        <input type="date" class="form-control" disabled value="{{$content->start_date}}" />
+        <hr/>
+
       <label>Reason(s) for Absence:</label>
       <textarea class="form-control" disabled="true">{{$content->purpose}}</textarea>
       <br/>

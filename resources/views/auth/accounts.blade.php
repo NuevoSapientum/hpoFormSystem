@@ -22,6 +22,9 @@
 @endsection
 
 @section('content')
+  <button class="btn btn-info" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span> Change Entitlements</button>
+  <br/>
+  <br/>
   <table id="example">
     <thead>
       <tr>
@@ -47,6 +50,35 @@
     @endforeach
     </tbody>
   </table>
+
+  <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Entitlements:</h2>
+                  <hr/>
+                </div>
+                <div class="modal-body">
+                  <form action="{{URL::to('accounts/changeEntitlement')}}" method="POST" >
+                    <?php echo Form::token() ?>
+                    <label>Vacation Leave Entitlement:</label>
+                    <input type="number" class="form-control" name="VL_entitlement" value="0" />
+                    <label>Sick Leave Entitlement:</label>
+                    <input type="number" class="form-control" name="SL_entitlement" value="0" />
+                    <label>Maternal Leave Entitlement:</label>
+                    <input type="number" class="form-control" name="ML_entitlement" value="0" />
+                    <label>Paternal Leave Entitlement:</label>
+                    <input type="number" class="form-control" name="PL_entitlement" value="0" />
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
   <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
   <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
   <script>

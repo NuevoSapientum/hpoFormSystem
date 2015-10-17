@@ -16,6 +16,7 @@ use App\User;
 use DB;
 use App\PagesController;
 use Validator;
+use Illuminate\Database\Eloquent;
 
 class AccountController extends Controller
 {
@@ -215,8 +216,6 @@ class AccountController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
             'username' => 'required|',
-            'entitlement' => 'required|',
-            'days_taken' => 'required|'
         ]);
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -232,11 +231,20 @@ class AccountController extends Controller
         $user->position_id = $request->position;
         $user->email = $request->email;
         $user->permissioners = $request->permissioners;
-        $user->entitlement = $request->entitlement;
-        $user->days_taken = $request->days_taken;
+        $user->VL_entitlement = $request->VL_entitlement;
+        $user->SL_entitlement = $request->SL_entitlement;
+        $user->ML_entitlement = $request->ML_entitlement;
+        $user->PL_entitlement = $request->PL_entitlement;
         $user->save();
 
-        return redirect('accounts');
+        if($user){
+            $status = "Success!";
+        }else{
+            $status = "Failed!";
+        }
+        // dd($request->all());
+
+        return redirect('accounts')->with('status', $status);
     }
 
     /**
@@ -248,5 +256,63 @@ class AccountController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function changeEntitlement(Request $request){
+        $status = null;
+
+        if($request->input('VL_entitlement') != 0){
+            $result = User::where('id', '!=', 0)
+                          ->update(array(
+                          'VL_entitlement' => $request->input('VL_entitlement')
+                    ));
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }
+
+        if($request->input('SL_entitlement') != 0){
+            $result = User::where('id', '!=', 0)
+                          ->update(array(
+                          'SL_entitlement' => $request->input('SL_entitlement')
+                    ));
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }
+
+        if($request->input('ML_entitlement') != 0){
+            $result = User::where('id', '!=', 0)
+                          ->update(array(
+                          'ML_entitlement' => $request->input('ML_entitlement')
+                    ));
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }
+
+        if($request->input('PL_entitlement') != 0){
+            $result = User::where('id', '!=', 0)
+                          ->update(array(
+                          'PL_entitlement' => $request->input('PL_entitlement')
+                    ));
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }
+
+        return redirect('/accounts')->with('status',$status);
     }
 }
