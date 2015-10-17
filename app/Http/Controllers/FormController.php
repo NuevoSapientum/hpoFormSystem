@@ -177,13 +177,18 @@ class FormController extends Controller
         $approvalNotif = $this->approvalNotif();
         $profileImage = $this->getImage();
         $positions = $this->position();
-        $permissioners = User::where('permissioners', '!=', 0)->get();
+        $HRs = DB::table("positions")
+                ->join('users', 'users.position_id', '=', 'positions.id')
+                ->where('positions.departments_id', 8)
+                ->get();
+        $Supervisors = User::where('permissioners', 1)->get();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
         $data = array(
                     'title' => 'Request for Leave of Absence',
                     'positions' => $positions,
-                    'permissioners' => $permissioners,
+                    'HRs' => $HRs,
+                    'Supervisors' => $Supervisors,
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,

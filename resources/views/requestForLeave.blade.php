@@ -12,7 +12,6 @@
       <div class="alert alert-danger">
       <strong>Whoops! </strong> There were some problems with your input. <br> <br>
       <ul>
-    
               @foreach ($errors->all() as $error)
            <li>{{ $error }} </li>
           @endforeach
@@ -123,15 +122,15 @@
       <br/>
       <label>Recommending Approval:</label>
       <select class="form-control" name="recommendApproval">
-          @foreach($permissioners as $permissioner)
-            <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @foreach($Supervisors as $Supervisor)
+            <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
           @endforeach
       </select>
       <br/>
       <label>Approved by:</label>
       <select class="form-control" name="approvedBy">
-          @foreach($permissioners as $permissioner)
-            <option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @foreach($HRs as $HR)
+            <option value="{{$HR->id}}">{{$HR->emp_name}}</option>
           @endforeach
       </select><br/>
       <button type="submit" class="btn btn-primary">Submit</button>
