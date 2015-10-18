@@ -17,6 +17,7 @@ use DB;
 use App\PagesController;
 use Validator;
 use Illuminate\Database\Eloquent;
+use App\Departments;
 
 class AccountController extends Controller
 {
@@ -102,6 +103,7 @@ class AccountController extends Controller
         $positions = $this->position();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
+        $departments = Departments::all();
         $data = array(
                     'title' => 'Manage Accounts',
                     'users' => $users,
@@ -109,8 +111,10 @@ class AccountController extends Controller
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'departments' => $departments
             );
+        // dd($departments);
         return view('auth.accounts')->with($data);
     }
 
@@ -314,5 +318,61 @@ class AccountController extends Controller
         }
 
         return redirect('/accounts')->with('status',$status);
+    }
+
+    public function addDepartment(Request $request){
+        if($request->input('department_name') == ''){
+            return redirect('/accounts');
+        }else{
+            $departments = Departments::all();
+            foreach ($departments as $department) {
+                if(strcasecmp($department->department_name, $request->input('department_name')) == 0){
+                    $status = "Department is already exist!";
+                    return redirect('/accounts')->with('status', $status);
+                }
+            }
+            $result = Departments::create([
+                        'department_name' => $request->input('department_name')
+            ]);
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+
+            return redirect('/accounts')->with('status', $status);
+
+        }
+        // dd($request->all());
+    }
+
+    public function addPosition(Request $request){
+        if($request->input('position_name') == ''){
+            return redirect('/accounts');
+        }else{
+            $positions = Positions::all();
+            foreach ($positions as $position) {
+                if(strcasecmp($position->position_name, $request->input('position_name')) == 0){
+                    $status = "Position is already exist!";
+                    return redirect('/accounts')->with('status', $status);
+                }
+            }
+            $result = Positions::create([
+                        'position_name' => $request->input('position_name'),
+                        'departments_id' => $request->input('department')
+            ]);
+
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+
+            return redirect('/accounts')->with('status', $status);
+
+        }
+        // dd($request->all());
+        // echo $request->input('department');
     }
 }

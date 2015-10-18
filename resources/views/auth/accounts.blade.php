@@ -1,17 +1,13 @@
 @extends('layout.default')
 
 @section('head')
-  @if(session('status') == "Success!")
+  @if(session('status') == "Success!" && session('status') != "")
     <div class="alert alert-success">
       <h4>{{session('status')}}</h4>
     </div>
-  @elseif(session('status') == "Failed!")
+  @elseif(session('status') != "")
     <div class="alert alert-warning">
       <h4>{{session('status')}}</h4>
-    </div>
-  @elseif(session('status') == "Nothing to Show.")
-    <div class="alert alert-danger">
-        <h4>{{session('status')}}</h4>
     </div>
   @endif
   <div class="well well-sm">
@@ -22,7 +18,9 @@
 @endsection
 
 @section('content')
-  <button class="btn btn-info" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span> Change Entitlements</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#entitlement" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span> Change Entitlements</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#department" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Department</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#position" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Position</button>
   <br/>
   <br/>
   <table id="example">
@@ -51,7 +49,7 @@
     </tbody>
   </table>
 
-  <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade" id="entitlement" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -69,6 +67,56 @@
                     <input type="number" class="form-control" name="ML_entitlement" value="0" />
                     <label>Paternal Leave Entitlement:</label>
                     <input type="number" class="form-control" name="PL_entitlement" value="0" />
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <div class="modal fade" id="department" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Add Department:</h2>
+                  <hr/>
+                </div>
+                <div class="modal-body">
+                  <form action="{{URL::to('accounts/addDepartment')}}" method="POST" >
+                    <?php echo Form::token() ?>
+                    <input type="text" class="form-control" name="department_name" placeholder="Department Name" />
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <div class="modal fade" id="position" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Add Position:</h2>
+                  <hr/>
+                </div>
+                <div class="modal-body">
+                  <form action="{{URL::to('accounts/addPosition')}}" method="POST" >
+                    <?php echo Form::token() ?>
+                    <select class="form-control" name="department">
+                      @foreach($departments as $department)
+                        <option value="{{$department->id}}">{{$department->department_name}}</option>
+                      @endforeach
+                    </select>
+                    <br/>
+                    <input type="text" class="form-control" name="position_name" placeholder="Position Name" />
                     <br/>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                   </form>

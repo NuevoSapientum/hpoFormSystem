@@ -7,18 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Positions extends Model
 {
 
-	// protected $table = 'positions';
+	protected $table = 'positions';
 
-	// public $timestamps = false;
-
-    // protected $fillable = [
-    // 	'department_id',
-    // 	'position_name'
-    // ];
-
-    // public function user(){
-    // 	return $this->hasMany('hpoforms/User');
-    // }
+    protected $fillable = [
+    	'departments_id',
+    	'position_name'
+    ];
 
     public function departments(){
         return $this->belongsTo('App\Departments');

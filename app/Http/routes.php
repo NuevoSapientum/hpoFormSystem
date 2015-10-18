@@ -52,6 +52,26 @@ Route::get('submittedforms', [
 	'uses' => 'PagesController@submittedForms'
 ]);
 
+Route::get('submittedforms/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
+Route::get('submittedforms/view/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
+Route::post('submittedforms/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@postForm'
+]);
+
+Route::get('submittedforms/delete/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@deleteForm'
+]);
+
 Route::get('record/vacation',[
 	'middleware' => 'admin',
 	'uses' => 'LeaveController@vacationRecord'
@@ -92,6 +112,8 @@ Route::get('record/paternal/view/{type}/{id}', [
 	'uses' => 'LeaveController@view'
 ]);
 
+/*Routes for the Inbox of the user*/
+
 Route::get('/inbox',[
 	'middleware' => 'auth',
 	'uses' => 'InboxController@inbox'
@@ -117,25 +139,7 @@ Route::get('inbox/delete/{type}/{id}', [
 	'uses' => 'InboxController@deleteForm'
 ]);
 
-Route::get('submittedforms/edit/{type}/{id}', [
-	'middleware' => 'auth',
-	'uses' => 'InboxController@editForm'
-]);
-
-Route::get('submittedforms/view/{type}/{id}', [
-	'middleware' => 'auth',
-	'uses' => 'InboxController@editForm'
-]);
-
-Route::post('submittedforms/edit/{type}/{id}', [
-	'middleware' => 'auth',
-	'uses' => 'InboxController@postForm'
-]);
-
-Route::get('submittedforms/delete/{type}/{id}', [
-	'middleware' => 'auth',
-	'uses' => 'InboxController@deleteForm'
-]);
+/*Routes for the Approvers*/
 
 Route::get('approval',[
 	'middleware' => 'auth',
@@ -151,6 +155,8 @@ Route::post('approval/view/{type}/{id}',[
 	'middleware' => 'auth',
 	'uses' => 'ApprovalController@permissionerApproval'
 ]);
+
+/*Routes for the view/add a Form*/
 
 Route::get('/exitForm', [
 	'middleware' => 'auth',
@@ -255,4 +261,14 @@ Route::post('accounts/resetPassword/{id}', [
 Route::post('accounts/changeEntitlement', [
 	'middleware' => 'admin',
 	'uses' => 'AccountController@changeEntitlement'
+]);
+
+Route::post('accounts/addDepartment', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@addDepartment'
+]);
+
+Route::post('accounts/addPosition', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@addPosition'
 ]);
