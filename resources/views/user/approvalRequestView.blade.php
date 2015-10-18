@@ -117,9 +117,9 @@
       <textarea class="form-control" disabled="true">{{$content->purpose}}</textarea>
       <hr/>
       <label>Recommending Approval:</label>
-      @foreach($permissioners as $permissioner)
-      	@if($permissioner->id === $content->permission_id1)
-        	<input type="text" class="form-control" disabled="true" value="{{$permissioner->emp_name}}"/>
+      @foreach($Supervisors as $Supervisor)
+      	@if($Supervisor->id === $content->permission_id1)
+        	<input type="text" class="form-control" disabled="true" value="{{$Supervisor->emp_name}}"/>
         @endif
       @endforeach
       <div class="radio">
@@ -150,9 +150,9 @@
       </div>
       <br/>
       <label>Approved by:</label>
-      @foreach($permissioners as $permissioner)
-      	@if($permissioner->id === $content->permission_id2)
-          <input type="text" class="form-control" disabled="true" value="{{$permissioner->emp_name}}"/>
+      @foreach($HRs as $HR)
+      	@if($HR->id === $content->permission_id2)
+          <input type="text" class="form-control" disabled="true" value="{{$HR->emp_name}}"/>
         @endif
       @endforeach
       <div class="radio">

@@ -159,22 +159,22 @@
       <br/>
       <label>Recommending Approval:</label>
       <select class="form-control" name="recommendApproval">
-          @foreach($permissioners as $permissioner)
-          	@if($permissioner->id === $content->permission_id1)
-            	<option selected="true" value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @foreach($Supervisors as $Supervisor)
+          	@if($Supervisor->id === $content->permission_id1)
+            	<option selected="true" value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
             @else
-            	<option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+            	<option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
             @endif
           @endforeach
       </select>
       <br/>
       <label>Approved by:</label>
       <select class="form-control" name="approvedBy">
-          @foreach($permissioners as $permissioner)
-          	@if($permissioner->id === $content->permission_id2)
-	            <option selected="true" value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+          @foreach($HRs as $HR)
+          	@if($HR->id === $content->permission_id2)
+	            <option selected="true" value="{{$HR->id}}">{{$HR->emp_name}}</option>
 	        @else
-	        	<option value="{{$permissioner->id}}">{{$permissioner->emp_name}}</option>
+	        	<option value="{{$HR->id}}">{{$HR->emp_name}}</option>
           @endif
           @endforeach
       </select><br/>

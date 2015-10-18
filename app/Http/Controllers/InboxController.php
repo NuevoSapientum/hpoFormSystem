@@ -171,21 +171,32 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             foreach ($contents as $content) {
                 if($content->permission_1 != 0){
-                    $permissioners = User::where('permissioners', '!=', 0)->get();
+                    $HRs = DB::table("positions")
+                            ->join('users', 'users.position_id', '=', 'positions.id')
+                            ->where('positions.departments_id', 8)
+                            ->get();
+                    $Supervisors = User::where('permissioners', 1)->get();
                     $dataSecond = array(
                                     'title' => "Edit Request for Leave of Absence",
                                     'contents' => $contents,
-                                    'permissioners' => $permissioners,
+                                    'HRs' => $HRs,
+                                    'Supervisors' => $Supervisors,
                                     'empDepartment' => $empDepartment
                         );
                     $data = array_merge($dataFirst, $dataSecond);
+                    // dd($contents);
                     return view('user.inboxLeaveApproval')->with($data);
                 }else{
-                    $permissioners = User::where('permissioners', '!=', 0)->get();
+                    $HRs = DB::table("positions")
+                            ->join('users', 'users.position_id', '=', 'positions.id')
+                            ->where('positions.departments_id', 8)
+                            ->get();
+                    $Supervisors = User::where('permissioners', 1)->get();
                     $dataSecond = array(
                                     'title' => "Edit Request for Leave of Absence",
                                     'contents' => $contents,
-                                    'permissioners' => $permissioners,
+                                    'HRs' => $HRs,
+                                    'Supervisors' => $Supervisors,
                                     'empDepartment' => $empDepartment
                         );
                     $data = array_merge($dataFirst, $dataSecond);

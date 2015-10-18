@@ -193,13 +193,18 @@ class ApprovalController extends Controller
             return view('user.approvalExitView')->with($data);
         }elseif($type == 2){
             $contents = Leaves::where('id', $id)->get();
-            $permissioners = User::where('permissioners', '!=', 0)->get();
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
+            $HRs = DB::table("positions")
+                    ->join('users', 'users.position_id', '=', 'positions.id')
+                    ->where('positions.departments_id', 8)
+                    ->get();
+            $Supervisors = User::where('permissioners', 1)->get();
             $dataSecond = array(
                             'title' => "Edit Request for Leave of Absence",
                             'contents' => $contents,
-                            'permissioners' => $permissioners,
+                            'HRs' => $HRs,
+                            'Supervisors' => $Supervisors,
                             'empDepartment' => $empDepartment
                 );
             $data = array_merge($dataFirst, $dataSecond);
