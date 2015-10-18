@@ -86,7 +86,7 @@ class ApprovalController extends Controller
     }
 
     public function exitApprovals($id){
-        return ExitPass::where('status', 0)
+        return ExitPass::where('status', '!=', 3)
                     ->where(function($query){
                         $id = Auth::user()->id;
                         $query->where('permission_id1', $id)
@@ -99,7 +99,7 @@ class ApprovalController extends Controller
     }
 
     public function leaveApprovals($id){
-        return Leaves::where('status', 0)
+        return Leaves::where('status', '!=', 3)
                     ->where(function($query){
                         $id = Auth::user()->id;
                         $query->where('permission_id1', $id)
@@ -109,7 +109,7 @@ class ApprovalController extends Controller
     }
 
     public function changeApprovals($id){
-        return Change::where('status', 0)
+        return Change::where('status', '!=', 3)
                     ->where(function($query){
                         $id = Auth::user()->id;
                         $query->where('permission_id1', $id)
@@ -121,7 +121,7 @@ class ApprovalController extends Controller
     }
 
     public function overtimeApproval($id){
-        return Overtime::where('status', 0)
+        return Overtime::where('status', '!=', 3)
                        ->where(function($query){
                         $id = Auth::user()->id;
                         $query->where('permission_id1', $id);
