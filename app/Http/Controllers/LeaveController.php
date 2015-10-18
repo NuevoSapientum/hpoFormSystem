@@ -24,20 +24,21 @@ class LeaveController extends Controller
 {
     public function inboxNotif(){
         $exitPass = ExitPass::where('user_id', Auth::user()->id)
-                    ->where('status', '!=', '3')->get();
+                    ->where('status', 0)->get();
         $leaveForm = Leaves::where('user_id', Auth::user()->id)
-                     ->where('status', '!=', '3')->get();
+                     ->where('status', 0)->get();
         $changeSchedule = Change::where('user_id', Auth::user()->id)
-                          ->where('status', '!=', '3')->get();
+                          ->where('status', 0)->get();
         $oas = Overtime::where('user_id', Auth::user()->id)
-               ->where('status', '!=', '3')->get();
+               ->where('status', 0)->get();
+        // dd($oas);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
 
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        $exitPass = ExitPass::where('status', '!=', 3)
+        $exitPass = ExitPass::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -46,14 +47,14 @@ class LeaveController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-       $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-       $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -62,10 +63,10 @@ class LeaveController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        $overtime = Overtime::where('status', '!=', 3)
+        $overtime = Overtime::where('status', 0)
                             ->where('permission_id1', $id)
                             ->get();
-        
+
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 

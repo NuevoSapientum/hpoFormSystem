@@ -28,20 +28,21 @@ class PagesController extends Controller
 
     public function inboxNotif(){
         $exitPass = ExitPass::where('user_id', Auth::user()->id)
-                    ->where('status', '!=', '3')->get();
+                    ->where('status', 0)->get();
         $leaveForm = Leaves::where('user_id', Auth::user()->id)
-                     ->where('status', '!=', '3')->get();
+                     ->where('status', 0)->get();
         $changeSchedule = Change::where('user_id', Auth::user()->id)
-                          ->where('status', '!=', '3')->get();
+                          ->where('status', 0)->get();
         $oas = Overtime::where('user_id', Auth::user()->id)
-               ->where('status', '!=', '3')->get();
+               ->where('status', 0)->get();
+        // dd($oas);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
 
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        $exitPass = ExitPass::where('status', '!=', 3)
+        $exitPass = ExitPass::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -50,14 +51,14 @@ class PagesController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-       $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-       $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -66,90 +67,12 @@ class PagesController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        $overtime = Overtime::where('status', '!=', 3)
+        $overtime = Overtime::where('status', 0)
                             ->where('permission_id1', $id)
                             ->get();
-        
+
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
-
-    // public function notification(){
-    //     $id = Auth::user()->id;
-    //     $exitPass = ExitPass::where('status', '!=', 3)
-    //                         ->where(function($query){
-    //                             $id = Auth::user()->id;
-    //                             $query->where('permission_id1', $id)
-    //                             ->orWhere('permission_id2', $id)
-    //                             ->orWhere('permission_id3', $id)
-    //                             ->orWhere('permission_id4', $id);
-    //                         })
-    //                         ->get();
-    //    $leaveForm = Leaves::where('status', '!=', 3)
-    //                         ->where(function($query){
-    //                             $id = Auth::user()->id;
-    //                             $query->where('permission_id1', $id)
-    //                             ->orWhere('permission_id2', $id);
-    //                         })
-    //                         ->get();
-    //    $changeSchedule = Change::where('status', '!=', 3)
-    //                         ->where(function($query){
-    //                             $id = Auth::user()->id;
-    //                             $query->where('permission_id1', $id)
-    //                             ->orWhere('permission_id2', $id)
-    //                             ->orWhere('permission_id3', $id)
-    //                             ->orWhere('permission_id4', $id);
-    //                         })
-    //                         ->get();
-    //     $overtime = Overtime::where('status', '!=', 3)
-    //                         ->where('permission_id1', $id)
-    //                         ->get();
-        
-    //     $needApproval = 0;
-
-    //     foreach ($exitPass as $exit) {
-    //         if($exit->permission_id1 == $id){
-    //             echo "1";
-    //         }elseif($exit->permission_id2 == $id){
-    //             echo "2";
-    //         }elseif($exit->permission_id3 == $id){
-    //             echo "3";
-    //         }elseif($exit->permission_id4 == $id){
-    //             echo "4";
-    //         }
-    //     }
-
-    //     foreach ($leaveForm as $exit) {
-    //         if($exit->permission_id1 == $id){
-    //             echo "1";
-    //         }elseif($exit->permission_id2 == $id){
-    //             echo "2";
-    //         }
-    //     }
-
-    //     foreach ($changeSchedule as $exit) {
-    //         if($exit->permission_id1 == $id){
-    //             echo "1";
-    //         }elseif($exit->permission_id2 == $id){
-    //             echo "2";
-    //         }elseif($exit->permission_id3 == $id){
-    //             echo "3";
-    //         }elseif($exit->permission_id4 == $id){
-    //             echo "4";
-    //         }
-    //     }
-
-    //     foreach ($overtime as $over) {
-    //         if($over->permission_id1 == $id){
-    //             if($over->permission_1 == 0){
-    //                 $needApproval++;
-    //             }
-    //         }
-    //     }
-    //     return $needApproval;
-    //     // $notification = $approvalNotif;
-
-    //     // return $notification;
-    // }
 
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();

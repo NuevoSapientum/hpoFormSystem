@@ -92,13 +92,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <!-- Notifications Menu-->
-              <li class="dropdown notifications-menu">
+              <!-- <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-warning">0</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header"><!-- You have 1 notifications --></li>
+                  <li class="header">You have 1 notifications</li>
                   <li>
                     <ul class="menu">
                       <li>
@@ -109,7 +109,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </ul>
                   </li>
                 </ul>
-              </li>
+              </li> -->
               </li>
               <!-- User Account Menu -->
               <li class="dropdown user user-menu">

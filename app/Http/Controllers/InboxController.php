@@ -26,13 +26,13 @@ class InboxController extends Controller
 
     public function inboxNotif(){
         $exitPass = ExitPass::where('user_id', Auth::user()->id)
-                    ->where('status', '!=', '3')->get();
+                    ->where('status', 0)->get();
         $leaveForm = Leaves::where('user_id', Auth::user()->id)
-                     ->where('status', '!=', '3')->get();
+                     ->where('status', 0)->get();
         $changeSchedule = Change::where('user_id', Auth::user()->id)
-                          ->where('status', '!=', '3')->get();
+                          ->where('status', 0)->get();
         $oas = Overtime::where('user_id', Auth::user()->id)
-               ->where('status', '!=', '3')->get();
+               ->where('status', 0)->get();
         // dd($oas);
         return $inboxNotif = count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
     }
@@ -40,7 +40,7 @@ class InboxController extends Controller
 
     public function approvalNotif(){
         $id = Auth::user()->id;
-        $exitPass = ExitPass::where('status', '!=', 3)
+        $exitPass = ExitPass::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -49,14 +49,14 @@ class InboxController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-       $leaveForm = Leaves::where('status', '!=', 3)
+       $leaveForm = Leaves::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
                                 ->orWhere('permission_id2', $id);
                             })
                             ->get();
-       $changeSchedule = Change::where('status', '!=', 3)
+       $changeSchedule = Change::where('status', 0)
                             ->where(function($query){
                                 $id = Auth::user()->id;
                                 $query->where('permission_id1', $id)
@@ -65,7 +65,7 @@ class InboxController extends Controller
                                 ->orWhere('permission_id4', $id);
                             })
                             ->get();
-        $overtime = Overtime::where('status', '!=', 3)
+        $overtime = Overtime::where('status', 0)
                             ->where('permission_id1', $id)
                             ->get();
 
@@ -95,16 +95,16 @@ class InboxController extends Controller
     public function inbox(){
         $profileImage = $this->getImage();
         $exitPass = ExitPass::where('user_id', Auth::user()->id)
-                            ->where('status', '!=', 3)
+                            ->where('status', 0)
                             ->get();
         $leaveForm = Leaves::where('user_id', Auth::user()->id)
-                            ->where('status', '!=', 3)
+                            ->where('status', 0)
                             ->get();
         $changeSchedule = Change::where('user_id', Auth::user()->id)
-                            ->where('status', '!=', 3)
+                            ->where('status', 0)
                             ->get();
         $oas = Overtime::where('user_id', Auth::user()->id)
-                    ->where('status', '!=', 3)
+                    ->where('status', 0)
                     ->get();
         $users = DB::table('positions')
                 ->join('users', 'users.position_id', '=', 'positions.id')
@@ -464,17 +464,23 @@ class InboxController extends Controller
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.inboxChangeApproval')->with($data);
         }elseif($type == 4){
-            $contents = Overtime::where('id', $id)->get();
+           $contents = Overtime::where('id', $id)->get();
             $user_position = Auth::user()->position_id;
             $empDepartment = Positions::find($user_position)->departments;
+            $Supervisors = User::where('permissioners', 1)->get();
+            $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
+            $count = 0;
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
                             'contents' => $contents,
-                            'empDepartment' => $empDepartment
+                            'empDepartment' => $empDepartment,
+                            'Supervisors' => $Supervisors,
+                            'dateTime' => $dateTime,
+                            'count' => $count
                 );
             $data = array_merge($dataFirst, $dataSecond);
             // dd($data);
-            return view('user.inboxOver')->with($data);
+            return view('user.inboxOverApproval')->with($data);
         }else{
             $status = "Nothing to Show.";
             return redirect('inbox')->with('status', $status);
