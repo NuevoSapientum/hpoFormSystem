@@ -68,12 +68,6 @@
             <label>Email:</label>
             <input type="email" name="email" placeholder="hpo@example.com" class="form-control" value="{{old('email')}}" />
             <br/>
-            <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter Password" class="form-control" value="{{old('password')}}" />
-            <br/>
-            <label>Confirm Password:</label>
-            <input type="password" name="password_confirmation" placeholder="Confirm Password" class="form-control" />
-            <br/>
             <label>Vacation Leave Entitlement:</label>
             <input type="number" name="vacation_leave" value="0" class="form-control" />
             <br/>

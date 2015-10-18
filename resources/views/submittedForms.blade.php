@@ -41,23 +41,23 @@
               @if($exit->status == 0)
               <td>Pending</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-                <a href="{{URL::to('inbox/delete/' . $exit->form_id . '/' . $exit->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+                <a href="{{URL::to('submittedforms/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+                <a href="{{URL::to('submittedforms/delete/' . $exit->form_id . '/' . $exit->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
               </td>
               @elseif($exit->status == 1)
               <td>Approved</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/edit/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($exit->status == 2)
               <td>Denied</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($exit->status == 3)
               <td>Closed</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $exit->form_id . '/' .$exit->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @endif
             </tr>
@@ -72,23 +72,23 @@
               @if($leave->status == 0)
               <td>Pending</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-                <a href="{{URL::to('inbox/delete/' . $leave->form_id . '/' . $leave->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+                <a href="{{URL::to('submittedforms/edit/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+                <a href="{{URL::to('submittedforms/delete/' . $leave->form_id . '/' . $leave->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
               </td>
               @elseif($leave->status == 1)
               <td>Approved</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/edit/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($leave->status == 2)
               <td>Denied</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($leave->status == 3)
               <td>Closed</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $leave->form_id . '/' .$leave->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @endif
             </tr>
@@ -103,23 +103,23 @@
               @if($change->status == 0)
               <td>Pending</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-                <a href="{{URL::to('inbox/delete/' . $change->form_id . '/' . $change->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+                <a href="{{URL::to('submittedforms/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+                <a href="{{URL::to('submittedforms/delete/' . $change->form_id . '/' . $change->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
               </td>
               @elseif($change->status == 1)
               <td>Approved</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($change->status == 2)
               <td>Denied</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($change->status == 3)
               <td>Closed</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @endif
             </tr>
@@ -134,23 +134,23 @@
               @if($over->status == 0)
               <td>Pending</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
-                <a href="{{URL::to('inbox/delete/' . $over->form_id . '/' . $over->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+                <a href="{{URL::to('submittedforms/edit/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>&nbsp;|&nbsp;
+                <a href="{{URL::to('submittedforms/delete/' . $over->form_id . '/' . $over->id  )}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
               </td>
               @elseif($over->status == 1)
               <td>Approved</td>
               <td>
-                <a href="{{URL::to('inbox/edit/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/edit/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($over->status == 2)
               <td>Denied</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @elseif($over->status == 3)
               <td>Closed</td>
               <td>
-                <a href="{{URL::to('inbox/view/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
+                <a href="{{URL::to('submittedforms/view/' . $over->form_id . '/' .$over->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a>
               </td>
               @endif
             </tr>

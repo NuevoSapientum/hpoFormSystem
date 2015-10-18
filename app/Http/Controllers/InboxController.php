@@ -19,6 +19,7 @@ use App\Overtime;
 use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
+use App\DateTimeChange;
 
 class InboxController extends Controller
 {
@@ -67,19 +68,19 @@ class InboxController extends Controller
         $overtime = Overtime::where('status', '!=', 3)
                             ->where('permission_id1', $id)
                             ->get();
-        
+
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
-    
+
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
-        return $positions; 
+        return $positions;
     }
 
     protected function getImage(){
         $con=mysqli_connect("localhost","root","password","hpodb");
         $qry = "select * from profile_image where id = '".Auth::user()->img_id."'";
-        
+
         return $result = mysqli_query($con, $qry);
     }
 
@@ -163,7 +164,7 @@ class InboxController extends Controller
                     return view('user.inboxExit')->with($data);
                 }
             }
-            
+
         }elseif($type == 2){
             $contents = Leaves::where('id', $id)->get();
             $user_position = Auth::user()->position_id;
@@ -203,6 +204,7 @@ class InboxController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
+            $dateTime = DateTimeChange::where('change_id', $id)->get();
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -211,7 +213,8 @@ class InboxController extends Controller
                                     'Supervisors' => $Supervisors,
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
-                                    'empDepartment' => $empDepartment
+                                    'empDepartment' => $empDepartment,
+                                    'dateTime' => $dateTime
                         );
             $data = array_merge($dataFirst, $dataSecond);
             foreach ($contents as $content) {
@@ -237,7 +240,7 @@ class InboxController extends Controller
                             'count' => $count
                 );
             $data = array_merge($dataFirst, $dataSecond);
-            
+
             foreach ($contents as $content) {
                 if($content->permission_1 != 0){
                     return view('user.inboxOverApproval')->with($data);
@@ -245,7 +248,7 @@ class InboxController extends Controller
                     return view('user.inboxOver')->with($data);
                 }
             }
-            
+
         }else{
             $status = "Nothing to Show.";
             return redirect('inbox')->with('status', $status);
@@ -256,8 +259,11 @@ class InboxController extends Controller
     public function postForm(Request $request, $type, $id){
         if($type == 1){
             $result = $this->editExit($request->all(), $id);
-            if($result){
+            // echo $result;
+            if($result == 1){
                 $status = "Success!";
+            }elseif($result == "You are execeeded from your maximum hours to Exit!"){
+                $status = "You are execeeded from your maximum hours to Exit!";
             }else{
                 $status = "Failed!";
             }
@@ -325,7 +331,7 @@ class InboxController extends Controller
                         $status = "Failed!";
                 }
             }
-            
+
             return redirect('inbox')->with('status', $status);
         }elseif($type == 3){
             $contents = Change::where('id', $id)->get();
@@ -341,10 +347,10 @@ class InboxController extends Controller
                     if($result)
                         $status = "Success!";
                     else
-                        $status = "Failed!";        
+                        $status = "Failed!";
                 }
             }
-            
+
             return redirect('inbox')->with('status', $status);
         }elseif($type == 4){
             $result = Overtime::where('id', $id)
@@ -355,8 +361,8 @@ class InboxController extends Controller
             if($result)
                 $status = "Success!";
             else
-                $status = "Failed!";  
-            
+                $status = "Failed!";
+
             return redirect('inbox')->with('status', $status);
         }
     }
@@ -452,49 +458,34 @@ class InboxController extends Controller
 
     public function editExit(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
-        return ExitPass::where('id', $id)
-                        ->update(array(
-                        'date_from' => $data['dateFrom'],
-                        'date_to' => $data['dateTo'],
-                        'purpose' => $data['textPurpose'],
-                        'permission_id1' => $data['supervisor'],
-                        'permission_id2' => $data['projectManager'],
-                        'permission_id3' => $data['HR'],
-                        'permission_id4' => $data['companyRep'],
-                        'updated_at' => $dateUpdate));
+        $dateFrom = $data['dateFrom'];
+        $dateTo = $data['dateTo'];
+        // echo $newDate;
+        $newFormatdateFrom = date('Y-m-d H:i:s', strtotime($dateFrom));
+        $newFormatdateTo = date('Y-m-d H:i:s', strtotime($dateTo));
+
+        $newFormattimeFrom = date('H:i:s', strtotime($dateFrom));
+        $newFormattimeTo = date('H:i:s', strtotime($dateTo));
+        if($newFormattimeTo - $newFormattimeFrom > 5){
+          return "You are execeeded from your maximum hours to Exit!";
+        }else{
+          return ExitPass::where('id', $id)
+                          ->update(array(
+                          'date_from' => $newFormatdateFrom,
+                          'date_to' => $newFormatdateTo,
+                          'purpose' => $data['textPurpose'],
+                          'permission_id1' => $data['supervisor'],
+                          'permission_id2' => $data['projectManager'],
+                          'permission_id3' => $data['HR'],
+                          'permission_id4' => $data['companyRep'],
+                          'updated_at' => $dateUpdate));
+        }
+
     }
 
     public function editLeave(array $data, $id){
         $datas = Leaves::where('id', $id)->get();
-        // foreach ($datas as $leave) {
-        //     $days = $leave->days_applied;
-        // }
-        // // $days -= $data['days_applied'];
-        // if($days != $data['days_applied']){
-        //     $diff = $days - $data['days_applied'];
-        //     if($diff < 0){
-        //         //Add the difference
-        //         $days_taken = Auth::user()->days_taken + abs($diff);
-        //         Auth::user()->days_taken = $days_taken;
-        //         Auth::user()->save();
-        //     }else{
-        //         //Minus the Difference
-        //         $days_taken = Auth::user()->days_taken - abs($diff);
-        //         Auth::user()->days_taken = $days_taken;
-        //         Auth::user()->save();
-        //     }
-        // }
-        // $dateUpdate = date("Y-m-d H:i:s");
-        // return Leaves::where('id', $id)
-        //                 ->update(array(
-        //                 'leave_type' => $data['typeofLeave'],
-        //                 'purpose' => $data['reasonforAbsence'],
-        //                 'permission_id1' => $data['recommendApproval'],
-        //                 'permission_id2' => $data['approvedBy'],
-        //                 'days_applied' => $data['days_applied'],
-        //                 'updated_at' => $dateUpdate
-        //                 ));
-        
+
         $dateUpdate = date("Y-m-d H:i:s");
         if($data['typeofLeave'] == 1){
             $days_taken = Auth::user()->VL_taken + $data['VL_daysApplied'];
@@ -553,7 +544,7 @@ class InboxController extends Controller
                             'days_applied' => $data['PL_daysApplied'],
                             'updated_at' => $dateUpdate
                             ));
-        }   
+        }
     }
 
     return 0;
@@ -561,20 +552,33 @@ class InboxController extends Controller
 
     public function editChange(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
-        return Change::where('id', $id)
+
+        $change = Change::where('id', $id)
                         ->update(array(
                         'permission_id1' => $data['supervisor'],
                         'permission_id2' => $data['projectManager'],
                         'permission_id3' => $data['permissioner'],
                         'permission_id4' => $data['HR'],
                         'purpose' => $data['reasonforChangeSchedule'],
-                        'updated_at' => $dateUpdate,
-                        'date_from' => $data['dateFromEffectivity'],
-                        'date_to' => $data['dateToEffectivity'],
-                        'shift_from' => $data['dateFromShift'],
-                        'shift_to' => $data['dateToShift']
+                        'updated_at' => $dateUpdate
                         ));
-    }    
+        if($change){
+          return DateTimeChange::where('change_id', $id)
+                                   ->update(array(
+                                     'dateFromEffectivity' => $data['dateFromEffectivity'],
+                                     'timeFromEffectivity' => $data['timeFromEffectivity'],
+                                     'dateToEffectivity' => $data['dateToEffectivity'],
+                                     'timeToEffectivity' => $data['timeToEffectivity'],
+                                     'dateFromShift' => $data['dateFromShift'],
+                                     'timeFromShift' => $data['timeFromShift'],
+                                     'dateToShift' => $data['dateToShift'],
+                                     'timeToShift' => $data['timeToShift'],
+                                     'updated_at' => $dateUpdate
+                                   ));
+        }else{
+          return false;
+        }
+    }
 
     public function editOver(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
@@ -588,7 +592,7 @@ class InboxController extends Controller
                                             'date_overtime' => $data['dateOvertime' . $i],
                                             'time_overtime' => $data['timeOvertime' . $i],
                                             'updated_at' => $dateUpdate
-                                        ));   
+                                        ));
             $i++;
             $count--;
         }

@@ -1,27 +1,19 @@
 @extends('layout.default')
 
 @section('head')
-  @if(session('status') == "Success!")
+  @if(session('status') == "Success!" && session('status') != "")
     <div class="alert alert-success">
       <h4>{{session('status')}}</h4>
     </div>
-  @elseif(session('status') == "Failed!")
+  @elseif(session('status') != "")
     <div class="alert alert-warning">
       <h4>{{session('status')}}</h4>
-    </div>
-  @elseif(session('status') == "Nothing to Show.")
-    <div class="alert alert-danger">
-        <h4>{{session('status')}}</h4>
-    </div>
-  @elseif(session('status') == "You don't have any days of leave left.")
-    <div class="alert alert-danger">
-        <h4>{{session('status')}}</h4>
     </div>
   @endif
   <div class="well well-sm">
     <h1>
       Welcome {{Auth::user()->emp_name}}
-    </h1>  
+    </h1>
   </div>
 @endsection
 
@@ -42,7 +34,7 @@
         @if($exit->status == 3)
         @else
         <tr>
-        
+
         <td>{{date('F d, Y', strtotime($exit->created_at))}}</td>
         <td>{{date('F d, Y', strtotime($exit->updated_at))}}</td>
         <td>Exit Pass</td>
@@ -110,7 +102,7 @@
         @elseif($change->status == 2)
           <td>Denied</td>
           <td><a href="{{URL::to('inbox/edit/' . $change->form_id . '/' .$change->id )}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> View</a></td>
-        
+
         @endif
         </tr>
         @endif

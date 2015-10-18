@@ -48,7 +48,6 @@ class AuthController extends Controller
             'name' => 'required|max:255',
             'position' => 'required',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
             'vacation_leave' => 'required|max:30',
             'sick_leave' => 'required|max:30',
             'maternity_leave' => 'required|max:60',
@@ -66,6 +65,7 @@ class AuthController extends Controller
     {
         $image = "blank";
         $name = "blank";
+        $default_password = "hpopassword";
 
         DB::insert("INSERT into `profile_image`(`picture_name`, `image`) values(?, ?)", [$name, $image]);
         $id = DB::select("SELECT id FROM profile_image");
@@ -79,7 +79,7 @@ class AuthController extends Controller
             'permissioners' => 0,
             'img_id' => $id->id,
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($default_password),
             'VL_entitlement' => $data['vacation_leave'],
             'SL_entitlement' => $data['sick_leave'],
             'ML_entitlement' => $data['maternity_leave'],

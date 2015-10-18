@@ -102,12 +102,37 @@ Route::get('inbox/edit/{type}/{id}', [
 	'uses' => 'InboxController@editForm'
 ]);
 
+Route::get('inbox/view/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
 Route::post('inbox/edit/{type}/{id}', [
 	'middleware' => 'auth',
 	'uses' => 'InboxController@postForm'
 ]);
 
 Route::get('inbox/delete/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@deleteForm'
+]);
+
+Route::get('submittedforms/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
+Route::get('submittedforms/view/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@editForm'
+]);
+
+Route::post('submittedforms/edit/{type}/{id}', [
+	'middleware' => 'auth',
+	'uses' => 'InboxController@postForm'
+]);
+
+Route::get('submittedforms/delete/{type}/{id}', [
 	'middleware' => 'auth',
 	'uses' => 'InboxController@deleteForm'
 ]);

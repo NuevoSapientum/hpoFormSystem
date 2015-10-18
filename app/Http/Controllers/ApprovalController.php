@@ -19,6 +19,8 @@ use App\Overtime;
 use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
+use App\DateTimeChange;
+
 
 class ApprovalController extends Controller
 {
@@ -214,6 +216,7 @@ class ApprovalController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
+            $dateTime = DateTimeChange::where('change_id', $id)->get();
             $dataSecond = array(
                             'title' => "Edit Change Schedule",
                             'contents' => $contents,
@@ -222,7 +225,8 @@ class ApprovalController extends Controller
                             'Supervisors' => $Supervisors,
                             'PMs' => $PMs,
                             'CompanyReps' => $CompanyReps,
-                            'empDepartment' => $empDepartment
+                            'empDepartment' => $empDepartment,
+                            'dateTime' => $dateTime
                 );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalChangeView')->with($data);

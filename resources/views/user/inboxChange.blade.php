@@ -19,22 +19,32 @@
 	<form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<hr/>
+		<label>Employee Name:</label>
+		<input disabled value="{{$content->users->emp_name}}" class="form-control" />
+    <hr/>
 		<label><u>Date of Effectivity:</u></label><br/>
-      <label>Employee Name:</label>
-      <input disabled value="{{$content->users->emp_name}}" class="form-control" />
-      <br/>
+			@foreach($dateTime as $dt)
 	    <label>From:</label>
-	    <input type="date" name="dateFromEffectivity" value="{{$content->date_from}}" class="form-control"/>
+	    <input type="date" name="dateFromEffectivity" value="{{$dt->dateFromEffectivity}}" class="form-control"/>
 	    <br/>
+			<input type="time" name="timeFromEffectivity" value="{{$dt->timeFromEffectivity}}" class="form-control" />
+			<br/>
 	    <label>To:</label>
-	    <input type="date" name="dateToEffectivity" value="{{$content->date_to}}" class="form-control"/>
+	    <input type="date" name="dateToEffectivity" value="{{$dt->dateToEffectivity}}" class="form-control"/>
+			<br/>
+			<input type="time" name="timeToEffectivity" value="{{$dt->timeToEffectivity}}" class="form-control" />
 	    <hr/>
 	    <label><u>Shift Schedule:</u></label><br/>
 	    <label>From:</label>
-	    <input type="date" name="dateFromShift" value="{{$content->shift_from}}" class="form-control"/>
+	    <input type="date" name="dateFromShift" value="{{$dt->dateFromShift}}" class="form-control"/>
 	    <br/>
+			<input type="time" name="timeFromShift" value="{{$dt->timeFromShift}}" class="form-control" />
+			<br/>
 	    <label>To:</label>
-	    <input type="date" name="dateToShift" value="{{$content->shift_to}}" class="form-control"/>
+	    <input type="date" name="dateToShift" value="{{$dt->dateFromShift}}" class="form-control"/>
+			<br/>
+			<input type="time" name="timeToShift" value="{{$dt->timeToShift}}" class="form-control" />
+			@endforeach
 	    <hr/>
 	    <label>Reason:</label>
 	    <textarea class="form-control" id="reasonforChangeSchedule" name="reasonforChangeSchedule">{{$content->purpose}}</textarea>

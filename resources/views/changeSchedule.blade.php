@@ -14,7 +14,7 @@
       <div class="alert alert-danger">
       <strong>Whoops! </strong> There were some problems with your input. <br> <br>
       <ul>
-    
+
               @foreach ($errors->all() as $error)
            <li>{{ $error }} </li>
           @endforeach
@@ -24,17 +24,21 @@
       <hr/>
       <label><u>Date of Effectivity:</u></label><br/>
       <label>From:</label>
-      <input type="date" name="dateFromEffectivity" class="form-control"/>
+      <input type="date" name="dateFromEffectivity" class="form-control"/><br/>
+      <input type="time" name="timeFromEffectivity" class="form-control" />
       <br/>
       <label>To:</label>
-      <input type="date" name="dateToEffectivity" class="form-control"/>
+      <input type="date" name="dateToEffectivity" class="form-control"/><br/>
+      <input type="time" name="timeToEffectivity" class="form-control" />
       <hr/>
       <label><u>Shift Schedule:</u></label><br/>
       <label>From:</label>
-      <input type="date" name="dateFromShift" class="form-control"/>
+      <input type="date" name="dateFromShift" class="form-control"/><br/>
+      <input type="time" name="timeFromShift" class="form-control" />
       <br/>
       <label>To:</label>
-      <input type="date" name="dateToShift" class="form-control"/>
+      <input type="date" name="dateToShift" class="form-control"/><br/>
+      <input type="time" name="timeToShift" class="form-control" />
       <hr/>
       <label>Reason:</label>
       <textarea class="form-control" name="reasonforChangeSchedule"></textarea>

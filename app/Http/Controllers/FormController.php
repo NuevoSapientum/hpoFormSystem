@@ -18,6 +18,7 @@ use DB;
 use App\PagesController;
 use Validator;
 use App\DateTimeOvertime;
+use App\DateTimeChange;
 
 class FormController extends Controller
 {
@@ -64,19 +65,19 @@ class FormController extends Controller
         $overtime = Overtime::where('status', '!=', 3)
                             ->where('permission_id1', $id)
                             ->get();
-        
+
         return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($overtime);
     }
 
     protected function position(){
         $positions = Positions::where('id', Auth::user()->position_id)->get();
-        return $positions; 
+        return $positions;
     }
 
     protected function getImage(){
         $con=mysqli_connect("localhost","root","password","hpodb");
         $qry = "select * from profile_image where id = '".Auth::user()->img_id."'";
-        
+
         return $result = mysqli_query($con, $qry);
     }
 
@@ -139,34 +140,36 @@ class FormController extends Controller
         $newFormatdateFrom = date('Y-m-d H:i:s', strtotime($dateFrom));
         $newFormatdateTo = date('Y-m-d H:i:s', strtotime($dateTo));
 
-        $exitPass = new ExitPass(array(
-            'user_id' => $id,
-            'created_at' => $request->input('dateCreated'),
-            'date_from' => $newFormatdateFrom,
-            'date_to' => $newFormatdateTo,
-            'purpose' => $request->input('purpose'),
-            'updated_at' => $dateUpdate,
-            'department_id' => $department->id,
-            'permission_id1' => $request->input('supervisor'),
-            'permission_id2' => $request->input('projectManager'),
-            'permission_id3' => $request->input('HR'),
-            'permission_id4' => $request->input('companyRep')
-        ));
+        $newFormattimeFrom = date('H:i:s', strtotime($dateFrom));
+        $newFormattimeTo = date('H:i:s', strtotime($dateTo));
 
-
-        // $timezone = date_default_timezone_get();
-        // $date = date('Y-m-d H:i:s', time());
-        // echo $date;
-        // echo "<br/>";
-        // echo $dateUpdate;
-        // echo $request->input('dateFrom');
-        $save = $exitPass->save();
-
-        if($save){
-            $status = "Success!";
+        if($newFormattimeTo - $newFormattimeFrom > 5){
+          $status = "You are execeeded from your maximum hours to Exit!";
         }else{
-            $status = "Failed!";
-        } 
+          $exitPass = new ExitPass(array(
+              'user_id' => $id,
+              'created_at' => $request->input('dateCreated'),
+              'date_from' => $newFormatdateFrom,
+              'date_to' => $newFormatdateTo,
+              'purpose' => $request->input('purpose'),
+              'updated_at' => $dateUpdate,
+              'department_id' => $department->id,
+              'permission_id1' => $request->input('supervisor'),
+              'permission_id2' => $request->input('projectManager'),
+              'permission_id3' => $request->input('HR'),
+              'permission_id4' => $request->input('companyRep')
+          ));
+
+          $save = $exitPass->save();
+
+          if($save){
+              $status = "Success!";
+          }else{
+              $status = "Failed!";
+          }
+        }
+
+
         return redirect('/inbox')->with('status', $status);
     }
 
@@ -194,7 +197,7 @@ class FormController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment
             );
-        
+
         return view('requestForLeave')->with($data);
     }
 
@@ -344,7 +347,7 @@ class FormController extends Controller
         }
         // dd($request->all());
         return redirect('/inbox')->with('status', $status);
-    }        
+    }
 
     /*Change Schedule Form Functions*/
 
@@ -383,9 +386,13 @@ class FormController extends Controller
     public function postchangeSchedule(Request $request){
         $rules = array('dateCreated' => 'required',
                        'dateFromEffectivity' => 'required',
+                       'timeFromEffectivity' => 'required',
                        'dateToEffectivity' => 'required',
+                       'timeToEffectivity' => 'required',
                        'dateFromShift' => 'required',
                        'dateToShift' => 'required',
+                       'timeFromShift' => 'required',
+                       'timeToShift' => 'required',
                        'reasonforChangeSchedule' => 'required',
                        'supervisor' => 'required',
                        'projectManager' => 'required',
@@ -397,11 +404,11 @@ class FormController extends Controller
                 $request, $validator
             );
         }
-        
+
         $dateUpdate = date("Y-m-d H:i:s");
         $department = Positions::find(Auth::user()->position_id)->departments;
-        $changes = new Change(array(
-                'user_id' => Auth::user()->id,
+        $changes = Change::insertGetId(
+                ['user_id' => Auth::user()->id,
                 'department_id' => $department->id,
                 'permission_id1' => $request->input('supervisor'),
                 'permission_id2' => $request->input('projectManager'),
@@ -409,19 +416,29 @@ class FormController extends Controller
                 'permission_id4' => $request->input('HR'),
                 'purpose' => $request->input('reasonforChangeSchedule'),
                 'created_at' => $request->input('dateCreated'),
-                'updated_at' => $dateUpdate,
-                'date_from' => $request->input('dateFromEffectivity'),
-                'date_to' => $request->input('dateToEffectivity'),
-                'shift_from' => $request->input('dateFromShift'),
-                'shift_to' => $request->input('dateToShift')
+                'updated_at' => $dateUpdate]
+            );
+        // dd($request->all());
+        $dateTime = new DateTimeChange(array(
+                  'dateFromEffectivity' => $request->input('dateFromEffectivity'),
+                  'dateToEffectivity' => $request->input('dateToEffectivity'),
+                  'timeFromEffectivity' => $request->input('timeFromEffectivity'),
+                  'timeToEffectivity' => $request->input('timeToEffectivity'),
+                  'dateFromShift' => $request->input('dateFromShift'),
+                  'dateToShift' => $request->input('dateToShift'),
+                  'timeFromShift' => $request->input('timeFromShift'),
+                  'timeToShift' => $request->input('timeToShift'),
+                  'change_id' => $changes,
+                  'created_at' => $request->input('dateCreated'),
+                  'updated_at' => $dateUpdate
+        ));
 
-            ));
+        $result = $dateTime->save();
 
-        $result = $changes->save();
         if($result){
-            $status = "Success!";
+          $status = "Success!";
         }else{
-            $status = "Failed!";
+          $status = "Failed!";
         }
 
         return redirect('inbox')->with('status', $status);

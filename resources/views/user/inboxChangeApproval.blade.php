@@ -22,18 +22,28 @@
       <input disabled value="{{$content->users->emp_name}}" class="form-control" />
       <br/>
 		<label><u>Date of Effectivity:</u></label><br/>
-	    <label>From:</label>
-	    <input type="text" disabled value="{{$content->date_from}}" class="form-control"/>
-	    <br/>
-	    <label>To:</label>
-	    <input type="text" disabled="" value="{{$content->date_to}}" class="form-control"/>
-	    <hr/>
-	    <label><u>Shift Schedule:</u></label><br/>
-	    <label>From:</label>
-	    <input type="text" disabled="" value="{{$content->shift_from}}" class="form-control"/>
-	    <br/>
-	    <label>To:</label>
-	    <input type="text" disabled="" value="{{$content->shift_to}}" class="form-control"/>
+      @foreach($dateTime as $dt)
+      <label>From:</label>
+      <input type="date" disabled value="{{$dt->dateFromEffectivity}}" class="form-control"/>
+      <br/>
+      <input type="time" disabled value="{{$dt->timeFromEffectivity}}" class="form-control" />
+      <br/>
+      <label>To:</label>
+      <input type="date" disabled value="{{$dt->dateToEffectivity}}" class="form-control"/>
+      <br/>
+      <input type="time" disabled value="{{$dt->timeToEffectivity}}" class="form-control" />
+      <hr/>
+      <label><u>Shift Schedule:</u></label><br/>
+      <label>From:</label>
+      <input type="date" disabled value="{{$dt->dateFromShift}}" class="form-control"/>
+      <br/>
+      <input type="time" disabled value="{{$dt->timeFromShift}}" class="form-control" />
+      <br/>
+      <label>To:</label>
+      <input type="date" disabled value="{{$dt->dateFromShift}}" class="form-control"/>
+      <br/>
+      <input type="time" disabled value="{{$dt->timeToShift}}" class="form-control" />
+      @endforeach
 	    <hr/>
 	    <label>Reason:</label>
 	    <textarea class="form-control" id="reason" disabled>{{$content->reason}}</textarea>

@@ -13,7 +13,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Load the Realtime JavaScript library -->
     <script src="https://apis.google.com/js/api.js"></script>
-    
+
     <link rel="stylesheet" type="text/css" href="{{URL::asset('plugins/filthypillow/jquery.filthypillow.css')}}">
     <!-- Load the utility library -->
     <script src="https://www.gstatic.com/realtime/realtime-client-utils.js"></script>
@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/skin-blue.min.css')}}">
    <script src="{{URL::asset('plugins/filthypillow/jquery.filthypillow.min.js')}}"></script>
     <script src="{{URL::asset('plugins/filthypillow/moment.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}"> 
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}">
     <script src="{{URL::asset('js/app.js')}}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +45,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
   </head>
   <!--
   BODY TAG OPTIONS:
@@ -78,7 +78,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>HPO</b></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>HP Outsourcing Inc.</b></span>
+          <span class="logo-lg" style="font-size:15px" ><b><img src="{{URL::asset('img/logo.png')}}"  style="height: 40px;width: 50px;" id="hpoLogo">
+          HP Outsourcing Inc.</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -90,25 +91,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <!-- Notifications Menu
+              <!-- Notifications Menu-->
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">1</span>
+                  <span class="label label-warning">0</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header">You have 1 notifications</li>
+                  <li class="header"><!-- You have 1 notifications --></li>
                   <li>
                     <ul class="menu">
                       <li>
                         <a href="#">
-                          <i class="fa fa-users text-aqua"></i> You have 1 notification
+                          <i class="fa fa-users text-aqua"></i>
                         </a>
                       </li>
                     </ul>
                   </li>
                 </ul>
-              </li>-->
+              </li>
               </li>
               <!-- User Account Menu -->
               <li class="dropdown user user-menu">
@@ -132,8 +133,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @else
                       <img class="img-circle" src="data:image;base64, {{$row[2]}} " alt="User Image">
                     @endif
-                     
-                    
+
+
                     <p>
                       {{ Auth::user()->emp_name }} - @foreach($positions as $position)
                                                       {{ $position->position_name }}
@@ -155,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                     @else
                     <div class="col-xs-4">
-                      
+
                     </div>
                     <div class="col-xs-4 text-center">
                       <a href="#">Forms</a>
@@ -218,7 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <li>
             @endif
             <a href="{{URL::to('/dashboard')}}"><i class="fa fa-link"></i> <span>Home</span></a></li>
-            
+
             @if($title == 'History')
             <li class="active">
             @else
@@ -284,7 +285,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
-          
+
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; 2015 <a href="http://www.hpoutsourcinginc.com/">HP Outsourcing Inc.</a></strong> All rights reserved.
