@@ -144,23 +144,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </li>
                   <!-- Menu Body -->
                   <li class="user-body">
+                    @if(Auth::user()->permissioners != 0)
                     <div class="col-xs-4 text-center">
                       <a href="{{URL::to('/inbox')}}">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
                     </div>
-                    @if(Auth::user()->permissioners != 0 || $empDepartment->department_name == "Human Resource")
-                    <div class="col-xs-3 text-center">
-                      <a href="#">Forms</a>
-                    </div>
+                    <div class="col-xs-3"></div>
                     <div class="col-xs-4 text-center">
                       <a href="{{URL::to('/approval')}}">Approvals&nbsp;<span class="label label-default">{{$approvalNotif}}</span></a>
                     </div>
+                    @elseif($empDepartment->department_name == "Human Resource")
+                      <div class="col-xs-3 text-center">
+                        <a href="{{URL::to('/inbox')}}">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
+                      </div>
+                      <div class="col-xs-5 text-center">
+                        <a href="{{URL::to('/approval')}}">Approvals&nbsp;<span class="label label-default">{{$approvalNotif}}</span></a>
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <a href="{{URL::to('/submittedforms')}}">Forms&nbsp;<span class="label label-default">{{$count}}</span></a>
+                      </div>
                     @else
-                    <div class="col-xs-4">
-
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="#">Forms</a>
-                    </div>
+                    <!-- <div class="col-xs-12 text-center">
+                      <a href="{{URL::to('/inbox')}}">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
+                    </div> -->
+                    <a href="{{URL::to('/inbox')}}" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Inbox&nbsp;<span class="label label-default">{{$inboxNotif}}</span></a>
+                    @endif
+                    
+                    @if($empDepartment->department_name == "Human Resource")
+                    
+                    
                     @endif
                   </li>
                   @if($empDepartment->department_name == "Human Resource")
@@ -218,23 +229,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @else
             <li>
             @endif
-            <a href="{{URL::to('/dashboard')}}"><i class="fa fa-link"></i> <span>Home</span></a></li>
+            <a href="{{URL::to('/dashboard')}}"><i class="glyphicon glyphicon-home"></i> <span>Home</span></a></li>
 
             @if($title == 'History')
             <li class="active">
             @else
             <li>
             @endif
-            <a href="{{URL::to('/history')}}"><i class="fa fa-link"></i> <span>History</span></a></li>
-
-            @if($empDepartment->department_name == "Human Resource")
-              @if($title == 'Submitted Forms')
-              <li class="active">
-              @else
-              <li>
-              @endif
-              <a href="{{URL::to('/submittedforms')}}"><i class="fa fa-link"></i> <span>Submitted Forms</span></a></li>
-            @endif
+            <a href="{{URL::to('/history')}}"><i class="glyphicon glyphicon-list-alt"></i> <span>History</span></a></li>  
 
             @if($empDepartment->department_name == "Human Resource")
               @if($title == 'Vacation Leave' || $title == 'Sick Leave' || $title == 'Maternal Leave' || $title == 'Paternal Leave')
@@ -242,7 +244,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               @else
               <li class="treeview">
               @endif
-                <a href="#"><i class="fa fa-link"></i> <span>Records of Leave</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="glyphicon glyphicon-folder-open"></i> <span>Records of Leave</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li><a href="{{URL::to('record/vacation')}}">Vacation Leave</a></li>
                   <li><a href="{{URL::to('record/sick')}}">Sick Leave</a></li>
@@ -257,7 +259,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @else
             <li class="treeview">
             @endif
-              <a href="#"><i class="fa fa-link"></i> <span>Form</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="glyphicon glyphicon-envelope"></i> <span>Form</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="{{URL::to('/exitForm')}}">Exit Pass</a></li>
                 <li><a href="{{URL::to('/requestForLeave')}}">Request for Leave of Absence</a></li>

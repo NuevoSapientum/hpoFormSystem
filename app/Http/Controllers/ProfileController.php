@@ -86,6 +86,14 @@ class ProfileController extends Controller
         return $result = mysqli_query($con, $qry);
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
     public function updateImage($name, $image){
        return DB::update("UPDATE `profile_image` SET `picture_name` = :name, `image` = :image WHERE `id` = :user_picture", ['name' => $name, 'image' => $image, 'user_picture' => Auth::user()->img_id]);
     }
@@ -104,6 +112,7 @@ class ProfileController extends Controller
         $positions_all = Positions::all();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
+        $count = $this->forms();
         $data = array(
                     'title' => 'Edit Profile',
                     'positions' => $positions,
@@ -111,7 +120,8 @@ class ProfileController extends Controller
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
             );
         return view('auth.editProfile')->with($data);
     }

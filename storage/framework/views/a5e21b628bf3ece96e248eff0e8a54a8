@@ -145,23 +145,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </li>
                   <!-- Menu Body -->
                   <li class="user-body">
+                    <?php if(Auth::user()->permissioners != 0): ?>
                     <div class="col-xs-4 text-center">
                       <a href="<?php echo e(URL::to('/inbox')); ?>">Inbox&nbsp;<span class="label label-default"><?php echo e($inboxNotif); ?></span></a>
                     </div>
-                    <?php if(Auth::user()->permissioners != 0 || $empDepartment->department_name == "Human Resource"): ?>
-                    <div class="col-xs-3 text-center">
-                      <a href="#">Forms</a>
-                    </div>
+                    <div class="col-xs-3"></div>
                     <div class="col-xs-4 text-center">
                       <a href="<?php echo e(URL::to('/approval')); ?>">Approvals&nbsp;<span class="label label-default"><?php echo e($approvalNotif); ?></span></a>
                     </div>
+                    <?php elseif($empDepartment->department_name == "Human Resource"): ?>
+                      <div class="col-xs-3 text-center">
+                        <a href="<?php echo e(URL::to('/inbox')); ?>">Inbox&nbsp;<span class="label label-default"><?php echo e($inboxNotif); ?></span></a>
+                      </div>
+                      <div class="col-xs-5 text-center">
+                        <a href="<?php echo e(URL::to('/approval')); ?>">Approvals&nbsp;<span class="label label-default"><?php echo e($approvalNotif); ?></span></a>
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <a href="<?php echo e(URL::to('/submittedforms')); ?>">Forms&nbsp;<span class="label label-default"><?php echo e($count); ?></span></a>
+                      </div>
                     <?php else: ?>
-                    <div class="col-xs-4">
-
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="#">Forms</a>
-                    </div>
+                    <!-- <div class="col-xs-12 text-center">
+                      <a href="<?php echo e(URL::to('/inbox')); ?>">Inbox&nbsp;<span class="label label-default"><?php echo e($inboxNotif); ?></span></a>
+                    </div> -->
+                    <a href="<?php echo e(URL::to('/inbox')); ?>" class="btn btn-default btn-flat" style="height:40px;padding-top:7px;">Inbox&nbsp;<span class="label label-default"><?php echo e($inboxNotif); ?></span></a>
+                    <?php endif; ?>
+                    
+                    <?php if($empDepartment->department_name == "Human Resource"): ?>
+                    
+                    
                     <?php endif; ?>
                   </li>
                   <?php if($empDepartment->department_name == "Human Resource"): ?>
@@ -219,23 +230,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <?php else: ?>
             <li>
             <?php endif; ?>
-            <a href="<?php echo e(URL::to('/dashboard')); ?>"><i class="fa fa-link"></i> <span>Home</span></a></li>
+            <a href="<?php echo e(URL::to('/dashboard')); ?>"><i class="glyphicon glyphicon-home"></i> <span>Home</span></a></li>
 
             <?php if($title == 'History'): ?>
             <li class="active">
             <?php else: ?>
             <li>
             <?php endif; ?>
-            <a href="<?php echo e(URL::to('/history')); ?>"><i class="fa fa-link"></i> <span>History</span></a></li>
-
-            <?php if($empDepartment->department_name == "Human Resource"): ?>
-              <?php if($title == 'Submitted Forms'): ?>
-              <li class="active">
-              <?php else: ?>
-              <li>
-              <?php endif; ?>
-              <a href="<?php echo e(URL::to('/submittedforms')); ?>"><i class="fa fa-link"></i> <span>Submitted Forms</span></a></li>
-            <?php endif; ?>
+            <a href="<?php echo e(URL::to('/history')); ?>"><i class="glyphicon glyphicon-list-alt"></i> <span>History</span></a></li>  
 
             <?php if($empDepartment->department_name == "Human Resource"): ?>
               <?php if($title == 'Vacation Leave' || $title == 'Sick Leave' || $title == 'Maternal Leave' || $title == 'Paternal Leave'): ?>
@@ -243,7 +245,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <?php else: ?>
               <li class="treeview">
               <?php endif; ?>
-                <a href="#"><i class="fa fa-link"></i> <span>Records of Leave</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="glyphicon glyphicon-folder-open"></i> <span>Records of Leave</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li><a href="<?php echo e(URL::to('record/vacation')); ?>">Vacation Leave</a></li>
                   <li><a href="<?php echo e(URL::to('record/sick')); ?>">Sick Leave</a></li>
@@ -258,7 +260,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <?php else: ?>
             <li class="treeview">
             <?php endif; ?>
-              <a href="#"><i class="fa fa-link"></i> <span>Form</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="glyphicon glyphicon-envelope"></i> <span>Form</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo e(URL::to('/exitForm')); ?>">Exit Pass</a></li>
                 <li><a href="<?php echo e(URL::to('/requestForLeave')); ?>">Request for Leave of Absence</a></li>

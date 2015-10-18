@@ -67,7 +67,7 @@
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 <input type="number" class="form-control" name="username" placeholder="ID Number"  value="<?php echo e(old('username')); ?>" autofocus/><br/>
                 <input type="password" class="form-control" name="password" placeholder="Password" value="<?php echo e(old('password')); ?>"/><hr/>
-                <button type="submit" class="btn-login">Login</button>
+                <button type="submit" class="btn-login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Login</button>
             </div>
         </form>
     </div>

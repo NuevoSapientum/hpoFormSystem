@@ -129,6 +129,14 @@ class ApprovalController extends Controller
                        ->get();
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
     public function index(){
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
@@ -140,6 +148,7 @@ class ApprovalController extends Controller
         $leaveApprovals = $this->leaveApprovals(Auth::user()->id);
         $changeApprovals = $this->changeApprovals(Auth::user()->id);
         $overtimeApprovals = $this->overtimeApproval(Auth::user()->id);
+        $count = $this->forms();
         $data = array(
                 'title' => "Need Approvals",
                 'inboxNotif' => $inboxNotif,
@@ -150,7 +159,8 @@ class ApprovalController extends Controller
                 'changeApprovals' => $changeApprovals,
                 'overtimeApprovals' => $overtimeApprovals,
                 'approvalNotif' => $approvalNotif,
-                'empDepartment' => $empDepartment
+                'empDepartment' => $empDepartment,
+                'count' => $count
             );
 
         return view('user.approval')->with($data);
@@ -161,11 +171,13 @@ class ApprovalController extends Controller
         $approvalNotif = $this->approvalNotif();
         $profileImage = $this->getImage();
         $positions = $this->position();
+        $count = $this->forms();
         $dataFirst = array(
                 'inboxNotif' => $inboxNotif,
                 'positions' => $positions,
                 'profileImage' => $profileImage,
-                'approvalNotif' => $approvalNotif
+                'approvalNotif' => $approvalNotif,
+                'count' => $count
             );
         if($type == 1){
             $contents = ExitPass::where('id', $id)->get();

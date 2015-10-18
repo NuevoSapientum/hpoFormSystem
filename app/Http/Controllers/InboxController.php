@@ -84,6 +84,14 @@ class InboxController extends Controller
         return $result = mysqli_query($con, $qry);
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
     public function inbox(){
         $profileImage = $this->getImage();
         $exitPass = ExitPass::where('user_id', Auth::user()->id)
@@ -106,6 +114,7 @@ class InboxController extends Controller
         $approvalNotif = $this->approvalNotif();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
+        $count = $this->forms();
         $data = array(
                     'title' => 'Inbox',
                     'profileImage' => $profileImage,
@@ -117,7 +126,8 @@ class InboxController extends Controller
                     'oas' => $oas,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
                     );
         // dd($exitPass);
         return view('user.inbox')->with($data);
@@ -128,11 +138,13 @@ class InboxController extends Controller
         $profileImage = $this->getImage();
         $positions = $this->position();
         $approvalNotif = $this->approvalNotif();
+        $count = $this->forms();
         $dataFirst = array(
                     'inboxNotif' => $inboxNotif,
                     'profileImage' => $profileImage,
                     'positions' => $positions,
-                    'approvalNotif' => $approvalNotif
+                    'approvalNotif' => $approvalNotif,
+                    'count' => $count
             );
         if($type == 1){
             $contents = ExitPass::where('id', $id)
@@ -383,11 +395,13 @@ class InboxController extends Controller
         $profileImage = $this->getImage();
         $positions = $this->position();
         $approvalNotif = $this->approvalNotif();
+        $count = $this->forms();
         $dataFirst = array(
                     'inboxNotif' => $inboxNotif,
                     'profileImage' => $profileImage,
                     'positions' => $positions,
-                    'approvalNotif' => $approvalNotif
+                    'approvalNotif' => $approvalNotif,
+                    'count' => $count
             );
         if($type == 1){
             $contents = ExitPass::where('id', $id)

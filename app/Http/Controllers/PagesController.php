@@ -163,6 +163,14 @@ class PagesController extends Controller
         return $result = mysqli_query($con, $qry);
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
     /**
     *Display the Home Page
     *
@@ -176,13 +184,15 @@ class PagesController extends Controller
         $id = Auth::user()->position_id;
         $empDepartment = Positions::find($id)->departments;
         // $notification = $this->notification();
+        $count = $this->forms();
         $data = array(
                     'title' => 'Home',
                     'positions' => $positions,
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
             );
         // echo $this->notification();
         return view('dashboard')->with($data);
@@ -205,6 +215,7 @@ class PagesController extends Controller
         $leaveForm = Leaves::where('user_id', Auth::user()->id)->get();
         $changeSchedule = Change::where('user_id', Auth::user()->id)->get();
         $oas = Overtime::where('user_id', Auth::user()->id)->get();
+        $count = $this->forms();
         $data = array(
                     'title' => 'History',
                     'positions' => $positions,
@@ -215,7 +226,8 @@ class PagesController extends Controller
                     'leaveForm' => $leaveForm,
                     'changeSchedule' => $changeSchedule,
                     'oas' => $oas,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
             );
 
         return view('history')->with($data);
@@ -224,7 +236,6 @@ class PagesController extends Controller
     public function exitApprovals($id){
         return ExitPass::where('status', '!=', 3)
                     ->get();
-        // return ExitPass::all();
     }
 
     public function submittedForms(){
@@ -238,6 +249,7 @@ class PagesController extends Controller
         $leaveForm = Leaves::where('status', '!=', 3)->get();
         $changeSchedule = Change::where('status', '!=', 3)->get();
         $oas = Overtime::where('status', '!=', 3)->get();
+        $count = $this->forms();
         $data = array(
             'title' => 'Submitted Forms',
             'positions' => $positions,
@@ -245,18 +257,12 @@ class PagesController extends Controller
             'inboxNotif' => $inboxNotif,
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
+            'count' => $count,
             'exitPass' => $exitPass,
             'leaveForm' => $leaveForm,
             'changeSchedule' => $changeSchedule,
             'oas' => $oas
         );
-
-        // echo $exitPass->users->emp_name;
-        // $exit = $this->exitApprovals(Auth::user()->id);
-        // dd($exit);
-        // foreach ($exitPass as $exit) {
-        //     echo $exit->users->emp_name;
-        // }
 
         return view('submittedForms')->with($data);
     }

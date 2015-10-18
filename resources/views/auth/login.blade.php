@@ -67,7 +67,7 @@
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}">
                 <input type="number" class="form-control" name="username" placeholder="ID Number"  value="{{old('username')}}" autofocus/><br/>
                 <input type="password" class="form-control" name="password" placeholder="Password" value="{{old('password')}}"/><hr/>
-                <button type="submit" class="btn-login">Login</button>
+                <button type="submit" class="btn-login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Login</button>
             </div>
         </form>
     </div>

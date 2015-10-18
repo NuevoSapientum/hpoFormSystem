@@ -81,9 +81,18 @@ class FormController extends Controller
         return $result = mysqli_query($con, $qry);
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
     /*Exif Pass Form Functions*/
 
     public function exitForm(){
+
         $inboxNotif = $this->inboxNotif();
         $profileImage = $this->getImage();
         $positions = $this->position();
@@ -99,6 +108,7 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
         $CompanyReps = User::where('permissioners', 3)->get();
+        $count = $this->forms();
         $data = array(
                     'title' => 'Exit Pass',
                     'positions' => $positions,
@@ -109,7 +119,8 @@ class FormController extends Controller
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
         );
         return view('exitForm')->with($data);
     }
@@ -136,7 +147,7 @@ class FormController extends Controller
         $dateUpdate = date("Y-m-d H:i:s");
         $dateFrom = $request->input('dateFrom');
         $dateTo = $request->input('dateTo');
-        // echo $newDate;
+        $count = $this->forms();
         $newFormatdateFrom = date('Y-m-d H:i:s', strtotime($dateFrom));
         $newFormatdateTo = date('Y-m-d H:i:s', strtotime($dateTo));
 
@@ -157,7 +168,8 @@ class FormController extends Controller
               'permission_id1' => $request->input('supervisor'),
               'permission_id2' => $request->input('projectManager'),
               'permission_id3' => $request->input('HR'),
-              'permission_id4' => $request->input('companyRep')
+              'permission_id4' => $request->input('companyRep'),
+              'count' => $count
           ));
 
           $save = $exitPass->save();
@@ -187,6 +199,7 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
+        $count = $this->forms();
         $data = array(
                     'title' => 'Request for Leave of Absence',
                     'positions' => $positions,
@@ -195,7 +208,8 @@ class FormController extends Controller
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
             );
 
         return view('requestForLeave')->with($data);
@@ -367,6 +381,7 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
         $CompanyReps = User::where('permissioners', 3)->get();
+        $count = $this->forms();
         $data = array(
                     'title' => 'Change Schedule',
                     'positions' => $positions,
@@ -378,7 +393,8 @@ class FormController extends Controller
                     'profileImage' => $profileImage,
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
-                    'empDepartment' => $empDepartment
+                    'empDepartment' => $empDepartment,
+                    'count' => $count
             );
         return view('changeSchedule')->with($data);
     }
@@ -454,6 +470,7 @@ class FormController extends Controller
         $empDepartment = Positions::find($user_position)->departments;
         $num = 1;
         $Supervisors = User::where('permissioners', 1)->get();
+        $count = $this->forms();
         $data = array(
                     'title' => 'Overtime Authorization Slip',
                     'positions' => $positions,
@@ -462,7 +479,8 @@ class FormController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
                     'Supervisors' => $Supervisors,
-                    'num' => $num
+                    'num' => $num,
+                    'count' => $count
             );
         return view('overtimeAuthSlip')->with($data);
     }

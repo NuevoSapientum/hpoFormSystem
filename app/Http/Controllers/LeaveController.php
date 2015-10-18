@@ -81,6 +81,14 @@ class LeaveController extends Controller
         return $result = mysqli_query($con, $qry);
     }
 
+    public function forms(){
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $oas = Overtime::where('status', '!=', 3)->get();
+        return count($exitPass) + count($leaveForm) + count($changeSchedule) + count($oas);
+    }
+
    public function vacationRecord(){
         $positions = $this->position();
         $profileImage = $this->getImage();
@@ -91,7 +99,7 @@ class LeaveController extends Controller
         $vacationRecords = Leaves::where('status', 1)
                                 ->where('leave_type', 1)
                                 ->get();
-        
+        $count = $this->forms();
         $collection = collect([]);
 
         foreach ($vacationRecords as $value) {
@@ -105,7 +113,8 @@ class LeaveController extends Controller
             'inboxNotif' => $inboxNotif,
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
-            'vacationRecords' => $collection
+            'vacationRecords' => $collection,
+            'count' => $count
         );
 
         return view('record.vacation')->with($data);
@@ -122,7 +131,7 @@ class LeaveController extends Controller
                                 ->where('leave_type', 2)
                                 ->get();
         $collection = collect([]);
-
+        $count = $this->forms();
         foreach ($sickRecords as $value) {
             $collection = collect([$value]);  
         }
@@ -134,7 +143,8 @@ class LeaveController extends Controller
             'inboxNotif' => $inboxNotif,
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
-            'sickRecords' => $collection
+            'sickRecords' => $collection,
+            'count' => $count
         );
 
         return view('record.sick')->with($data);
@@ -152,7 +162,7 @@ class LeaveController extends Controller
                                 ->get();
 
         $collection = collect([]);
-
+        $count = $this->forms();
         foreach ($maternalRecords as $value) {
             $collection = collect([$value]);  
         }
@@ -164,7 +174,8 @@ class LeaveController extends Controller
                 'inboxNotif' => $inboxNotif,
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
-                'maternalRecords' => $collection
+                'maternalRecords' => $collection,
+                'count' => $count
             );
 
         return view('record.maternal')->with($data);
@@ -181,7 +192,7 @@ class LeaveController extends Controller
                                 ->where('leave_type', 4)
                                 ->get();
         $collection = collect([]);
-
+        $count = $this->forms();
         foreach ($paternalRecords as $value) {
             $collection = collect([$value]);  
         }
@@ -193,7 +204,8 @@ class LeaveController extends Controller
             'inboxNotif' => $inboxNotif,
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
-            'paternalRecords' => $collection
+            'paternalRecords' => $collection,
+            'count' => $count
         );
 
         return view('record.paternal')->with($data);
@@ -208,6 +220,7 @@ class LeaveController extends Controller
             $id_user = Auth::user()->position_id;
             $permissioners = User::where('permissioners', '!=', 0)->get();
             $empDepartment = Positions::find($id_user)->departments;
+            $count = $this->forms();
             $contents = Leaves::where('leave_type', $type)
                                      ->where('id', $id)
                                      ->get();
@@ -219,7 +232,8 @@ class LeaveController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'contents' => $contents,
-                'permissioners' => $permissioners
+                'permissioners' => $permissioners,
+                'count' => $count
             );
             // echo $id;
             // dd($vacationRecords);
@@ -232,6 +246,7 @@ class LeaveController extends Controller
             $id_user = Auth::user()->position_id;
             $empDepartment = Positions::find($id_user)->departments;
             $permissioners = User::where('permissioners', '!=', 0)->get();
+            $count = $this->forms();
             $contents = Leaves::where('leave_type', 2)
                                     ->where('id', $id)
                                     ->get();
@@ -243,7 +258,8 @@ class LeaveController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'permissioners' => $permissioners,
-                'contents' => $contents
+                'contents' => $contents,
+                'count' => $count
             );
 
             return view('record.sickView')->with($data);
@@ -255,6 +271,7 @@ class LeaveController extends Controller
             $id_user = Auth::user()->position_id;
             $empDepartment = Positions::find($id_user)->departments;
             $permissioners = User::where('permissioners', '!=', 0)->get();
+            $count = $this->forms();
             $contents = Leaves::where('leave_type', 3)
                                     ->where('id', $id)
                                     ->get();
@@ -266,7 +283,8 @@ class LeaveController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'permissioners' => $permissioners,
-                'contents' => $contents
+                'contents' => $contents,
+                'count' => $count
             );
 
             return view('record.maternalView')->with($data);
@@ -278,6 +296,7 @@ class LeaveController extends Controller
             $id_user = Auth::user()->position_id;
             $empDepartment = Positions::find($id_user)->departments;
             $permissioners = User::where('permissioners', '!=', 0)->get();
+            $count = $this->forms();
             $contents = Leaves::where('leave_type', 4)
                                     ->where('id', $id)
                                     ->get();
@@ -289,7 +308,8 @@ class LeaveController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'permissioners' => $permissioners,
-                'contents' => $contents
+                'contents' => $contents,
+                'count' => $count
             );
 
             return view('record.paternalView')->with($data);
