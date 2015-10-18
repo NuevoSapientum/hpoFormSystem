@@ -19,6 +19,7 @@ use App\PagesController;
 use Validator;
 use App\DateTimeOvertime;
 use App\DateTimeChange;
+use DateTime;
 
 class FormController extends Controller
 {
@@ -424,7 +425,16 @@ class FormController extends Controller
 
         $dateUpdate = date("Y-m-d H:i:s");
         $department = Positions::find(Auth::user()->position_id)->departments;
-        $changes = Change::insertGetId(
+
+        $dateFromEffectivity = strtotime($request->input('dateFromEffectivity'));
+        $dateToEffectivity = strtotime($request->input('dateToEffectivity'));
+        $dateFromShift = strtotime($request->input('dateFromShift'));
+        $dateToShift = strtotime($request->input('dateToShift'));
+
+        if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift){
+            $status = "Please Double Check The Dates";
+        }else{
+            $changes = Change::insertGetId(
                 ['user_id' => Auth::user()->id,
                 'department_id' => $department->id,
                 'permission_id1' => $request->input('supervisor'),
@@ -435,27 +445,28 @@ class FormController extends Controller
                 'created_at' => $request->input('dateCreated'),
                 'updated_at' => $dateUpdate]
             );
-        // dd($request->all());
-        $dateTime = new DateTimeChange(array(
-                  'dateFromEffectivity' => $request->input('dateFromEffectivity'),
-                  'dateToEffectivity' => $request->input('dateToEffectivity'),
-                  'timeFromEffectivity' => $request->input('timeFromEffectivity'),
-                  'timeToEffectivity' => $request->input('timeToEffectivity'),
-                  'dateFromShift' => $request->input('dateFromShift'),
-                  'dateToShift' => $request->input('dateToShift'),
-                  'timeFromShift' => $request->input('timeFromShift'),
-                  'timeToShift' => $request->input('timeToShift'),
-                  'change_id' => $changes,
-                  'created_at' => $request->input('dateCreated'),
-                  'updated_at' => $dateUpdate
-        ));
 
-        $result = $dateTime->save();
+            $dateTime = new DateTimeChange(array(
+                      'dateFromEffectivity' => $request->input('dateFromEffectivity'),
+                      'dateToEffectivity' => $request->input('dateToEffectivity'),
+                      'timeFromEffectivity' => $request->input('timeFromEffectivity'),
+                      'timeToEffectivity' => $request->input('timeToEffectivity'),
+                      'dateFromShift' => $request->input('dateFromShift'),
+                      'dateToShift' => $request->input('dateToShift'),
+                      'timeFromShift' => $request->input('timeFromShift'),
+                      'timeToShift' => $request->input('timeToShift'),
+                      'change_id' => $changes,
+                      'created_at' => $request->input('dateCreated'),
+                      'updated_at' => $dateUpdate
+            ));
 
-        if($result){
-          $status = "Success!";
-        }else{
-          $status = "Failed!";
+            $result = $dateTime->save();
+
+            if($result){
+              $status = "Success!";
+            }else{
+              $status = "Failed!";
+            }
         }
 
         return redirect('inbox')->with('status', $status);
