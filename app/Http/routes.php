@@ -54,22 +54,22 @@ Route::get('submittedforms', [
 
 Route::get('submittedforms/edit/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'InboxController@editForm'
+	'uses' => 'PagesController@editForm'
 ]);
 
 Route::get('submittedforms/view/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'InboxController@editForm'
+	'uses' => 'PagesController@editForm'
 ]);
 
 Route::post('submittedforms/edit/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'InboxController@postForm'
+	'uses' => 'PagesController@postForm'
 ]);
 
 Route::get('submittedforms/delete/{type}/{id}', [
 	'middleware' => 'auth',
-	'uses' => 'InboxController@deleteForm'
+	'uses' => 'PagesController@deleteForm'
 ]);
 
 Route::get('record/vacation',[

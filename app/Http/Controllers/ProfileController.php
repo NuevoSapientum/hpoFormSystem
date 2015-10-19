@@ -144,9 +144,8 @@ class ProfileController extends Controller
         Auth::user()->email = $data['email'];
         if($data['password'] != ''){
             Auth::user()->password = bcrypt($data['password']);
-        }else{
-            return Auth::user()->save();
         }
+        return Auth::user()->save();
         // dd($data);
     }
 

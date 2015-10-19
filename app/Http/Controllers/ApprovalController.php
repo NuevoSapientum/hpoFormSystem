@@ -306,6 +306,7 @@ class ApprovalController extends Controller
                 $status = "Failed!";
             }
             // echo $result;
+            // dd($data);
             return redirect('approval')->with('status', $status);
         }else{
             $status = "Nothing to Show.";
@@ -652,16 +653,14 @@ class ApprovalController extends Controller
 
 
     public function approveOvertime(array $data, $id){
-        $dateUpdate = date("Y-m-d H:i:s");
-        if(isset($data['permission_1'])){
+        if(isset($data['permission_1']) && isset($data['client_paid'])){
             if($data['permission_1'] == 2){
                 return Overtime::where('id', $id)
                               ->update(array(
                                     'permission_1' => $data['permission_1'],
                                     'reason' => $data['note'],
                                     'status' => 2,
-                                    'updated_at' => $dateUpdate,
-                                    'client_paid' => 0
+                                    'client_paid' => 2
                                 ));
                 // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
                 //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
@@ -672,20 +671,15 @@ class ApprovalController extends Controller
                                 'permission_1' => $data['permission_1'],
                                 'reason' => '',
                                 'status' => 1,
-                                'updated_at' => $dateUpdate,
                                 'client_paid' => $data['client_paid']
                             ));
 
                 // return DB::update("UPDATE tbl_leave SET permission_1 = :answer, requestNote = :note, status = :status, dateUpdated = :dateUpdated
                 //                     WHERE tbl_leaveid = :id", ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
                 //                     'id' => $id, 'status' => 0, 'note' => '']);
+            }else{
+                return false;
             }
         }
-
-        return Overtime::where('id', $id)
-                            ->update(array(
-                                'client_paid' => $data['client_paid'],
-                                'updated_at' => $dateUpdate
-                            ));
     }
 }

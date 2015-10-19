@@ -45,8 +45,8 @@
 			        <label><input type="radio" disabled checked="true"/>Yes</label>
 			        <label><input type="radio" disabled />No</label>
 		        @elseif($content->permission_1 === 2)
-		        	<label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
-			        <label><input type="radio" id="permission_1no" name="permission_1" checked="true" value="2" />No</label>
+		        	<label><input type="radio" disabled  />Yes</label>
+			        <label><input type="radio" disabled checked="true" />No</label>
 			    @else
 			    	<label><input type="radio" id="permission_1yes" name="permission_1" value="1" />Yes</label>
 	              	<label><input type="radio" id="permission_1no" name="permission_1" value="2" />No</label>
@@ -78,8 +78,8 @@
 			        <label><input type="radio" disabled checked="true"/>Yes</label>
 			        <label><input type="radio" disabled />No</label>
 		        @elseif($content->permission_2 === 2)
-		        	<label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
-			        <label><input type="radio" id="permission_2no" name="permission_2" checked="true" value="2" />No</label>
+		        	<label><input type="radio" disabled  />Yes</label>
+			        <label><input type="radio" disabled checked="true" />No</label>
 			    @else
 			    	<label><input type="radio" id="permission_2yes" name="permission_2" value="1" />Yes</label>
 	              	<label><input type="radio" id="permission_2no" name="permission_2" value="2" />No</label>
@@ -110,8 +110,8 @@
 			        <label><input type="radio" disabled checked="true" name="permission_3" value="1" />Yes</label>
 			        <label><input type="radio" disabled name="permission_3" value="2" />No</label>
 		        @elseif($content->permission_3 === 2)
-		        	<label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
-			        <label><input type="radio" id="permission_3no" name="permission_3" checked="true" value="2" />No</label>
+		        	<label><input type="radio" disabled  />Yes</label>
+			        <label><input type="radio" disabled checked="true" />No</label>
 			    @else
 			    	<label><input type="radio" id="permission_3yes" name="permission_3" value="1" />Yes</label>
 	              	<label><input type="radio" id="permission_3no" name="permission_3" value="2" />No</label>
@@ -142,8 +142,8 @@
 			        <label><input type="radio" disabled checked="true" />Yes</label>
 			        <label><input type="radio" disabled />No</label>
 		        @elseif($content->permission_4 === 2)
-		        	<label><input type="radio" name="permission_4" value="1" />Yes</label>
-			        <label><input type="radio" name="permission_4" checked="true" value="2" />No</label>
+		        	<label><input type="radio" disabled  />Yes</label>
+			        <label><input type="radio" disabled checked="true" />No</label>
 			    @else
 			    	<label><input type="radio" id="permission_4yes" name="permission_4" value="1" />Yes</label>
 	              	<label><input type="radio" id="permission_4no" name="permission_4" value="2" />No</label>
@@ -161,25 +161,11 @@
               	@endif
 		    @endif
 	      </div>
+	      <hr/>
         @if($content->permission_1 == 2 || $content->permission_2 == 2 || $content->permission_3 == 2
-        	|| $content->permission_4 == 2)
-        	<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
-	          <div class="modal-dialog" role="document">
-	            <div class="modal-content">
-	              <div class="modal-header">
-	                <h4>Note:</h4>
-	              </div>
-	              <div class="modal-body">
-	                <textarea class="form-control" id="note" name="note">{{$content->reason}}</textarea>
-	              </div>
-	              <div class="modal-footer">
-	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	                <button type="submit" class="btn btn-primary">Save changes</button>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-			<button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Save</button>
+        	|| $content->permission_4 == 2 || $content->permission_4 == 1)
+	        <label>Note:</label>
+	        <textarea disabled class="form-control">{{$content->reason}}</textarea>
 		@else
 			<div class="modal fade" id="false" role="dialog" aria-labelledby="myModalLabel">
 	          <div class="modal-dialog" role="document">
