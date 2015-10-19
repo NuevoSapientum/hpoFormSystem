@@ -20,7 +20,6 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
       <hr/>
       <button type="button" id="dateTime" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Date/Time</button>
       <input type="hidden" name="number" id="number" value="1" />

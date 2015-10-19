@@ -605,30 +605,45 @@ class InboxController extends Controller
     public function editChange(array $data, $id){
         $dateUpdate = date("Y-m-d H:i:s");
 
-        $change = Change::where('id', $id)
-                        ->update(array(
-                        'permission_id1' => $data['supervisor'],
-                        'permission_id2' => $data['projectManager'],
-                        'permission_id3' => $data['permissioner'],
-                        'permission_id4' => $data['HR'],
-                        'purpose' => $data['reasonforChangeSchedule'],
-                        'updated_at' => $dateUpdate
-                        ));
-        if($change){
-          return DateTimeChange::where('change_id', $id)
-                                   ->update(array(
-                                     'dateFromEffectivity' => $data['dateFromEffectivity'],
-                                     'timeFromEffectivity' => $data['timeFromEffectivity'],
-                                     'dateToEffectivity' => $data['dateToEffectivity'],
-                                     'timeToEffectivity' => $data['timeToEffectivity'],
-                                     'dateFromShift' => $data['dateFromShift'],
-                                     'timeFromShift' => $data['timeFromShift'],
-                                     'dateToShift' => $data['dateToShift'],
-                                     'timeToShift' => $data['timeToShift'],
-                                     'updated_at' => $dateUpdate
-                                   ));
-        }else{
-          return false;
+        $dateFromEffectivity = strtotime($data['dateFromEffectivity']);
+        $dateToEffectivity = strtotime($data['dateToEffectivity']);
+        $dateFromShift = strtotime($data['dateFromShift']);
+        $dateToShift = strtotime($data['dateToShift']);
+
+        $dateToday = strtotime(date("Y-m-d"));
+
+        // echo strtotime($dateToday) . "<br/>";
+        // echo $dateFromEffectivity;
+        // dd($request->all());
+        if($dateFromEffectivity >= $dateToday && $dateFromShift >= $dateToday){
+            if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift ){
+                $status = "Please Double Check The Dates";
+            }else{
+                $change = Change::where('id', $id)
+                                ->update(array(
+                                'permission_id1' => $data['supervisor'],
+                                'permission_id2' => $data['projectManager'],
+                                'permission_id3' => $data['permissioner'],
+                                'permission_id4' => $data['HR'],
+                                'purpose' => $data['reasonforChangeSchedule'],
+                                'updated_at' => $dateUpdate
+                                ));
+
+                if($change){
+                  return DateTimeChange::where('change_id', $id)
+                                           ->update(array(
+                                             'dateFromEffectivity' => $data['dateFromEffectivity'],
+                                             'timeFromEffectivity' => $data['timeFromEffectivity'],
+                                             'dateToEffectivity' => $data['dateToEffectivity'],
+                                             'timeToEffectivity' => $data['timeToEffectivity'],
+                                             'dateFromShift' => $data['dateFromShift'],
+                                             'timeFromShift' => $data['timeFromShift'],
+                                             'dateToShift' => $data['dateToShift'],
+                                             'timeToShift' => $data['timeToShift'],
+                                             'updated_at' => $dateUpdate
+                                           ));
+                }
+            }
         }
     }
 

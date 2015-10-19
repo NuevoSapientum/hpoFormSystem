@@ -128,8 +128,7 @@ class FormController extends Controller
     }
 
     public function postexitForm(Request $request){
-        $rules = array('dateCreated' => 'required',
-                       'dateFrom' => 'required',
+        $rules = array('dateFrom' => 'required',
                        'dateTo' => 'required',
                        'purpose' => 'required|max:255',
                        'supervisor' => 'required',
@@ -218,8 +217,7 @@ class FormController extends Controller
     }
 
     public function postrequestForLeave(Request $request){
-        $rules = array('dateCreated' => 'required',
-                       'typeofLeave' => 'required',
+        $rules = array('typeofLeave' => 'required',
                        'startDate' => 'required',
                        'reasonforAbsence' => 'required',
                        'recommendApproval' => 'required',
@@ -248,7 +246,6 @@ class FormController extends Controller
                         'permission_id2' => $request->input('approvedBy'),
                         'days_applied' => $request->input('VL_daysApplied'),
                         'start_date' => $request->input('startDate'),
-                        'created_at' => $request->input('dateCreated'),
                         'updated_at' => $dateUpdate
                     ));
 
@@ -280,7 +277,6 @@ class FormController extends Controller
                         'permission_id2' => $request->input('approvedBy'),
                         'days_applied' => $request->input('SL_daysApplied'),
                         'start_date' => $request->input('startDate'),
-                        'created_at' => $request->input('dateCreated'),
                         'updated_at' => $dateUpdate
                     ));
 
@@ -313,7 +309,6 @@ class FormController extends Controller
                         'permission_id2' => $request->input('approvedBy'),
                         'days_applied' => $request->input('ML_daysApplied'),
                         'start_date' => $request->input('startDate'),
-                        'created_at' => $request->input('dateCreated'),
                         'updated_at' => $dateUpdate
                     ));
 
@@ -344,7 +339,6 @@ class FormController extends Controller
                         'permission_id2' => $request->input('approvedBy'),
                         'days_applied' => $request->input('PL_daysApplied'),
                         'start_date' => $request->input('startDate'),
-                        'created_at' => $request->input('dateCreated'),
                         'updated_at' => $dateUpdate
                     ));
 
@@ -402,8 +396,7 @@ class FormController extends Controller
     }
 
     public function postchangeSchedule(Request $request){
-        $rules = array('dateCreated' => 'required',
-                       'dateFromEffectivity' => 'required',
+        $rules = array('dateFromEffectivity' => 'required',
                        'timeFromEffectivity' => 'required',
                        'dateToEffectivity' => 'required',
                        'timeToEffectivity' => 'required',
@@ -431,44 +424,54 @@ class FormController extends Controller
         $dateFromShift = strtotime($request->input('dateFromShift'));
         $dateToShift = strtotime($request->input('dateToShift'));
 
-        if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift){
-            $status = "Please Double Check The Dates";
-        }else{
-            $changes = Change::insertGetId(
-                ['user_id' => Auth::user()->id,
-                'department_id' => $department->id,
-                'permission_id1' => $request->input('supervisor'),
-                'permission_id2' => $request->input('projectManager'),
-                'permission_id3' => $request->input('permissioner'),
-                'permission_id4' => $request->input('HR'),
-                'purpose' => $request->input('reasonforChangeSchedule'),
-                'created_at' => $request->input('dateCreated'),
-                'updated_at' => $dateUpdate]
-            );
+        $dateToday = strtotime(date("Y-m-d"));
 
-            $dateTime = new DateTimeChange(array(
-                      'dateFromEffectivity' => $request->input('dateFromEffectivity'),
-                      'dateToEffectivity' => $request->input('dateToEffectivity'),
-                      'timeFromEffectivity' => $request->input('timeFromEffectivity'),
-                      'timeToEffectivity' => $request->input('timeToEffectivity'),
-                      'dateFromShift' => $request->input('dateFromShift'),
-                      'dateToShift' => $request->input('dateToShift'),
-                      'timeFromShift' => $request->input('timeFromShift'),
-                      'timeToShift' => $request->input('timeToShift'),
-                      'change_id' => $changes,
-                      'created_at' => $request->input('dateCreated'),
-                      'updated_at' => $dateUpdate
-            ));
-
-            $result = $dateTime->save();
-
-            if($result){
-              $status = "Success!";
+        // echo strtotime($dateToday) . "<br/>";
+        // echo $dateFromEffectivity;
+        // dd($request->all());
+        if($dateFromEffectivity >= $dateToday && $dateFromShift >= $dateToday){
+            if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift ){
+                $status = "Please Double Check The Dates";
             }else{
-              $status = "Failed!";
+                $changes = Change::insertGetId(
+                    ['user_id' => Auth::user()->id,
+                    'department_id' => $department->id,
+                    'permission_id1' => $request->input('supervisor'),
+                    'permission_id2' => $request->input('projectManager'),
+                    'permission_id3' => $request->input('permissioner'),
+                    'permission_id4' => $request->input('HR'),
+                    'purpose' => $request->input('reasonforChangeSchedule'),
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => $dateUpdate]
+                );
+
+                $dateTime = new DateTimeChange(array(
+                          'dateFromEffectivity' => $request->input('dateFromEffectivity'),
+                          'dateToEffectivity' => $request->input('dateToEffectivity'),
+                          'timeFromEffectivity' => $request->input('timeFromEffectivity'),
+                          'timeToEffectivity' => $request->input('timeToEffectivity'),
+                          'dateFromShift' => $request->input('dateFromShift'),
+                          'dateToShift' => $request->input('dateToShift'),
+                          'timeFromShift' => $request->input('timeFromShift'),
+                          'timeToShift' => $request->input('timeToShift'),
+                          'change_id' => $changes,
+                          'created_at' => date("Y-m-d H:i:s"),
+                          'updated_at' => $dateUpdate
+                ));
+
+                $result = $dateTime->save();
+
+                if($result){
+                  $status = "Success!";
+                }else{
+                  $status = "Failed!";
+                }
             }
+        }else{
+            $status = "Please Double Check The Dates";
         }
 
+        
         return redirect('inbox')->with('status', $status);
     }
 
@@ -512,6 +515,7 @@ class FormController extends Controller
         }
 
         $dateUpdate = date("Y-m-d H:i:s");
+        $dateCreated = date("Y-m-d H:i:s");
         $department = Positions::find(Auth::user()->position_id)->departments;
 
         $result = Overtime::insertGetId(

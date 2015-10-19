@@ -20,7 +20,6 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d h:i:s');?>"/>
       <hr/>
       
       <br/>

@@ -9,7 +9,6 @@
 @section('content')
     <form method="POST" action="{{URL::to('/changeSchedule')}}">
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
       @if (count($errors) > 0)
       <div class="alert alert-danger">
       <strong>Whoops! </strong> There were some problems with your input. <br> <br>

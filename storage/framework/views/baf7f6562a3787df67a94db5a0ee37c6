@@ -12,16 +12,16 @@
               <h4><?php echo e(session('status')); ?></h4>
           </div>
         <?php endif; ?>
-
-          <h1>
-            Welcome
-            <small>Optional description</small>
-          </h1>
-         
+        
+        <div class="well well-sm">
+        <h1>
+          Home Page
+        </h1>  
+      </div>
       <?php $__env->stopSection(); ?>
 
       <?php $__env->startSection('content'); ?>
-          <h2>Home Page</h2>
+
       <?php $__env->stopSection(); ?>
 
 

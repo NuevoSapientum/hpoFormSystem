@@ -14,15 +14,15 @@
               <h4>{{session('status')}}</h4>
           </div>
         @endif
-
-          <h1>
-            Welcome
-            <small>Optional description</small>
-          </h1>
-         
+        
+        <div class="well well-sm">
+        <h1>
+          Home Page
+        </h1>  
+      </div>
       @endsection
 
       @section('content')
-          <h2>Home Page</h2>
+
       @endsection
 

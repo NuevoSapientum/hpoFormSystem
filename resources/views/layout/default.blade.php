@@ -215,8 +215,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <div class="pull-left info">
               <p>{{ Auth::user()->emp_name }}</p>
-              <!-- Status -->
-              <i class="fa fa-circle text-success"></i> Online
             </div>
           </div>
 

@@ -19,7 +19,6 @@
       </div>
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-      <input type="hidden" name="dateCreated" value="<?php echo date('Y-m-d');?>"/>
       <hr/>
       <label>Type of Leave:</label>
       <br/>
