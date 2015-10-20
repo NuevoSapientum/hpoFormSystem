@@ -21,20 +21,21 @@
       </div>
       @endif
       <hr/>
-      <label><u>Current Schedule:</u></label><br/>
-      <label>Original Schedule:</label>
-      <input disabled type="date" class="form-control"/><br/>
-      <input class="form-control" disabled />
+      <label>Current Shift:</label>
+      <input type="date" class="form-control" disabled /><br/>
+      <label>Shift Schedule:</label>
+      <input value="{{$currentShift}}" disabled class="form-control" />
       <hr/>
-      <label><u>Shift Schedule:</u></label><br/>
+      <label><u>Change Shift Schedule:</u></label><br/>
       <label>From:</label>
       <input type="date" name="dateFromShift" class="form-control"/>
       <br/>
       <label>To:</label>
       <input type="date" name="dateToShift" class="form-control"/><br/>
-      <select class="form-control">
+      <label>Shift Schedule:</label>
+      <select class="form-control" name="shiftSchedule">
         @foreach($shifts as $shift)
-          <option >{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>
+          <option value="{{$shift->id}}" >{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>
         @endforeach
       </select>
       <hr/>

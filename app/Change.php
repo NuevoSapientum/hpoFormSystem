@@ -25,10 +25,9 @@ class Change extends Model
    			'status',
    			'created_at',
    			'updated_at',
-   			'date_from',
-   			'date_to',
-   			'shift_from',
-   			'shift_to'
+        'shift_id',
+   			'dateFromShift',
+   			'dateToShift'
     ];
 
     public function users(){

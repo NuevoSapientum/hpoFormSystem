@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2015 at 06:14 AM
+-- Generation Time: Oct 20, 2015 at 05:46 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -29,6 +29,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `change_schedules` (
 `id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
+  `shift_id` int(10) unsigned NOT NULL,
+  `dateFromShift` date NOT NULL,
+  `dateToShift` date NOT NULL,
   `department_id` int(11) NOT NULL,
   `form_id` int(10) unsigned NOT NULL DEFAULT '3',
   `permission_id1` int(10) unsigned NOT NULL,
@@ -42,48 +45,17 @@ CREATE TABLE IF NOT EXISTS `change_schedules` (
   `permission_3` int(11) NOT NULL,
   `permission_4` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `change_schedules`
 --
 
-INSERT INTO `change_schedules` (`id`, `user_id`, `department_id`, `form_id`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `purpose`, `reason`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `created_at`, `updated_at`) VALUES
-(31, 17, 2, 3, 12, 16, 14, 1, 'Wala lng', '', 1, 1, 1, 1, 1, '2015-10-19 08:00:00', '2015-10-19 22:31:53'),
-(32, 17, 2, 3, 12, 16, 14, 1, 'asd', '', 2, 0, 0, 0, 2, '2015-10-19 08:00:00', '2015-10-19 22:32:55'),
-(35, 17, 2, 3, 12, 16, 12, 1, 'asd', '', 0, 0, 0, 0, 3, '2015-10-20 03:19:07', '2015-10-20 05:14:53');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `datetime_change`
---
-
-CREATE TABLE IF NOT EXISTS `datetime_change` (
-`id` int(11) unsigned NOT NULL,
-  `dateFromEffectivity` date NOT NULL,
-  `dateToEffectivity` date NOT NULL,
-  `timeFromEffectivity` time NOT NULL,
-  `timeToEffectivity` time NOT NULL,
-  `dateFromShift` date NOT NULL,
-  `dateToShift` date NOT NULL,
-  `timeFromShift` time NOT NULL,
-  `timeToShift` time NOT NULL,
-  `change_id` int(10) unsigned NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `datetime_change`
---
-
-INSERT INTO `datetime_change` (`id`, `dateFromEffectivity`, `dateToEffectivity`, `timeFromEffectivity`, `timeToEffectivity`, `dateFromShift`, `dateToShift`, `timeFromShift`, `timeToShift`, `change_id`, `created_at`, `updated_at`) VALUES
-(5, '2015-10-18', '2015-10-19', '01:01:00', '01:01:00', '2015-10-20', '2015-10-20', '01:01:00', '01:01:00', 31, '2015-10-19 05:14:56', '2015-10-19 21:14:56'),
-(6, '2015-10-18', '2015-10-19', '01:01:00', '01:01:00', '2015-10-18', '2015-10-18', '01:01:00', '01:01:00', 32, '2015-10-19 06:23:59', '2015-10-19 22:23:59'),
-(9, '2015-10-19', '2015-10-20', '01:01:00', '01:01:00', '2015-10-19', '2015-10-19', '01:01:00', '01:01:00', 35, '2015-10-19 11:24:41', '2015-10-20 03:24:41');
+INSERT INTO `change_schedules` (`id`, `user_id`, `shift_id`, `dateFromShift`, `dateToShift`, `department_id`, `form_id`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `purpose`, `reason`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `created_at`, `updated_at`) VALUES
+(40, 1, 2, '2015-10-21', '2015-10-22', 8, 3, 12, 16, 13, 1, 'asd1', '', 1, 1, 1, 1, 1, '2015-10-21 06:53:19', '2015-10-21 07:43:10'),
+(41, 1, 1, '2015-10-21', '2015-10-22', 8, 3, 12, 16, 12, 1, 'asd', 'Invalid', 2, 0, 0, 0, 2, '2015-10-21 07:44:15', '2015-10-21 07:44:34');
 
 -- --------------------------------------------------------
 
@@ -230,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   `status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `leaves`
@@ -242,7 +214,11 @@ INSERT INTO `leaves` (`id`, `user_id`, `department_id`, `leave_type`, `purpose`,
 (6, 17, 2, 4, 'asd', '', 2, 12, 1, 1, 1, 20, '2015-10-17', 1, '2015-10-19 08:00:00', '2015-10-19 22:05:53'),
 (7, 17, 2, 1, 'asd', 'Invalid\r\n', 2, 12, 1, 1, 2, 2, '2015-10-18', 2, '2015-10-19 08:00:00', '2015-10-19 22:09:39'),
 (8, 17, 2, 2, 'sick2', 'Invalid', 2, 12, 1, 2, 0, 4, '2015-10-18', 2, '2015-10-19 08:00:00', '2015-10-19 22:13:00'),
-(9, 17, 2, 4, 'Reason1', 'Invalid', 2, 12, 1, 2, 0, 10, '2015-10-19', 2, '2015-10-19 08:00:00', '2015-10-19 22:15:59');
+(10, 17, 2, 1, 'Going to Japan', '', 2, 12, 1, 0, 0, 2, '2015-10-20', 0, '2015-10-21 01:35:07', '2015-10-21 01:35:07'),
+(11, 1, 8, 3, 'Pregnant', '', 2, 12, 1, 1, 1, 68, '2015-10-20', 1, '2015-10-21 02:19:45', '2015-10-21 05:55:18'),
+(12, 1, 8, 2, 'asd', '', 2, 12, 1, 0, 0, 3, '2015-10-20', 0, '2015-10-21 05:29:46', '2015-10-21 05:29:46'),
+(13, 1, 8, 1, 'asd', '', 2, 12, 1, 0, 0, 3, '2015-10-20', 0, '2015-10-21 05:47:03', '2015-10-21 05:47:03'),
+(14, 12, 3, 4, 'asd', '', 2, 12, 1, 0, 0, 7, '2015-10-27', 0, '2015-10-21 06:05:34', '2015-10-21 06:05:34');
 
 -- --------------------------------------------------------
 
@@ -462,14 +438,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `emp_gender`, `shift_id`, `position_id`, `img_id`, `email`, `username`, `password`, `permissioners`, `SL_entitlement`, `remember_token`, `created_at`, `updated_at`, `VL_entitlement`, `PL_entitlement`, `ML_entitlement`, `SL_taken`, `VL_taken`, `ML_taken`, `PL_taken`) VALUES
-(1, 'Robin Scherbatsky', 'Female', 15, 5, 1, 'himym@example.com', 1200289, '$2y$10$m1grdPAspbDaIPEmId6O8ed9NazgYIuRIH4pPqeQNIktpVTKJWUkK', 0, 7, '6gG7NCYXjM4XQmf8QJEGRgWeleFVfyV0vCuQmK3SflS0zE2xm7swUCTS5goT', '2015-10-09 07:00:00', '2015-10-20 19:44:00', 7, 30, 0, 0, 0, 0, 0),
-(12, 'Barney Stinson', 'Male', 15, 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'bmoc9sBoOHOiWJKDNLexyq4ma2iZgAW8ZwPMKSSU0J49oEnFmOVbGOTUSPpN', '2015-10-10 11:19:53', '2015-10-20 09:38:33', 7, 30, 0, 0, 0, 0, 0),
-(13, 'Ted Mosby', 'Male', 15, 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, 'R6laHUWAOzAVO3ZUpPWU2U0Zw5wGpZGT8HeoHlw5e4gr1jyFhO1Wgltkc4c6', '2015-10-10 16:21:16', '2015-10-19 22:08:30', 7, 17, 0, 0, 0, 0, 0),
-(14, 'Marshall Eriksen', 'Male', 15, 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, '0BAwwg73GKvFGRB1IB7pF67AuxGTvUW2fGaI8MiYwxfH0Re7icjmQ2XyXd40', '2015-10-10 16:22:24', '2015-10-19 22:31:35', 7, 30, 0, 0, 0, 0, 0),
-(16, 'Lily Aldrin', 'Female', 15, 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'oDg33Abc8PlYJsbDzZ3AGd8tmMcZI5vxIft17uJwQq4gUEUk5chJUBcXyMAx', '2015-10-10 16:23:24', '2015-10-19 22:30:44', 7, 30, 0, 0, 0, 0, 0),
-(17, 'Erwin Mark D. Añora', 'Male', 15, 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$Yk7UGL6SLE6zY1JZm/h2J.NptgtmJ0WDoxDGU6MtuGqjw1nLP3Fx.', 0, 8, 'cLj0lLOqfFgn6bxB6anp3OSRKz2zfads3KMKyWOPiak4yrD7PknKl6e4InDY', '2015-10-15 10:13:21', '2015-10-20 09:40:03', 7, 30, 0, 4, 5, 0, 20),
-(18, 'Testing', 'Male', 15, 1, 21, '123@example.com', 1200307, '$2y$10$ZqNyKTgyayA.VIDM5ZkH8uoYTznTlFjISkyiqSm1aG4tvyctEwDoG', 0, 7, 'R1X91IqqqMkettNfT41jwxxKb3xrhYhI3QbKAc7g9FAhexbJOIvd6mtYSymo', '2015-10-18 12:59:35', '2015-10-19 22:08:30', 7, 7, 0, 0, 0, 0, 0),
-(23, 'Test Dummy1', 'Male', 1, 1, 27, '3@gmail.com', 1200306, '$2y$10$Bc8mGX9GN7yBT83yXBdSBOIl0SJqYME/OJ0CkGjSVKI4H1M1xHUYi', 0, 7, NULL, '2015-10-20 20:09:53', '2015-10-20 20:12:43', 7, 30, 0, 0, 0, 0, 0);
+(1, 'Robin Scherbatsky', 'Female', 2, 5, 1, 'himym@example.com', 1200289, '$2y$10$m1grdPAspbDaIPEmId6O8ed9NazgYIuRIH4pPqeQNIktpVTKJWUkK', 0, 7, '86luMTtTlR1q13RmvTxgOC5XRSP7xkW8zR640JiJExLOUHSAHq0pekVrlMHr', '2015-10-09 07:00:00', '2015-10-21 07:44:17', 7, 0, 68, 0, 0, 68, 0),
+(12, 'Barney Stinson', 'Male', 15, 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'Ap8Jcat5T0IhtqFpQtFR11UtvryfESQbyH5AFcNZMMYNySkvbEDsZs1KrzCc', '2015-10-10 11:19:53', '2015-10-21 07:41:29', 7, 7, 0, 0, 0, 0, 0),
+(13, 'Ted Mosby', 'Male', 15, 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, '34JGkqpVAK2v2lBCPio6Aq6JJtOhiuK7KrPZQdvcIgpmcTFNf2KzSG8NOdyK', '2015-10-10 16:21:16', '2015-10-21 07:42:27', 7, 7, 0, 0, 0, 0, 0),
+(14, 'Marshall Eriksen', 'Male', 15, 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, '0BAwwg73GKvFGRB1IB7pF67AuxGTvUW2fGaI8MiYwxfH0Re7icjmQ2XyXd40', '2015-10-10 16:22:24', '2015-10-21 03:46:34', 7, 7, 0, 0, 0, 0, 0),
+(16, 'Lily Aldrin', 'Female', 15, 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'a7d1fph74Z9SkSwtccbwXTlqt7rCgKOSHjhBqXNf9HRWrzHHOGkGCb5vvOzM', '2015-10-10 16:23:24', '2015-10-21 07:42:08', 7, 0, 68, 0, 0, 0, 0),
+(17, 'Erwin Mark D. Añora', 'Male', 15, 3, 20, 'bananasapientum@gmail.com', 1200100, '$2y$10$Yk7UGL6SLE6zY1JZm/h2J.NptgtmJ0WDoxDGU6MtuGqjw1nLP3Fx.', 0, 8, 'X8vqyRAl3RZOaxVaUPw5HRIWDjoXYtTd36fdq56LKdFP5EouiVgOFZe47l3K', '2015-10-15 10:13:21', '2015-10-21 03:54:40', 7, 7, 0, 4, 5, 0, 20),
+(18, 'Testing', 'Male', 15, 1, 21, '123@example.com', 1200307, '$2y$10$ZqNyKTgyayA.VIDM5ZkH8uoYTznTlFjISkyiqSm1aG4tvyctEwDoG', 0, 7, 'R1X91IqqqMkettNfT41jwxxKb3xrhYhI3QbKAc7g9FAhexbJOIvd6mtYSymo', '2015-10-18 12:59:35', '2015-10-21 03:46:34', 7, 7, 0, 0, 0, 0, 0),
+(23, 'Test Dummy1', 'Male', 1, 1, 27, '3@gmail.com', 1200306, '$2y$10$Bc8mGX9GN7yBT83yXBdSBOIl0SJqYME/OJ0CkGjSVKI4H1M1xHUYi', 0, 7, NULL, '2015-10-20 20:09:53', '2015-10-21 03:46:34', 7, 7, 0, 0, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -479,13 +455,7 @@ INSERT INTO `users` (`id`, `emp_name`, `emp_gender`, `shift_id`, `position_id`, 
 -- Indexes for table `change_schedules`
 --
 ALTER TABLE `change_schedules`
- ADD PRIMARY KEY (`id`), ADD KEY `change_schedules_user_id_foreign` (`user_id`), ADD KEY `change_schedules_form_id_foreign` (`form_id`), ADD KEY `change_schedules_permission_id1_foreign` (`permission_id1`), ADD KEY `change_schedules_permission_id2_foreign` (`permission_id2`), ADD KEY `change_schedules_permission_id3_foreign` (`permission_id3`), ADD KEY `change_schedules_permission_id4_foreign` (`permission_id4`);
-
---
--- Indexes for table `datetime_change`
---
-ALTER TABLE `datetime_change`
- ADD PRIMARY KEY (`id`), ADD KEY `change_id` (`change_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `change_schedules_user_id_foreign` (`user_id`), ADD KEY `change_schedules_form_id_foreign` (`form_id`), ADD KEY `change_schedules_permission_id1_foreign` (`permission_id1`), ADD KEY `change_schedules_permission_id2_foreign` (`permission_id2`), ADD KEY `change_schedules_permission_id3_foreign` (`permission_id3`), ADD KEY `change_schedules_permission_id4_foreign` (`permission_id4`), ADD KEY `shift_id` (`shift_id`);
 
 --
 -- Indexes for table `datetime_overtime`
@@ -561,12 +531,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `change_schedules`
 --
 ALTER TABLE `change_schedules`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
---
--- AUTO_INCREMENT for table `datetime_change`
---
-ALTER TABLE `datetime_change`
-MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `datetime_overtime`
 --
@@ -591,7 +556,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `overtime_authorization`
 --
@@ -626,17 +591,12 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 ALTER TABLE `change_schedules`
 ADD CONSTRAINT `change_schedules_form_id_foreign` FOREIGN KEY (`form_id`) REFERENCES `form_types` (`id`) ON DELETE CASCADE,
+ADD CONSTRAINT `change_schedules_ibfk_1` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_permission_id1_foreign` FOREIGN KEY (`permission_id1`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_permission_id2_foreign` FOREIGN KEY (`permission_id2`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_permission_id3_foreign` FOREIGN KEY (`permission_id3`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_permission_id4_foreign` FOREIGN KEY (`permission_id4`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 ADD CONSTRAINT `change_schedules_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `datetime_change`
---
-ALTER TABLE `datetime_change`
-ADD CONSTRAINT `datetime_change_ibfk_1` FOREIGN KEY (`change_id`) REFERENCES `change_schedules` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `datetime_overtime`

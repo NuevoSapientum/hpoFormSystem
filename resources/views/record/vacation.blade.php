@@ -1,56 +1,43 @@
 @extends('layout.default')
 
       @section('head')
-        @if(session('status') == "Success!")
-          <div class="alert alert-success">
-            <h4>{{session('status')}}</h4>
-          </div>
-        @elseif(session('status') == "Failed!")
-          <div class="alert alert-warning">
-            <h4>{{session('status')}}</h4>
-          </div>
-        @elseif(session('status') == "Nothing to Show.")
-          <div class="alert alert-danger">
-              <h4>{{session('status')}}</h4>
-          </div>
-        @endif      
+
       @endsection
 
       @section('content')
           <h1>Vacation Leave Records</h1>
           <hr/>
+          <table>
           <table id="example">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Date Created</th>
-              <th>Date Approved</th>
-              <th>Days Applied</th>
-              <th>Days Taken</th>
+              <th>Entitlement</th>
               <th>Balance</th>
               <th>Last Leave</th>
-              <th>Status</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            @foreach($vacationRecords as $vacation)
+            @foreach($users as $user)
+              @foreach($vacationRecords as $vacation)
               <tr>
-                <td>{{$vacation->users->emp_name}}</td>
-                <td>{{date('F d, Y', strtotime($vacation->created_at))}}</td>
-                <td>{{date('F d, Y', strtotime($vacation->updated_at))}}</td>
-                <td>{{$vacation->days_applied}}</td>
-                <td>{{$vacation->users->VL_taken}}</td>
-                <td>{{$vacation->users->VL_entitlement - $vacation->users->VL_taken}}</td>
+                <td>{{$user->emp_name}}</td>
+                <td>{{$user->VL_entitlement}}</td>
+                <td>{{max($balance[$i++],0)}}</td>
+                @if($vacation->user_id == $user->id)
                 <td>{{date('F d, Y', strtotime($vacation->start_date))}}</td>
-                @if($vacation->status === 1)
-                  <td>Approved</td>
-                @endif
                 <td>
-                  <a href="{{URL::to('record/vacation/view/' . $vacation->leave_type . '/' . $vacation->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
-                  <a href="{{URL::to('record/vacation/view/' . $vacation->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
+                  <a href="{{URL::to('record/vacation/view/' . $vacation->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
                 </td>
+                @else
+                <td>N/A</td>
+                <td>
+                  <a href="{{URL::to('record/vacation/view/' . $user->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
+                </td>
+                @endif
               </tr> 
+              @endforeach
             @endforeach
           </tbody>
         </table>

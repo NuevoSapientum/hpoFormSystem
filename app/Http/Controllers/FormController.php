@@ -378,6 +378,11 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
         $CompanyReps = User::where('permissioners', 3)->get();
+        $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+        foreach ($currentShift as $cur) {
+            $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+        }
+
         $shifts = Shifts::all();
         $count = $this->forms();
         $data = array(
@@ -393,20 +398,16 @@ class FormController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
                     'shifts' => $shifts,
+                    'currentShift' => $currentShift,
                     'count' => $count
             );
         return view('changeSchedule')->with($data);
     }
 
     public function postchangeSchedule(Request $request){
-        $rules = array('dateFromEffectivity' => 'required',
-                       'timeFromEffectivity' => 'required',
-                       'dateToEffectivity' => 'required',
-                       'timeToEffectivity' => 'required',
-                       'dateFromShift' => 'required',
+        $rules = array('dateFromShift' => 'required',
                        'dateToShift' => 'required',
-                       'timeFromShift' => 'required',
-                       'timeToShift' => 'required',
+                       'shiftSchedule' => 'required',
                        'reasonforChangeSchedule' => 'required',
                        'supervisor' => 'required',
                        'projectManager' => 'required',
@@ -419,50 +420,30 @@ class FormController extends Controller
             );
         }
 
-        $dateUpdate = date("Y-m-d H:i:s");
         $department = Positions::find(Auth::user()->position_id)->departments;
 
-        $dateFromEffectivity = strtotime($request->input('dateFromEffectivity'));
-        $dateToEffectivity = strtotime($request->input('dateToEffectivity'));
         $dateFromShift = strtotime($request->input('dateFromShift'));
         $dateToShift = strtotime($request->input('dateToShift'));
 
         $dateToday = strtotime(date("Y-m-d"));
 
-        // echo strtotime($dateToday) . "<br/>";
-        // echo $dateFromEffectivity;
-        // dd($request->all());
-        if($dateFromEffectivity >= $dateToday && $dateFromShift >= $dateToday){
-            if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift ){
+        if($dateFromShift > $dateToday){
+            if($dateToShift < $dateFromShift){
                 $status = "Please Double Check The Dates";
             }else{
-                $changes = Change::insertGetId(
-                    ['user_id' => Auth::user()->id,
-                    'department_id' => $department->id,
-                    'permission_id1' => $request->input('supervisor'),
-                    'permission_id2' => $request->input('projectManager'),
-                    'permission_id3' => $request->input('permissioner'),
-                    'permission_id4' => $request->input('HR'),
-                    'purpose' => $request->input('reasonforChangeSchedule'),
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => $dateUpdate]
-                );
-
-                $dateTime = new DateTimeChange(array(
-                          'dateFromEffectivity' => $request->input('dateFromEffectivity'),
-                          'dateToEffectivity' => $request->input('dateToEffectivity'),
-                          'timeFromEffectivity' => $request->input('timeFromEffectivity'),
-                          'timeToEffectivity' => $request->input('timeToEffectivity'),
-                          'dateFromShift' => $request->input('dateFromShift'),
-                          'dateToShift' => $request->input('dateToShift'),
-                          'timeFromShift' => $request->input('timeFromShift'),
-                          'timeToShift' => $request->input('timeToShift'),
-                          'change_id' => $changes,
-                          'created_at' => date("Y-m-d H:i:s"),
-                          'updated_at' => $dateUpdate
+                $change = new Change(array(
+                            'user_id' => Auth::user()->id,
+                            'shift_id' => $request->input('shiftSchedule'),
+                            'dateFromShift' => $request->input('dateFromShift'),
+                            'dateToShift' => $request->input('dateToShift'),
+                            'department_id' => $department->id,
+                            'permission_id1' => $request->input('supervisor'),
+                            'permission_id2' => $request->input('projectManager'),
+                            'permission_id3' => $request->input('permissioner'),
+                            'permission_id4' => $request->input('HR'),
+                            'purpose' => $request->input('reasonforChangeSchedule')
                 ));
-
-                $result = $dateTime->save();
+                $result = $change->save();
 
                 if($result){
                   $status = "Success!";
@@ -471,8 +452,9 @@ class FormController extends Controller
                 }
             }
         }else{
-            $status = "Please Double Check The Dates";
+            $status = "Please Double Check the Dates";
         }
+        
 
         
         return redirect('inbox')->with('status', $status);

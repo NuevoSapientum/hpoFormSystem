@@ -19,7 +19,7 @@ use App\Overtime;
 use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
-use App\DateTimeChange;
+use App\Shifts;
 
 class InboxController extends Controller
 {
@@ -227,7 +227,11 @@ class InboxController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
-            $dateTime = DateTimeChange::where('change_id', $id)->get();
+            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            foreach ($currentShift as $cur) {
+                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            }
+            $shifts = Shifts::all();
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -237,7 +241,8 @@ class InboxController extends Controller
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
                                     'empDepartment' => $empDepartment,
-                                    'dateTime' => $dateTime
+                                    'currentShift' => $currentShift,
+                                    'shifts' => $shifts
                         );
             $data = array_merge($dataFirst, $dataSecond);
             foreach ($contents as $content) {
@@ -457,7 +462,10 @@ class InboxController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
-            $dateTime = DateTimeChange::where('change_id', $id)->get();
+            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            foreach ($currentShift as $cur) {
+                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            }
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -467,7 +475,7 @@ class InboxController extends Controller
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
                                     'empDepartment' => $empDepartment,
-                                    'dateTime' => $dateTime
+                                    'currentShift' => $currentShift
                         );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.inboxChangeApproval')->with($data);
@@ -605,47 +613,30 @@ class InboxController extends Controller
     }
 
     public function editChange(array $data, $id){
-        $dateUpdate = date("Y-m-d H:i:s");
 
-        $dateFromEffectivity = strtotime($data['dateFromEffectivity']);
-        $dateToEffectivity = strtotime($data['dateToEffectivity']);
         $dateFromShift = strtotime($data['dateFromShift']);
         $dateToShift = strtotime($data['dateToShift']);
 
         $dateToday = strtotime(date("Y-m-d"));
 
-        // echo strtotime($dateToday) . "<br/>";
-        // echo $dateFromEffectivity;
-        // dd($request->all());
-        if($dateFromEffectivity >= $dateToday && $dateFromShift >= $dateToday){
-            if($dateToEffectivity < $dateFromEffectivity || $dateToShift < $dateFromShift ){
-                $status = "Please Double Check The Dates";
+        if($dateFromShift > $dateToday){
+            if($dateToShift < $dateFromShift){
+                return false;
             }else{
-                $change = Change::where('id', $id)
+                 return Change::where('id', $id)
                                 ->update(array(
+                                'shift_id' => $data['shiftSchedule'],
+                                'dateFromShift' => $data['dateFromShift'],
+                                'dateToShift' => $data['dateToShift'],
                                 'permission_id1' => $data['supervisor'],
                                 'permission_id2' => $data['projectManager'],
                                 'permission_id3' => $data['permissioner'],
                                 'permission_id4' => $data['HR'],
-                                'purpose' => $data['reasonforChangeSchedule'],
-                                'updated_at' => $dateUpdate
+                                'purpose' => $data['reasonforChangeSchedule']
                                 ));
-
-                if($change){
-                  return DateTimeChange::where('change_id', $id)
-                                           ->update(array(
-                                             'dateFromEffectivity' => $data['dateFromEffectivity'],
-                                             'timeFromEffectivity' => $data['timeFromEffectivity'],
-                                             'dateToEffectivity' => $data['dateToEffectivity'],
-                                             'timeToEffectivity' => $data['timeToEffectivity'],
-                                             'dateFromShift' => $data['dateFromShift'],
-                                             'timeFromShift' => $data['timeFromShift'],
-                                             'dateToShift' => $data['dateToShift'],
-                                             'timeToShift' => $data['timeToShift'],
-                                             'updated_at' => $dateUpdate
-                                           ));
-                }
             }
+        }else{
+            return false;
         }
     }
 

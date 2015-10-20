@@ -297,7 +297,6 @@ class PagesController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
-            $dateTime = DateTimeChange::where('change_id', $id)->get();
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -306,8 +305,7 @@ class PagesController extends Controller
                                     'Supervisors' => $Supervisors,
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
-                                    'empDepartment' => $empDepartment,
-                                    'dateTime' => $dateTime
+                                    'empDepartment' => $empDepartment
                         );
             $data = array_merge($dataFirst, $dataSecond);
             foreach ($contents as $content) {

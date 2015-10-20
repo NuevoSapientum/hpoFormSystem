@@ -19,7 +19,7 @@ use App\Overtime;
 use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
-use App\DateTimeChange;
+use App\Shifts;
 
 
 class ApprovalController extends Controller
@@ -233,7 +233,11 @@ class ApprovalController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
-            $dateTime = DateTimeChange::where('change_id', $id)->get();
+            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            foreach ($currentShift as $cur) {
+                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            }
+            $shifts = Shifts::all();
             $dataSecond = array(
                             'title' => "Edit Change Schedule",
                             'contents' => $contents,
@@ -243,7 +247,8 @@ class ApprovalController extends Controller
                             'PMs' => $PMs,
                             'CompanyReps' => $CompanyReps,
                             'empDepartment' => $empDepartment,
-                            'dateTime' => $dateTime
+                            'currentShift' => $currentShift,
+                            'shifts' => $shifts
                 );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalChangeView')->with($data);
@@ -554,10 +559,6 @@ class ApprovalController extends Controller
                                 'status' => 2,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_1 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
-                //                     'id' => $id, 'note' => $data['note'], 'status' => 2]);
             }elseif($data['permission_1'] == 1){
                 return Change::where('id', $id)
                              ->update(array(
@@ -566,10 +567,6 @@ class ApprovalController extends Controller
                                 'status' => 0,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_1 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_1'],
-                //                     'id' => $id, 'note' => '', 'status' => 0]);
             }
         }elseif(isset($data['permission_2'])){
             if($data['permission_2'] == 2){
@@ -580,10 +577,6 @@ class ApprovalController extends Controller
                                 'status' => 2,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_2 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
-                //                     'id' => $id, 'note' => $data['note'], 'status' => 2]);
             }elseif($data['permission_2'] == 1){
                 return Change::where('id', $id)
                              ->update(array(
@@ -592,10 +585,6 @@ class ApprovalController extends Controller
                                 'status' => 0,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_2 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_2'],
-                //                     'id' => $id, 'note' => '', 'status' => 0]);
             }
         }elseif(isset($data['permission_3'])){
             if($data['permission_3'] == 2){
@@ -606,10 +595,6 @@ class ApprovalController extends Controller
                                 'status' => 2,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_3 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
-                //                     'id' => $id, 'note' => $data['note'], 'status' => 2]);
             }elseif($data['permission_3'] == 1){
                 return Change::where('id', $id)
                              ->update(array(
@@ -618,10 +603,6 @@ class ApprovalController extends Controller
                                 'status' => 0,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_3 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_3'],
-                //                     'id' => $id, 'note' => '', 'status' => 0]);
             }
         }elseif(isset($data['permission_4'])){
             if($data['permission_4'] == 2){
@@ -632,22 +613,31 @@ class ApprovalController extends Controller
                                 'status' => 2,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_4 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
-                //                     'id' => $id, 'note' => $data['note'], 'status' => 2]);
             }elseif($data['permission_4'] == 1){
-                return Change::where('id', $id)
+                $userChangeSchedule = Change::where('id', $id)->get();
+                $shift_id = 0;
+                foreach ($userChangeSchedule as $user) {
+                    $userChangeSchedule = $user->users->id;
+                    $shift_id = $user->shift_id; 
+                }
+
+                $updateShift = User::where('id', $userChangeSchedule)
+                                   ->update(array(
+                                        'shift_id' => $shift_id
+                                ));
+
+                if($updateShift){
+                    return Change::where('id', $id)
                              ->update(array(
                                 'permission_4' => $data['permission_4'],
                                 'reason' => '',
                                 'status' => 1,
                                 'updated_at' => $dateUpdate
                             ));
-                // return DB::update("UPDATE tbl_chgschd SET permission_4 = :answer, changeNote = :note, 
-                //                     dateUpdated = :dateUpdated, status = :status WHERE chgschd_id = :id", 
-                //                     ['dateUpdated' => $dateUpdate, 'answer' => $data['permission_4'],
-                //                     'id' => $id, 'note' => '', 'status' => 1]);
+                 }else{
+                    return false;
+                 }
+                
             }
         }
     }
