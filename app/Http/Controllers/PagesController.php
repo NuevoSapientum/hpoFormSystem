@@ -19,7 +19,6 @@ use App\Overtime;
 use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
-use App\DateTimeChange;
 use App\Shifts;
 use DateTime;
 
@@ -297,6 +296,11 @@ class PagesController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
+            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            foreach ($currentShift as $cur) {
+                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            }
+            $shifts = Shifts::all();
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -305,7 +309,9 @@ class PagesController extends Controller
                                     'Supervisors' => $Supervisors,
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
-                                    'empDepartment' => $empDepartment
+                                    'empDepartment' => $empDepartment,
+                                    'currentShift' => $currentShift,
+                                    'shifts' => $shifts
                         );
             $data = array_merge($dataFirst, $dataSecond);
             foreach ($contents as $content) {
@@ -519,6 +525,11 @@ class PagesController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
+            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            $shifts = Shifts::all();
+            foreach ($currentShift as $cur) {
+                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            }
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
                                     'contents' => $contents,
@@ -527,7 +538,9 @@ class PagesController extends Controller
                                     'Supervisors' => $Supervisors,
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
-                                    'empDepartment' => $empDepartment
+                                    'empDepartment' => $empDepartment,
+                                    'currentShift' => $currentShift,
+                                    'shifts' => $shifts
                         );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.inboxChangeApproval')->with($data);

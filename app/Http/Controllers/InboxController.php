@@ -463,6 +463,7 @@ class InboxController extends Controller
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
             $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            $shifts = Shifts::all();
             foreach ($currentShift as $cur) {
                 $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
             }
@@ -475,7 +476,8 @@ class InboxController extends Controller
                                     'PMs' => $PMs,
                                     'CompanyReps' => $CompanyReps,
                                     'empDepartment' => $empDepartment,
-                                    'currentShift' => $currentShift
+                                    'currentShift' => $currentShift,
+                                    'shifts' => $shifts
                         );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.inboxChangeApproval')->with($data);

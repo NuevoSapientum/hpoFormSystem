@@ -20,33 +20,29 @@
 		<hr/>
       <label>Employee Name:</label>
       <input disabled value="{{$content->users->emp_name}}" class="form-control" />
-      <br/>
-		<label><u>Date of Effectivity:</u></label><br/>
-      @foreach($dateTime as $dt)
-      <label>From:</label>
-      <input type="date" disabled value="{{$dt->dateFromEffectivity}}" class="form-control"/>
-      <br/>
-      <input type="time" disabled value="{{$dt->timeFromEffectivity}}" class="form-control" />
-      <br/>
-      <label>To:</label>
-      <input type="date" disabled value="{{$dt->dateToEffectivity}}" class="form-control"/>
-      <br/>
-      <input type="time" disabled value="{{$dt->timeToEffectivity}}" class="form-control" />
       <hr/>
-      <label><u>Shift Schedule:</u></label><br/>
+		<label>Current Shift:</label>
+      <input type="date" class="form-control" disabled /><br/>
+      <label>Shift Schedule:</label>
+      <input value="{{$currentShift}}" disabled class="form-control" />
+      <hr/>
+      <label><u>Change Shift Schedule:</u></label><br/>
       <label>From:</label>
-      <input type="date" disabled value="{{$dt->dateFromShift}}" class="form-control"/>
-      <br/>
-      <input type="time" disabled value="{{$dt->timeFromShift}}" class="form-control" />
+      <input disabled value="{{date('F d, Y', strtotime($content->dateFromShift))}}" class="form-control"/>
       <br/>
       <label>To:</label>
-      <input type="date" disabled value="{{$dt->dateFromShift}}" class="form-control"/>
-      <br/>
-      <input type="time" disabled value="{{$dt->timeToShift}}" class="form-control" />
-      @endforeach
-	    <hr/>
-	    <label>Reason:</label>
-	    <textarea class="form-control" id="reason" disabled>{{$content->reason}}</textarea>
+      <input disabled value="{{date('F d, Y', strtotime($content->dateToShift))}}" class="form-control"/><br/>
+      <label>Shift Schedule:</label>
+      <select class="form-control" disabled>
+        @foreach($shifts as $shift)
+          @if($shift->id === $content->shift_id)
+            <option disabled value="{{$shift->id}}" >{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>
+          @endif
+        @endforeach
+      </select>
+      <hr/>
+      <label>Reason:</label>
+      <textarea class="form-control" disabled>{{$content->purpose}}</textarea>
 	    <hr/>
 	    <label><u>Approved by:</u></label>
 	    <br/>
