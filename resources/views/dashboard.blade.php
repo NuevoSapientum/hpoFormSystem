@@ -1,17 +1,13 @@
 @extends('layout.default')
 
       @section('head')
-        @if(session('status') == "Success!")
+        @if(session('status') == "Success!" && session('status') != "")
           <div class="alert alert-success">
             <h4>{{session('status')}}</h4>
           </div>
-        @elseif(session('status') == "Failed!")
+        @elseif(session('status') != "")
           <div class="alert alert-warning">
             <h4>{{session('status')}}</h4>
-          </div>
-        @elseif(session('status') == "Nothing to Show.")
-          <div class="alert alert-danger">
-              <h4>{{session('status')}}</h4>
           </div>
         @endif
         

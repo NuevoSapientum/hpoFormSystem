@@ -27,6 +27,8 @@
               <th>Date Created</th>
               <th>Date Approved</th>
               <th>Days Applied</th>
+              <th>Days Taken</th>
+              <th>Balance</th>
               <th>Last Leave</th>
               <th>Status</th>
               <th></th>
@@ -39,12 +41,15 @@
                 <td>{{date('F d, Y', strtotime($sick->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($sick->updated_at))}}</td>
                 <td>{{$sick->days_applied}}</td>
+                <td>{{$sick->users->SL_taken}}</td>
+                <td>{{$sick->users->SL_entitlement - $sick->users->SL_taken}}</td>
                 <td>{{date('F d, Y', strtotime($sick->start_date))}}</td>
                 @if($sick->status === 1)
                   <td>Approved</td>
                 @endif
                 <td>
-                  <a href="{{URL::to('record/sick/view/' . $sick->leave_type . '/' . $sick->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+                  <a href="{{URL::to('record/sick/view/' . $sick->leave_type . '/' . $sick->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
+                  <a href="{{URL::to('record/sick/view/' . $sick->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
                 </td>
               </tr> 
             @endforeach

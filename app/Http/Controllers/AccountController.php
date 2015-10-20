@@ -225,29 +225,25 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules =  array([
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'username' => 'required|',
-        ]);
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
 
         $user = User::find($id);
 
         $user->username = $request->username;
         $user->emp_name = $request->name;
+        if($request->gender == "Male"){
+            $user->ML_entitlement = 0;
+            $user->PL_entitlement = $request->PL_entitlement;
+            $user->emp_gender = $request->gender;
+        }elseif($request->gender == "Female"){
+            $user->ML_entitlement = $request->ML_entitlement;
+            $user->PL_entitlement = 0;
+            $user->emp_gender = $request->gender;
+        }
         $user->position_id = $request->position;
         $user->email = $request->email;
         $user->permissioners = $request->permissioners;
         $user->VL_entitlement = $request->VL_entitlement;
         $user->SL_entitlement = $request->SL_entitlement;
-        $user->ML_entitlement = $request->ML_entitlement;
-        $user->PL_entitlement = $request->PL_entitlement;
         $user->save();
 
         if($user){
@@ -275,6 +271,18 @@ class AccountController extends Controller
         $status = null;
 
         if($request->input('VL_entitlement') != 0){
+
+        //     $users = User::where('id', '!=', 0)->get();
+        //     foreach ($users as $user) {
+        //         if($user->VL_entitlement > $request->input('VL_entitlement')){
+        //             User::where('id', '!=', 0)
+        //                 ->update(array(
+        //                     'VL_entitlement' => $user->VL_entitlement - 
+        //                 ));    
+        //         }
+                
+        //     }
+
             $result = User::where('id', '!=', 0)
                           ->update(array(
                           'VL_entitlement' => $request->input('VL_entitlement')
@@ -302,6 +310,7 @@ class AccountController extends Controller
 
         if($request->input('ML_entitlement') != 0){
             $result = User::where('id', '!=', 0)
+                          ->where('emp_gender', 'Female')
                           ->update(array(
                           'ML_entitlement' => $request->input('ML_entitlement')
                     ));
@@ -314,11 +323,13 @@ class AccountController extends Controller
         }
 
         if($request->input('PL_entitlement') != 0){
-            $result = User::where('id', '!=', 0)
-                          ->update(array(
-                          'PL_entitlement' => $request->input('PL_entitlement')
-                    ));
 
+            $result = User::where('id', '!=', 0)
+                         ->where('emp_gender', 'Male')
+                         ->update(array(
+                          'PL_entitlement' => $request->input('PL_entitlement'),
+                        ));
+                
             if($result){
                 $status = "Success!";
             }else{

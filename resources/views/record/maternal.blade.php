@@ -27,6 +27,8 @@
               <th>Date Created</th>
               <th>Date Approved</th>
               <th>Days Applied</th>
+              <th>Days Taken</th>
+              <th>Balance</th>
               <th>Last Leave</th>
               <th>Status</th>
               <th></th>
@@ -39,12 +41,15 @@
                 <td>{{date('F d, Y', strtotime($maternal->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($maternal->updated_at))}}</td>
                 <td>{{$maternal->days_applied}}</td>
+                <td>{{$maternal->users->ML_taken}}</td>
+                <td>{{$maternal->users->ML_entitlement - $maternal->users->ML_taken}}</td>
                 <td>{{date('F d, Y', strtotime($maternal->start_date))}}</td>
                 @if($maternal->status === 1)
                   <td>Approved</td>
                 @endif
                 <td>
-                  <a href="{{URL::to('record/maternal/view/' . $maternal->leave_type . '/' . $maternal->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+                  <a href="{{URL::to('record/maternal/view/' . $maternal->leave_type . '/' . $maternal->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
+                  <a href="{{URL::to('record/maternal/view/' . $maternal->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
                 </td>
               </tr> 
             @endforeach

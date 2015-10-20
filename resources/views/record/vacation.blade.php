@@ -19,7 +19,6 @@
       @section('content')
           <h1>Vacation Leave Records</h1>
           <hr/>
-          <table>
           <table id="example">
           <thead>
             <tr>
@@ -27,6 +26,8 @@
               <th>Date Created</th>
               <th>Date Approved</th>
               <th>Days Applied</th>
+              <th>Days Taken</th>
+              <th>Balance</th>
               <th>Last Leave</th>
               <th>Status</th>
               <th></th>
@@ -39,12 +40,15 @@
                 <td>{{date('F d, Y', strtotime($vacation->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($vacation->updated_at))}}</td>
                 <td>{{$vacation->days_applied}}</td>
+                <td>{{$vacation->users->VL_taken}}</td>
+                <td>{{$vacation->users->VL_entitlement - $vacation->users->VL_taken}}</td>
                 <td>{{date('F d, Y', strtotime($vacation->start_date))}}</td>
                 @if($vacation->status === 1)
                   <td>Approved</td>
                 @endif
                 <td>
-                  <a href="{{URL::to('record/vacation/view/' . $vacation->leave_type . '/' . $vacation->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+                  <a href="{{URL::to('record/vacation/view/' . $vacation->leave_type . '/' . $vacation->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
+                  <a href="{{URL::to('record/vacation/view/' . $vacation->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
                 </td>
               </tr> 
             @endforeach

@@ -27,6 +27,8 @@
               <th>Date Created</th>
               <th>Date Approved</th>
               <th>Days Applied</th>
+              <th>Days Taken</th>
+              <th>Balance</th>
               <th>Last Leave</th>
               <th>Status</th>
               <th></th>
@@ -39,12 +41,15 @@
                 <td>{{date('F d, Y', strtotime($paternal->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($paternal->updated_at))}}</td>
                 <td>{{$paternal->days_applied}}</td>
+                <td>{{$paternal->users->PL_taken}}</td>
+                <td>{{$balance}}</td>
                 <td>{{date('F d, Y', strtotime($paternal->start_date))}}</td>
                 @if($paternal->status === 1)
                   <td>Approved</td>
                 @endif
                 <td>
-                  <a href="{{URL::to('record/paternal/view/' . $paternal->leave_type . '/' . $paternal->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a>
+                  <a href="{{URL::to('record/paternal/view/' . $paternal->leave_type . '/' . $paternal->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
+                  <a href="{{URL::to('record/paternal/view/' . $paternal->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
                 </td>
               </tr> 
             @endforeach

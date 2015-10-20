@@ -105,6 +105,7 @@ class LeaveController extends Controller
 
         foreach ($vacationRecords as $value) {
             $collection = collect([$value]);  
+            $balance = $value->users->VL_entitlement - $value->users->VL_taken;
         }
 
         $data = array(
@@ -115,6 +116,7 @@ class LeaveController extends Controller
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
             'vacationRecords' => $collection,
+            'balance' => max($balance, 0),
             'count' => $count
         );
 
@@ -134,8 +136,11 @@ class LeaveController extends Controller
         $collection = collect([]);
         $count = $this->forms();
         foreach ($sickRecords as $value) {
-            $collection = collect([$value]);  
+            $collection = collect([$value]); 
+            $balance = $value->users->SL_entitlement - $value->users->SL_taken; 
         }
+
+
 
         $data = array(
             'title' => 'Sick Leave',
@@ -145,6 +150,7 @@ class LeaveController extends Controller
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
             'sickRecords' => $collection,
+            'balance' => max($balance, 0),
             'count' => $count
         );
 
@@ -166,6 +172,7 @@ class LeaveController extends Controller
         $count = $this->forms();
         foreach ($maternalRecords as $value) {
             $collection = collect([$value]);  
+            $balance = $value->users->ML_entitlement - $value->users->ML_taken;
         }
 
         $data = array(
@@ -176,6 +183,7 @@ class LeaveController extends Controller
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'maternalRecords' => $collection,
+                'balance' => max($balance, 0),
                 'count' => $count
             );
 
@@ -196,6 +204,7 @@ class LeaveController extends Controller
         $count = $this->forms();
         foreach ($paternalRecords as $value) {
             $collection = collect([$value]);  
+            $balance = $value->users->PL_entitlement - $value->users->PL_taken;
         }
 
         $data = array(
@@ -206,6 +215,7 @@ class LeaveController extends Controller
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
             'paternalRecords' => $collection,
+            'balance' => max($balance, 0),
             'count' => $count
         );
 
@@ -301,6 +311,7 @@ class LeaveController extends Controller
             $contents = Leaves::where('leave_type', 4)
                                     ->where('id', $id)
                                     ->get();
+
             $data = array(
                 'title' => 'Paternal Leave',
                 'positions' => $positions,
@@ -314,6 +325,172 @@ class LeaveController extends Controller
             );
 
             return view('record.paternalView')->with($data);
+        }
+   }
+
+   public function viewUserVacations($id){
+        $users = User::find($id);
+        // dd($user)
+        $vacationUser = Leaves::where('leave_type', 1)
+                              ->where('user_id', $id)->first();
+
+        if($vacationUser){
+            $positions = $this->position();
+            $profileImage = $this->getImage();
+            $inboxNotif = $this->inboxNotif();
+            $approvalNotif = $this->approvalNotif();
+            $id = Auth::user()->position_id;
+            $empDepartment = Positions::find($id)->departments;
+            $vacationRecords = Leaves::where('leave_type', 1)
+                                     ->get();
+            $count = $this->forms();
+            foreach ($vacationRecords as $vacation) {
+                $balance = $vacation->users->VL_entitlement - $vacation->users->VL_taken;
+                $VL_entitlement = $vacation->users->VL_entitlement;
+            }
+
+            $data = array(
+                'title' => 'View User Vacation Leaves',
+                'positions' => $positions,
+                'profileImage' => $profileImage,
+                'inboxNotif' => $inboxNotif,
+                'approvalNotif' => $approvalNotif,
+                'empDepartment' => $empDepartment,
+                'count' => $count,
+                'vacationRecords' => $vacationRecords,
+                'balance' => max($balance,0),
+                'VL_entitlement' => $VL_entitlement,
+                'users' => $users
+            );
+
+
+            return view('record.userVacations')->with($data);
+        }else{
+            return redirect('dashboard')->with('status', 'Error: No Vacation Records Found');
+        }
+   }
+
+   public function viewUserSick($id){
+        $users = User::find($id);
+        // dd($user)
+        $sickUser = Leaves::where('leave_type', 2)
+                          ->where('user_id', $id)->first();
+        if($sickUser){
+            $positions = $this->position();
+            $profileImage = $this->getImage();
+            $inboxNotif = $this->inboxNotif();
+            $approvalNotif = $this->approvalNotif();
+            $id = Auth::user()->position_id;
+            $empDepartment = Positions::find($id)->departments;
+            $sickRecords = Leaves::where('leave_type', 2)
+                                     ->get();
+            $count = $this->forms();
+            foreach ($sickRecords as $sick) {
+                $balance = $sick->users->SL_entitlement - $sick->users->VL_taken;
+                $SL_entitlement = $sick->users->SL_entitlement;
+            }
+
+            $data = array(
+                'title' => 'View User Sick Leaves',
+                'positions' => $positions,
+                'profileImage' => $profileImage,
+                'inboxNotif' => $inboxNotif,
+                'approvalNotif' => $approvalNotif,
+                'empDepartment' => $empDepartment,
+                'count' => $count,
+                'sickRecords' => $sickRecords,
+                'balance' => max($balance,0),
+                'SL_entitlement' => $SL_entitlement,
+                'users' => $users
+            );
+
+
+            return view('record.userSick')->with($data);
+        }else{
+            return redirect('dashboard')->with('status', 'Error: No Sick Records Found');
+        }
+        
+   }
+
+   public function viewUserMaternal($id){
+        $users = User::find($id);
+        // dd($user)
+        $maternalUser = Leaves::where('leave_type', 3)
+                               ->where('user_id', $id)->first();
+        if($maternalUser){
+            $positions = $this->position();
+            $profileImage = $this->getImage();
+            $inboxNotif = $this->inboxNotif();
+            $approvalNotif = $this->approvalNotif();
+            $id = Auth::user()->position_id;
+            $empDepartment = Positions::find($id)->departments;
+            $maternalRecords = Leaves::where('leave_type', 3)
+                                     ->get();
+            $count = $this->forms();
+            foreach ($maternalRecords as $maternal) {
+                $balance = $maternal->users->ML_entitlement - $maternal->users->ML_taken;
+                $ML_entitlement = $maternal->users->ML_entitlement;
+            }
+
+            $data = array(
+                'title' => 'View User Maternal Leaves',
+                'positions' => $positions,
+                'profileImage' => $profileImage,
+                'inboxNotif' => $inboxNotif,
+                'approvalNotif' => $approvalNotif,
+                'empDepartment' => $empDepartment,
+                'count' => $count,
+                'maternalRecords' => $maternalRecords,
+                'balance' => max($balance,0),
+                'ML_entitlement' => $ML_entitlement,
+                'users' => $users
+            );
+
+
+            return view('record.userMaternal')->with($data);
+        }else{
+            return redirect('dashboard')->with('status', 'Error: No Maternal Records Found');
+        }
+   }
+
+   public function viewUserPaternal($id){
+        $users = User::find($id);
+        // dd($user)
+        $paternalUser = Leaves::where('leave_type', 4)
+                               ->where('user_id', $id)->first();
+        if($paternalUser){
+            $positions = $this->position();
+            $profileImage = $this->getImage();
+            $inboxNotif = $this->inboxNotif();
+            $approvalNotif = $this->approvalNotif();
+            $id = Auth::user()->position_id;
+            $empDepartment = Positions::find($id)->departments;
+            $paternalRecords = Leaves::where('leave_type', 4)
+                                     ->get();
+            $count = $this->forms();
+            foreach ($paternalRecords as $paternal) {
+                $balance = $paternal->users->PL_entitlement - $paternal->users->PL_taken;
+                $PL_entitlement = $paternal->users->PL_entitlement;
+            }
+
+            $data = array(
+                'title' => 'View User Paternal Leaves',
+                'positions' => $positions,
+                'profileImage' => $profileImage,
+                'inboxNotif' => $inboxNotif,
+                'approvalNotif' => $approvalNotif,
+                'empDepartment' => $empDepartment,
+                'count' => $count,
+                'paternalRecords' => $paternalRecords,
+                'balance' => max($balance, 0),
+                'PL_entitlement' => $PL_entitlement,
+                'users' => $users
+            );
+
+
+            return view('record.userPaternal')->with($data);
+        }else{
+            return redirect('dashboard')->with('status', 'Error: No Paternal Records Found');
         }
    }
 

@@ -499,6 +499,7 @@ class ApprovalController extends Controller
                                         'ML_taken' => $data['MLDays']
                                     ));
                     }
+                    // dd($data);
                     return Leaves::where('id', $id)
                                  ->update(array(
                                     'permission_2' => $data['permission_2'],

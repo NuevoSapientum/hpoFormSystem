@@ -35,7 +35,7 @@
 		<br/>
 	<label>Name:</label>
 		<input type="text" name="name" class="form-control" value="{{Auth::user()->emp_name}}"/>
-		<br/>
+		<!-- <br/>
     <label>Gender:</label>
     <select class="form-control" name="gender">
         @if(Auth::user()->emp_gender == "Male")
@@ -45,7 +45,7 @@
           <option value="Male">Male</option>
           <option value="Female" selected >Female</option>
         @endif
-    </select>
+    </select> -->
     <br/>
 	<label>Position:</label>
 		<select class="form-control" name="position">
