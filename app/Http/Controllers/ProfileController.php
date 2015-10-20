@@ -142,11 +142,11 @@ class ProfileController extends Controller
         Auth::user()->emp_name = $data['name'];
         Auth::user()->position_id = $data['position'];
         Auth::user()->email = $data['email'];
+        Auth::user()->emp_gender = $data['gender'];
         if($data['password'] != ''){
             Auth::user()->password = bcrypt($data['password']);
         }
         return Auth::user()->save();
-        // dd($data);
     }
 
 

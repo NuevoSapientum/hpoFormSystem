@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Positions;
+use App\Shifts;
 
 trait RegistersUsers
 {
@@ -19,7 +20,12 @@ trait RegistersUsers
     public function getRegister()
     {
         $positions = Positions::all();
-        return view('auth.register')->with('positions_all', $positions);
+        $shifts = Shifts::all();
+        $data = array(
+                    'positions_all' => $positions,
+                    'shifts' => $shifts
+                );
+        return view('auth.register')->with($data);
     }
 
     /**

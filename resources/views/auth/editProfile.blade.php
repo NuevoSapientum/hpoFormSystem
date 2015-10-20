@@ -36,6 +36,17 @@
 	<label>Name:</label>
 		<input type="text" name="name" class="form-control" value="{{Auth::user()->emp_name}}"/>
 		<br/>
+    <label>Gender:</label>
+    <select class="form-control" name="gender">
+        @if(Auth::user()->emp_gender == "Male")
+          <option value="Male" selected>Male</option>
+          <option value="Female">Female</option>
+        @elseif(Auth::user()->emp_gender == "Female")
+          <option value="Male">Male</option>
+          <option value="Female" selected >Female</option>
+        @endif
+    </select>
+    <br/>
 	<label>Position:</label>
 		<select class="form-control" name="position">
               @foreach($positions_all as $post)

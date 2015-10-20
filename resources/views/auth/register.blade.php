@@ -58,11 +58,23 @@
             <label>Full Name:</label>
             <input type="text" name="name" placeholder="Enter Full Name" class="form-control" value="{{old('name')}}" />
             <br/>
+            <label>Gender:</label>
+            <select class="form-control" id="gender" name="gender">
+                <option value="Male" selected="true">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <br/>
             <label>Position:</label>
-            <select class="form-control" name="position" value="{{old('position')}}">
+            <select class="form-control" name="position">
               @foreach($positions_all as $positions)
                 <option value="{{$positions->id}}">{{$positions->position_name}}</option>
               @endforeach
+            </select>
+            <label>Work Shift:</label>
+            <select class="form-control" name="shift">
+                @foreach($shifts as $shift)
+                    <option value="{{$shift->id}}">{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>
+                @endforeach
             </select>
             <br/>
             <label>Email:</label>
@@ -74,26 +86,45 @@
             <label>Sick Leave Entitlement:</label>
             <input type="number" name="sick_leave" value="0" class="form-control" />
             <br/>
-            <label>Maternity Leave Entitlement:</label>
-            <input type="number" name="maternity_leave" value="0" class="form-control" />
-            <br/>
-            <label>Paternity Leave Entitlement:</label>
-            <input type="number" name="paternity_leave" value="0" class="form-control" />
-            <br/>
+            <div id="ML" style="display:none">
+                <label>Maternity Leave Entitlement:</label>
+                <input type="number" name="maternity_leave" value="0" class="form-control" />
+                <br/>
+            </div>
+            
+            <div id="PL" style="display:none">
+                <label>Paternity Leave Entitlement:</label>
+                <input type="number" name="paternity_leave" value="0" class="form-control" />
+                <br/>
+            </div>
             <button class="btn-reg">Submit</button>
             <a href="{{URL::to('/dashboard')}}" class="btn-flat">Back</a>
           </form>
           <hr/>
           <!-- Main Footer -->
       <footer class="main-footer">
-        <!-- To the right -->
-        <div class="pull-right hidden-xs">
-          
-        </div>
-        <!-- Default to the left -->
         <strong>Copyright &copy; 2015 <a href="http://www.hpoutsourcinginc.com/">HP Outsourcing Inc.</a></strong> All rights reserved.
       </footer>
       </div>
-      
+      <script src="{{URL::asset('plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
+      <script type="text/javascript">
+      if($('#gender').val() == "Male"){
+        $('#PL').css('display', 'block');
+      }else if($('#gender').val() == "Female"){
+        $('#ML').css('display', 'block');
+      }
+
+      $('#gender').change(function(){
+        var gender = $('#gender').find(":selected").text();
+        if(gender == "Male"){
+            $('#ML').css('display', 'none');
+            $('#PL').css('display', 'block');
+            // alert(gender);
+        }else if(gender == "Female"){
+            $('#PL').css('display', 'none');
+            $('#ML').css('display', 'block');
+        }
+      });
+      </script>
     </body>   
 </html>

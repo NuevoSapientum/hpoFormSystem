@@ -51,7 +51,9 @@ class AuthController extends Controller
             'vacation_leave' => 'required|max:30',
             'sick_leave' => 'required|max:30',
             'maternity_leave' => 'required|max:60',
-            'paternity_leave' => 'required|max:30'
+            'paternity_leave' => 'required|max:30',
+            'gender' => 'required',
+            'shift' => 'required'
         ]);
     }
 
@@ -75,10 +77,12 @@ class AuthController extends Controller
         return User::create([
             'username' => $data['username'],
             'emp_name' => $data['name'],
+            'emp_gender' => $data['gender'],
             'position_id' => $data['position'],
             'permissioners' => 0,
             'img_id' => $id->id,
             'email' => $data['email'],
+            'shift_id' => $data['shift'],
             'password' => bcrypt($default_password),
             'VL_entitlement' => $data['vacation_leave'],
             'SL_entitlement' => $data['sick_leave'],

@@ -36,7 +36,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'VL_entitlement',
                             'SL_entitlement',
                             'ML_entitlement',
-                            'PL_entitlement'];
+                            'PL_entitlement',
+                            'emp_gender',
+                            'shift_id'];
     /**
      * The attributes excluded from the model's JSON form.
      *

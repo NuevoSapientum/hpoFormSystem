@@ -28,6 +28,15 @@
         </select><br/>
         <label>Email:</label>
 		<input type="text" class="form-control" name="email" value="{{$user->email}}" /><br/>
+		<label>Gender:</label>
+		<select class="form-control" disabled>
+	        @if($user->emp_gender == "Male")
+	          <option disabled selected>Male</option>
+	        @elseif($user->emp_gender == "Female")
+	          <option disabled selected >Female</option>
+	        @endif
+	    </select>
+	    <br/>
 		<label>ID Number:</label>
 		<input type="number" name="username" class="form-control" value="{{$user->username}}" /><br/>
 		<label>Permissioner:</label>
@@ -57,11 +66,14 @@
 		<label>Sick Entitlement:</label>
 		<input type="number" name="SL_entitlement" value="{{$user->SL_entitlement}}" class="form-control" />
 		<br/>
-		<label>Maternal Entitlement:</label>
-		<input type="number" name="ML_entitlement" value="{{$user->ML_entitlement}}" class="form-control" />
-		<br/>
-		<label>Parental Entitlement:</label>
-		<input type="number" name="PL_entitlement" value="{{$user->PL_entitlement}}" class="form-control" />
+		@if($user->emp_gender == "Female")
+			<label>Maternal Entitlement:</label>
+			<input type="number" name="ML_entitlement" value="{{$user->ML_entitlement}}" class="form-control" />
+			<br/>
+		@elseif($user->emp_gender == "Male")
+			<label>Parental Entitlement:</label>
+			<input type="number" name="PL_entitlement" value="{{$user->PL_entitlement}}" class="form-control" />
+		@endif
 		<hr/>
 	<button type="submit" class="btn btn-primary confirm">Save</button>
 	</form>

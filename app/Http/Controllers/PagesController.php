@@ -20,6 +20,8 @@ use App\Departments;
 use App\Users;
 use App\DateTimeOvertime;
 use App\DateTimeChange;
+use App\Shifts;
+use DateTime;
 
 class PagesController extends Controller
 {
@@ -120,6 +122,14 @@ class PagesController extends Controller
                     'count' => $count
             );
         // echo $this->notification();
+        // $shifts = Shifts::all();
+        // foreach ($shifts as $shift) {
+        //     $timefrom = new DateTime($shift->shift_from);
+        //     $timeto = new DateTime($shift->shift_to);
+        //     echo $timefrom->format('h:i A') . '-';
+        //     echo $timeto->format('h:i A');
+        //     echo "<br/>";
+        // }
         return view('dashboard')->with($data);
     }
 
