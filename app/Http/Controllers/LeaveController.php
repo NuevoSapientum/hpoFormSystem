@@ -102,7 +102,7 @@ class LeaveController extends Controller
                                 ->get();
         $count = $this->forms();
         $collection = collect([]);
-
+        $balance = 0;
         foreach ($vacationRecords as $value) {
             $collection = collect([$value]);  
             $balance = $value->users->VL_entitlement - $value->users->VL_taken;
@@ -130,17 +130,24 @@ class LeaveController extends Controller
         $approvalNotif = $this->approvalNotif();
         $id = Auth::user()->position_id;
         $empDepartment = Positions::find($id)->departments;
-        $sickRecords = Leaves::where('status', 1)
-                                ->where('leave_type', 2)
-                                ->get();
-        $collection = collect([]);
+        $users = User::all();
         $count = $this->forms();
-        foreach ($sickRecords as $value) {
-            $collection = collect([$value]); 
-            $balance = $value->users->SL_entitlement - $value->users->SL_taken; 
+        $balance = array();
+        // foreach ($sickRecords as $value) {
+        //     $balance = $value->users->SL_entitlement - $value->users->SL_taken; 
+        // }
+        $collection = collect([]);
+        foreach ($users as $user) {
+            $sickRecord = Leaves::where('leave_type', 2)
+                                ->where('user_id', $user->id)
+                                ->first();
+            if($sickRecord){
+                $collection = collect([$sickRecord]);
+            }
+            array_push($balance, $user->SL_entitlement - $user->SL_taken);
         }
 
-
+        $i = 0;
 
         $data = array(
             'title' => 'Sick Leave',
@@ -149,8 +156,10 @@ class LeaveController extends Controller
             'inboxNotif' => $inboxNotif,
             'approvalNotif' => $approvalNotif,
             'empDepartment' => $empDepartment,
+            'balance' => $balance,
+            'i' => $i,
+            'users' => $users,
             'sickRecords' => $collection,
-            'balance' => max($balance, 0),
             'count' => $count
         );
 
@@ -170,6 +179,7 @@ class LeaveController extends Controller
 
         $collection = collect([]);
         $count = $this->forms();
+        $balance = 0;
         foreach ($maternalRecords as $value) {
             $collection = collect([$value]);  
             $balance = $value->users->ML_entitlement - $value->users->ML_taken;
@@ -201,6 +211,7 @@ class LeaveController extends Controller
                                 ->where('leave_type', 4)
                                 ->get();
         $collection = collect([]);
+        $balance = 0;
         $count = $this->forms();
         foreach ($paternalRecords as $value) {
             $collection = collect([$value]);  
@@ -380,11 +391,13 @@ class LeaveController extends Controller
             $profileImage = $this->getImage();
             $inboxNotif = $this->inboxNotif();
             $approvalNotif = $this->approvalNotif();
-            $id = Auth::user()->position_id;
-            $empDepartment = Positions::find($id)->departments;
+            $id_user = Auth::user()->position_id;
+            $empDepartment = Positions::find($id_user)->departments;
             $sickRecords = Leaves::where('leave_type', 2)
+                                     ->where('user_id', $id)
                                      ->get();
             $count = $this->forms();
+            $balance = 0;
             foreach ($sickRecords as $sick) {
                 $balance = $sick->users->SL_entitlement - $sick->users->VL_taken;
                 $SL_entitlement = $sick->users->SL_entitlement;

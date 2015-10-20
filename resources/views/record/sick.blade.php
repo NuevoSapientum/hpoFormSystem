@@ -24,34 +24,32 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Date Created</th>
-              <th>Date Approved</th>
-              <th>Days Applied</th>
-              <th>Days Taken</th>
+              <th>Entitlement</th>
               <th>Balance</th>
               <th>Last Leave</th>
-              <th>Status</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            @foreach($sickRecords as $sick)
+            @foreach($users as $user)
+              @foreach($sickRecords as $sick)
               <tr>
-                <td>{{$sick->users->emp_name}}</td>
-                <td>{{date('F d, Y', strtotime($sick->created_at))}}</td>
-                <td>{{date('F d, Y', strtotime($sick->updated_at))}}</td>
-                <td>{{$sick->days_applied}}</td>
-                <td>{{$sick->users->SL_taken}}</td>
-                <td>{{$sick->users->SL_entitlement - $sick->users->SL_taken}}</td>
+                <td>{{$user->emp_name}}</td>
+                <td>{{$user->SL_entitlement}}</td>
+                <td>{{$balance[$i++]}}</td>
+                @if($sick->user_id == $user->id)
                 <td>{{date('F d, Y', strtotime($sick->start_date))}}</td>
-                @if($sick->status === 1)
-                  <td>Approved</td>
-                @endif
                 <td>
-                  <a href="{{URL::to('record/sick/view/' . $sick->leave_type . '/' . $sick->id)}}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> View</a> |&nbsp;
-                  <a href="{{URL::to('record/sick/view/' . $sick->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User</a>
+                  <a href="{{URL::to('record/sick/view/' . $sick->users->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
                 </td>
+                @else
+                <td>N/A</td>
+                <td>
+                  <a href="{{URL::to('record/sick/view/' . $user->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
+                </td>
+                @endif
               </tr> 
+              @endforeach
             @endforeach
           </tbody>
         </table>

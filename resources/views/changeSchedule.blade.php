@@ -21,23 +21,22 @@
       </div>
       @endif
       <hr/>
-      <label><u>Date of Effectivity:</u></label><br/>
-      <label>From:</label>
-      <input type="date" name="dateFromEffectivity" class="form-control"/><br/>
-      <input type="time" name="timeFromEffectivity" class="form-control" />
-      <br/>
-      <label>To:</label>
-      <input type="date" name="dateToEffectivity" class="form-control"/><br/>
-      <input type="time" name="timeToEffectivity" class="form-control" />
+      <label><u>Current Schedule:</u></label><br/>
+      <label>Original Schedule:</label>
+      <input disabled type="date" class="form-control"/><br/>
+      <input class="form-control" disabled />
       <hr/>
       <label><u>Shift Schedule:</u></label><br/>
       <label>From:</label>
-      <input type="date" name="dateFromShift" class="form-control"/><br/>
-      <input type="time" name="timeFromShift" class="form-control" />
+      <input type="date" name="dateFromShift" class="form-control"/>
       <br/>
       <label>To:</label>
       <input type="date" name="dateToShift" class="form-control"/><br/>
-      <input type="time" name="timeToShift" class="form-control" />
+      <select class="form-control">
+        @foreach($shifts as $shift)
+          <option >{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>
+        @endforeach
+      </select>
       <hr/>
       <label>Reason:</label>
       <textarea class="form-control" name="reasonforChangeSchedule"></textarea>

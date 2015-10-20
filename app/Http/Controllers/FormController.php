@@ -20,6 +20,7 @@ use Validator;
 use App\DateTimeOvertime;
 use App\DateTimeChange;
 use DateTime;
+use App\Shifts;
 
 class FormController extends Controller
 {
@@ -377,6 +378,7 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
         $CompanyReps = User::where('permissioners', 3)->get();
+        $shifts = Shifts::all();
         $count = $this->forms();
         $data = array(
                     'title' => 'Change Schedule',
@@ -390,6 +392,7 @@ class FormController extends Controller
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
+                    'shifts' => $shifts,
                     'count' => $count
             );
         return view('changeSchedule')->with($data);
