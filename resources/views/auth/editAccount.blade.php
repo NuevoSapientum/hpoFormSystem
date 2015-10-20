@@ -77,7 +77,6 @@
 		<hr/>
 	<button type="submit" class="btn btn-primary confirm">Save</button>
 	</form>
-
 	<script type="text/javascript">
 			document.getElementById('{{$user->position_id}}').selected = "true";
 	</script>
