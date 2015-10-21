@@ -14,20 +14,21 @@
         <label>Employee Name:</label>
         <input disabled value="{{$content->users->emp_name}}" class="form-control" />
         <hr/>
-        <label>Total Hours: {{$content->total_overtime}}</label>
+        <label>Total Hours: {{$content->total_overtime}}</label><br/>
+        <label>Schedule: {{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</label>
         <hr/>
         @foreach($dateTime as $dateAndtime)
-        <?php $count++ ?>
+        <?php $var++ ?>
         <div id="datesTime">
           <label>From:</label>
-          <input type='date' class='form-control' name='dateFromOvertime{{$count}}' value="{{$dateAndtime->dateFromOvertime}}"/> <br/>  
-          <input type='time' class='form-control' name='timeFromOvertime{{$count}}' value="{{$dateAndtime->timeFromOvertime}}" />
+          <input type='date' class='form-control' name='dateFromOvertime{{$var}}' value="{{$dateAndtime->dateFromOvertime}}"/> <br/>  
+          <input type='time' class='form-control' name='timeFromOvertime{{$var}}' value="{{$dateAndtime->timeFromOvertime}}" />
           <br/><label>To:</label>
-          <input type='date' class='form-control' name='dateToOvertime{{$count}}' value="{{$dateAndtime->dateToOvertime}}"/> <br/>
-          <input type='time' class='form-control' name='timeToOvertime{{$count}}' value="{{$dateAndtime->timeToOvertime}}" /><hr/>  
+          <input type='date' class='form-control' name='dateToOvertime{{$var}}' value="{{$dateAndtime->dateToOvertime}}"/> <br/>
+          <input type='time' class='form-control' name='timeToOvertime{{$var}}' value="{{$dateAndtime->timeToOvertime}}" /><hr/>  
           
-          <input type="hidden" name="count" value="{{$count}}" >
-          <input type="hidden" name="id{{$count}}" value="{{$dateAndtime->id}}" >
+          <input type="hidden" name="count" value="{{$var}}" >
+          <input type="hidden" name="id{{$var}}" value="{{$dateAndtime->id}}" >
         </div>
         @endforeach
         <label>Supervisor Signature:</label>

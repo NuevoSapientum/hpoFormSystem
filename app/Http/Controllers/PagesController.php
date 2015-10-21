@@ -296,10 +296,18 @@ class PagesController extends Controller
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
             $CompanyReps = User::where('permissioners', 3)->get();
-            $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
-            foreach ($currentShift as $cur) {
-                $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            // $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+            // foreach ($currentShift as $cur) {
+            //     $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+            // }
+            foreach ($contents as $content) {
+                $user = $content->users->id;
             }
+            // echo $user;
+            $shift = User::find($user);
+            $shift = Shifts::find($shift->shift_id);
+            $currentShift =  date('h:i A', strtotime($shift->shift_from)) . ' to ' . date('h:i A', strtotime($shift->shift_to));
+            // echo $shift->shift_to;
             $shifts = Shifts::all();
             $dataSecond = array(
                                     'title' => "Edit Change Schedule",
@@ -311,7 +319,7 @@ class PagesController extends Controller
                                     'CompanyReps' => $CompanyReps,
                                     'empDepartment' => $empDepartment,
                                     'currentShift' => $currentShift,
-                                    'shifts' => $shifts
+                                    'shifts' => $shifts,
                         );
             $data = array_merge($dataFirst, $dataSecond);
             foreach ($contents as $content) {
@@ -327,6 +335,15 @@ class PagesController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $Supervisors = User::where('permissioners', 1)->get();
             $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
+            // $shift = User::where('id',)
+            foreach ($contents as $content) {
+                $user = $content->users->id;
+            }
+            // echo $user;
+            $shift = User::find($user);
+            $shift = Shifts::find($shift->shift_id);
+            // dd($shift);
+            // echo $shift->shift_from;
             $count = 0;
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
@@ -334,7 +351,8 @@ class PagesController extends Controller
                             'empDepartment' => $empDepartment,
                             'Supervisors' => $Supervisors,
                             'dateTime' => $dateTime,
-                            'count' => $count
+                            'count' => $count,
+                            'shift' => $shift
                 );
             $data = array_merge($dataFirst, $dataSecond);
 

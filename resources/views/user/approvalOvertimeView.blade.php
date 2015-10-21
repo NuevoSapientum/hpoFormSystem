@@ -12,7 +12,8 @@
         <label>Employee Name:</label>
         <input disabled value="{{$content->users->emp_name}}" class="form-control" />
         <hr/>
-        <label>Total Hours: {{$content->total_overtime}}</label>
+        <label>Total Hours: {{$content->total_overtime}}</label><br/>
+        <label>Schedule: {{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</label>
         <hr/>
         @foreach($dateTime as $dateAndtime)
         <?php $count++ ?>

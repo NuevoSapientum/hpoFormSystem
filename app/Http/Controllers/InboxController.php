@@ -258,14 +258,16 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $Supervisors = User::where('permissioners', 1)->get();
             $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
-            $count = 0;
+            $var = 0;
+            $shift = Shifts::find(Auth::user()->shift_id);
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
                             'contents' => $contents,
                             'empDepartment' => $empDepartment,
                             'Supervisors' => $Supervisors,
                             'dateTime' => $dateTime,
-                            'count' => $count
+                            'var' => $var,
+                            'shift' => $shift
                 );
             $data = array_merge($dataFirst, $dataSecond);
 
@@ -488,14 +490,16 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $Supervisors = User::where('permissioners', 1)->get();
             $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
-            $count = 0;
+            $shift = Shifts::find(Auth::user()->shift_id);
+            $var = 0;
             $dataSecond = array(
                             'title' => "Edit Overtime Authorization",
                             'contents' => $contents,
                             'empDepartment' => $empDepartment,
                             'Supervisors' => $Supervisors,
                             'dateTime' => $dateTime,
-                            'count' => $count
+                            'var' => $var,
+                            'shift' => $shift
                 );
             $data = array_merge($dataFirst, $dataSecond);
             // dd($data);

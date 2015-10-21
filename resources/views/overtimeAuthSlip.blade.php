@@ -25,6 +25,8 @@
       <input type="hidden" name="number" id="number" value="1" />
       <br/>
       <hr/>
+      <label>Schedule: {{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</label>
+      <hr/>
       <div id="datesTime">
         <label>From:</label>
         <input type='date' class='form-control' name='dateFromOvertime' /> <br/>

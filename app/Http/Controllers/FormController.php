@@ -470,6 +470,7 @@ class FormController extends Controller
         $num = 1;
         $Supervisors = User::where('permissioners', 1)->get();
         $count = $this->forms();
+        $shift = Shifts::find(Auth::user()->shift_id);
         $data = array(
                     'title' => 'Overtime Authorization Slip',
                     'positions' => $positions,
@@ -478,9 +479,11 @@ class FormController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
                     'Supervisors' => $Supervisors,
+                    'shift' => $shift,
                     'num' => $num,
                     'count' => $count
             );
+
         return view('overtimeAuthSlip')->with($data);
     }
 

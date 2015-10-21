@@ -259,13 +259,20 @@ class ApprovalController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $dateTime = DateTimeOvertime::where('overtime_id', $id)->get();
             $count = 0;
+            foreach ($contents as $content) {
+                $user = $content->users->id;
+            }
+            // echo $user;
+            $shift = User::find($user);
+            $shift = Shifts::find($shift->shift_id);
             $dataSecond = array(
                             'title' => "Edit Change Schedule",
                             'contents' => $contents,
                             'Supervisors' => $Supervisors,
                             'empDepartment' => $empDepartment,
                             'dateTime' => $dateTime,
-                            'count' => $count
+                            'count' => $count,
+                            'shift' => $shift
                 );
             $data = array_merge($dataFirst, $dataSecond);
             return view('user.approvalOvertimeView')->with($data);
