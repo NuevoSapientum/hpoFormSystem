@@ -24,10 +24,14 @@
       <button type="button" id="dateTime" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Date/Time</button>
       <input type="hidden" name="number" id="number" value="1" />
       <br/>
-      <br/>
+      <hr/>
       <div id="datesTime">
-        <input type='date' class='form-control' name='dateOvertime' /> <br/>
-        <input type='time' class='form-control' name='timeOvertime' /><hr/>  
+        <label>From:</label>
+        <input type='date' class='form-control' name='dateFromOvertime' /> <br/>
+        <input type='time' class='form-control' name='timeFromOvertime' /><br/>
+        <label>To:</label>
+        <input type='date' class='form-control' name='dateToOvertime' /> <br/>
+        <input type='time' class='form-control' name='timeToOvertime' /><hr/>    
       </div>
       <br/>
       <label>Supervisor Signature:</label>
@@ -43,8 +47,6 @@
       
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  
 
-  <script type="text/javascript">
-
-  </script>
 @endsection

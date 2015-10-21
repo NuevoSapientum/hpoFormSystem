@@ -9,8 +9,10 @@ class DateTimeOvertime extends Model
     protected $table = 'datetime_overtime';
 
     protected $fillable = [
-   			'date_overtime',
-   			'time_overtime',
+   			'dateFromOvertime',
+   			'timeFromOvertime',
+        'dateToOvertime',
+        'timeToOvertime',
    			'user_id',
    			'overtime_id'
     ];

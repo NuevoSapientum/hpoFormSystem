@@ -18,7 +18,6 @@ use DB;
 use App\PagesController;
 use Validator;
 use App\DateTimeOvertime;
-use App\DateTimeChange;
 use DateTime;
 use App\Shifts;
 
@@ -486,63 +485,132 @@ class FormController extends Controller
     }
 
     public function postovertimeAuthSlip(Request $request){
-        $rules = array('purpose' => 'required',
-                       'supervisor' => 'required',
-                       'dateOvertime' => 'required',
-                       'timeOvertime' => 'required');
+        // $rules = array('purpose' => 'required',
+        //                'supervisor' => 'required',
+        //                'dateFromOvertime' => 'required',
+        //                'timeFromOvertime' => 'required',
+        //                'dateToOvertime' => 'required',
+        //                'timeToOvertime' => 'required');
 
-        $validator = Validator::make($request->all(), $rules);
+        // $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
+        // if ($validator->fails()) {
+        //     $this->throwValidationException(
+        //         $request, $validator
+        //     );
+        // }
 
-        $dateUpdate = date("Y-m-d H:i:s");
-        $dateCreated = date("Y-m-d H:i:s");
-        $department = Positions::find(Auth::user()->position_id)->departments;
-
-        $result = Overtime::insertGetId(
-                        ['user_id' => Auth::user()->id,
-                        'department_id' => $department->id,
-                        'purpose' => $request->input('purpose'),
-                        'created_at' => $request->input('dateCreated'),
-                        'updated_at' => $dateUpdate,
-                        'permission_id1' => $request->input('supervisor')]
-        );
-
-        if($result){
-            $status = "Success!";
-        }else{
-            $status = "Failed";
-        }
-
-        $var = $request->input('number');
         // dd($request->all());
-        $i = 1;
-        $firstdateTime = new DateTimeOvertime(array(
-                        'user_id' => Auth::user()->id,
-                        'date_overtime' => $request->input('dateOvertime'),
-                        'time_overtime' => $request->input('timeOvertime'),
-                        'overtime_id' => $result
-        ));
 
-        $firstdateTime->save();
+        $department = Positions::find(Auth::user()->position_id)->departments;
+        $dateFromOvertime = strtotime($request->input('dateFromOvertime'));
+        $timeFromOvertime = strtotime($request->input('timeFromOvertime'));
+        $dateToOvertime = strtotime($request->input('dateToOvertime'));
+        $timeToOvertime = strtotime($request->input('timeToOvertime'));
+        $user_shift = Shifts::find(Auth::user()->shift_id);
+        // dd($user_shift);
 
-        while($var != 0){
-            if($request->input('dateovertime' . $i) != "" && $request->input('timeovertime' . $i) != ""){
-                $over = new DateTimeOvertime(array(
-                                'user_id' => Auth::user()->id,
-                                'date_overtime' => $request->input('dateovertime' . $i),
-                                'time_overtime' => $request->input('timeovertime' . $i),
-                                'overtime_id' => $result
-                    ));
-                $over->save();
+        $dateToday = strtotime(date("Y-m-d"));
+
+        if($dateFromOvertime >= $dateToday && $dateToOvertime >= $dateFromOvertime){
+
+            if(strtotime($request->input('timeFromOvertime')) >= strtotime($user_shift->shift_to)){
+                $i = 1;
+                $var = $request->input('number');
+                if($var > 1){
+                    $status = "Failed!";
+                }else{
+                    if($dateToOvertime > $dateFromOvertime){
+                        $seconds = strtotime($request->input('dateToOvertime') . $request->input('timeToOvertime')) - strtotime($request->input('dateFromOvertime') . $request->input('timeFromOvertime'));
+
+                        $days    = floor($seconds / 86400);
+                        $hours   = floor(($seconds - ($days * 86400)) / 3600);
+                        $minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+                        $seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+                        // $day = $days*24;
+                        if($minutes == 0){
+                            $overtime = ($days*24) + $hours . ':00';
+                        }elseif($minutes >  0 && $minutes < 10){
+                            $overtime = ($days*24) + $hours . ':0' . $minutes;
+                        }else{
+                            $overtime = ($days*24) + $hours . ':' . $minutes;
+                        }
+                        
+
+                        $overtime_id = Overtime::insertGetId(
+                                        ['user_id' => Auth::user()->id,
+                                        'department_id' => $department->id,
+                                        'total_overtime' => $overtime,
+                                        'purpose' => $request->input('purpose'),
+                                        'permission_id1' => $request->input('supervisor')]
+                        );
+
+                        $firstdateTime = new DateTimeOvertime(array(
+                                        'user_id' => Auth::user()->id,
+                                        'dateFromOvertime' => $request->input('dateFromOvertime'),
+                                        'timeFromOvertime' => $request->input('timeFromOvertime'),
+                                        'dateToOvertime' => $request->input('dateToOvertime'),
+                                        'timeToOvertime' => $request->input('timeToOvertime'),
+                                        'overtime_id' => $overtime_id
+                        ));
+
+                        $firstdateTime->save();
+
+                        if($firstdateTime){
+                            $status = "Success!";
+                        }else{
+                            $status = "Failed!";
+                        }
+                    }elseif($dateToOvertime == $dateFromOvertime){
+                        if($timeToOvertime > $timeFromOvertime){
+                            $to_time = strtotime(date('Y-m-d', $dateToOvertime) . date(' H:i:s', $timeToOvertime));
+                            $from_time = strtotime(date('Y-m-d', $dateFromOvertime) . date(' H:i:s', $timeFromOvertime));
+                            $minutes = round(abs($to_time - $from_time) / 60,2);
+                            $seconds = abs($to_time - $from_time) % 60;
+                            $overtime = gmdate("H:i", ($minutes * 60));
+
+                            $overtime_id = Overtime::insertGetId(
+                                            ['user_id' => Auth::user()->id,
+                                            'department_id' => $department->id,
+                                            'total_overtime' => $overtime,
+                                            'purpose' => $request->input('purpose'),
+                                            'permission_id1' => $request->input('supervisor')]
+                            );
+
+                            $firstdateTime = new DateTimeOvertime(array(
+                                            'user_id' => Auth::user()->id,
+                                            'dateFromOvertime' => $request->input('dateFromOvertime'),
+                                            'timeFromOvertime' => $request->input('timeFromOvertime'),
+                                            'dateToOvertime' => $request->input('dateToOvertime'),
+                                            'timeToOvertime' => $request->input('timeToOvertime'),
+                                            'overtime_id' => $overtime_id
+                            ));
+
+                            $firstdateTime->save();
+
+                            if($firstdateTime){
+                                $status = "Success!";
+                            }else{
+                                $status = "Failed!";
+                            }
+                        }else{
+                            $status = "Error: Double Check your Time inputted";
+                            // echo $status;
+                        }
+                        
+                    }
+                }
+            }else{
+                $status = "Error: Double Check your Time inputted";
+                // echo "2";
             }
-            $i++;
-            $var--;
+        }else{
+            $status = "Error: Double Check your Date inputted";
         }
+
+            // dd($request->all());
+            
+        
 
         return redirect('inbox')->with('status', $status);
         // dd($request->all());

@@ -38,7 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
    <script src="{{URL::asset('plugins/filthypillow/jquery.filthypillow.min.js')}}"></script>
     <script src="{{URL::asset('plugins/filthypillow/moment.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/main.css')}}">
-    <script src="{{URL::asset('js/app.js')}}"></script>
+    <script src="{{URL::asset('js/main.js')}}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
