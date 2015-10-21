@@ -508,17 +508,102 @@ class FormController extends Controller
         $dateToOvertime = strtotime($request->input('dateToOvertime'));
         $timeToOvertime = strtotime($request->input('timeToOvertime'));
         $user_shift = Shifts::find(Auth::user()->shift_id);
+        $daysTotal = 0;
+        $hoursTotal = 0;
+        $minutesTotal = 0;
+        $secondsTotal = 0;
         // dd($user_shift);
 
         $dateToday = strtotime(date("Y-m-d"));
 
         if($dateFromOvertime >= $dateToday && $dateToOvertime >= $dateFromOvertime){
-
+            
             if(strtotime($request->input('timeFromOvertime')) >= strtotime($user_shift->shift_to)){
                 $i = 1;
                 $var = $request->input('number');
                 if($var > 1){
-                    $status = "Failed!";
+                    $seconds = strtotime($request->input('dateToOvertime') . $request->input('timeToOvertime')) - strtotime($request->input('dateFromOvertime') . $request->input('timeFromOvertime'));
+
+                    $days    = floor($seconds / 86400);
+                    $hours   = floor(($seconds - ($days * 86400)) / 3600);
+                    $minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+                    $seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+                    
+                    $daysTotal = $days;
+                    $hoursTotal = $hours;
+                    $minutesTotal = $minutes;
+                    $secondsTotal = $seconds;
+
+                    $overtime_id = Overtime::insertGetId(
+                                        ['user_id' => Auth::user()->id,
+                                        'department_id' => $department->id,
+                                        'purpose' => $request->input('purpose'),
+                                        'permission_id1' => $request->input('supervisor')]
+                        );
+
+                    $firstdateTime = new DateTimeOvertime(array(
+                                    'user_id' => Auth::user()->id,
+                                    'dateFromOvertime' => $request->input('dateFromOvertime'),
+                                    'timeFromOvertime' => $request->input('timeFromOvertime'),
+                                    'dateToOvertime' => $request->input('dateToOvertime'),
+                                    'timeToOvertime' => $request->input('timeToOvertime'),
+                                    'overtime_id' => $overtime_id
+                    ));
+                    if($firstdateTime->save()){
+                        while ($var != 0) {
+                        
+                            if($request->input('dateFromOvertime' . $i) != '' && $request->input('dateToOvertime' . $i) != ''
+                                && $request->input('timeFromOvertime' . $i) != '' && $request->input('timeFromOvertime' . $i) != ''){
+                                $seconds = strtotime($request->input('dateToOvertime' . $i) . $request->input('timeToOvertime' . $i)) - strtotime($request->input('dateFromOvertime' . $i) . $request->input('timeFromOvertime' . $i));
+
+                                $days    = floor($seconds / 86400);
+                                $hours   = floor(($seconds - ($days * 86400)) / 3600);
+                                $minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+                                $seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+
+                                $daysTotal += $days;
+                                $hoursTotal += $hours;
+                                $minutesTotal += $minutes;
+                                $secondsTotal += $seconds;
+
+                                $overtimeDatesTime = new DateTimeOvertime(array(
+                                                'user_id' => Auth::user()->id,
+                                                'dateFromOvertime' => $request->input('dateFromOvertime'),
+                                                'timeFromOvertime' => $request->input('timeFromOvertime'),
+                                                'dateToOvertime' => $request->input('dateToOvertime'),
+                                                'timeToOvertime' => $request->input('timeToOvertime'),
+                                                'overtime_id' => $overtime_id
+                                ));
+
+                                $overtimeDatesTime->save();
+
+                            }
+
+                            $var--;
+                            $i++;
+                        }
+
+                        if($minutesTotal == 0){
+                            $overtime = ($daysTotal*24) + $hoursTotal . ':00';
+                        }elseif($minutesTotal >  0 && $minutesTotal < 10){
+                            $overtime = ($daysTotal*24) + $hoursTotal . ':0' . $minutesTotal;
+                        }else{
+                            $overtime = ($daysTotal*24) + $hoursTotal . ':' . $minutesTotal;
+                        }
+
+                        $updateOvertime = Overtime::where('id', $overtime_id)
+                                              ->update(array(
+                                                'total_overtime' => $overtime
+                                        ));
+                        if($updateOvertime){
+                            $status = "Success!";
+                        }else{
+                            $status = "Failed!";
+                        }
+
+                    }
+                    // $status = "Failed!";
+                    // echo $overtime;
                 }else{
                     if($dateToOvertime > $dateFromOvertime){
                         $seconds = strtotime($request->input('dateToOvertime') . $request->input('timeToOvertime')) - strtotime($request->input('dateFromOvertime') . $request->input('timeFromOvertime'));
@@ -536,7 +621,6 @@ class FormController extends Controller
                             $overtime = ($days*24) + $hours . ':' . $minutes;
                         }
                         
-
                         $overtime_id = Overtime::insertGetId(
                                         ['user_id' => Auth::user()->id,
                                         'department_id' => $department->id,

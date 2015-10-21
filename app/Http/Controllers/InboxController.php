@@ -277,6 +277,7 @@ class InboxController extends Controller
                 }
             }
 
+            // dd($data);
         }else{
             $status = "Nothing to Show.";
             return redirect('inbox')->with('status', $status);
@@ -320,7 +321,7 @@ class InboxController extends Controller
             }else{
                 $status = "Failed!";
             }
-            return redirect('inbox')->with('status', $status);
+            // return redirect('inbox')->with('status', $status);
         }
     }
 
@@ -643,26 +644,59 @@ class InboxController extends Controller
     }
 
     public function editOver(array $data, $id){
-        $dateUpdate = date("Y-m-d H:i:s");
         // dd($data);
         $count = $data['count'];
+        $daysTotal = 0;
+        $hoursTotal = 0;
+        $minutesTotal = 0;
+        $secondsTotal = 0;
         $i = 1;
-        echo $count;
+        // echo $count;
+        // dd($data);
         while($count != 0){
+            $seconds = strtotime($data['dateToOvertime' . $i] . $data['timeToOvertime' . $i]) - strtotime($data['dateFromOvertime' . $i] . $data['timeFromOvertime' . $i]);
+
+            $days    = floor($seconds / 86400);
+            $hours   = floor(($seconds - ($days * 86400)) / 3600);
+            $minutes = floor(($seconds - ($days * 86400) - ($hours * 3600))/60);
+            $seconds = floor(($seconds - ($days * 86400) - ($hours * 3600) - ($minutes*60)));
+
+            $daysTotal += $days;
+            $hoursTotal += $hours;
+            $minutesTotal += $minutes;
+            $secondsTotal += $seconds;
+
             $dateTime = DateTimeOvertime::where('id', $data['id' . $i])
                                         ->update(array(
-                                            'date_overtime' => $data['dateOvertime' . $i],
-                                            'time_overtime' => $data['timeOvertime' . $i],
-                                            'updated_at' => $dateUpdate
+                                            'dateFromOvertime' => $data['dateFromOvertime' . $i],
+                                            'timeFromOvertime' => $data['timeFromOvertime' . $i],
+                                            'dateToOvertime' => $data['dateToOvertime' . $i],
+                                            'timeToOvertime' => $data['timeToOvertime' . $i]
                                         ));
+            // echo $daysTotal . '<br/>';
+            // echo $hoursTotal . '<br/>';
+            // echo $minutesTotal . '<br/>';
+            // echo $data['dateFromOvertime'.$i] . '=' . $data['timeFromOvertime'.$i] . '<br/>';
+            // echo $data['dateToOvertime'.$i] . '=' .$data['timeToOvertime' .$i] . '<br/>';
+            // echo 'id: ' . $data['id'. $i];
             $i++;
             $count--;
         }
+
+        if($minutesTotal == 0){
+            $overtime = ($daysTotal*24) + $hoursTotal . ':00';
+        }elseif($minutesTotal >  0 && $minutesTotal < 10){
+            $overtime = ($daysTotal*24) + $hoursTotal . ':0' . $minutesTotal;
+        }else{
+            $overtime = ($daysTotal*24) + $hoursTotal . ':' . $minutesTotal;
+        }
+
+        // echo $overtime;
         return Overtime::where('id', $id)
                           ->update(array(
                                     'permission_id1' => $data['supervisor'],
                                     'purpose' => $data['purpose'],
-                                    'updated_at' => $dateUpdate
+                                    'total_overtime' => $overtime
                             ));
     }
 

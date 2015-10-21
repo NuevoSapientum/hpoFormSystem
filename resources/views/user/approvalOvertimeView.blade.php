@@ -8,15 +8,21 @@
     @foreach($contents as $content)
 	<form method="POST" action="{{URL::to('approval/view/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		  <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+        <hr/>
         <label>Employee Name:</label>
         <input disabled value="{{$content->users->emp_name}}" class="form-control" />
-        <br/>
-        <label>Date/Time:</label>
+        <hr/>
+        <label>Total Hours: {{$content->total_overtime}}</label>
+        <hr/>
         @foreach($dateTime as $dateAndtime)
         <?php $count++ ?>
         <div id="datesTime">
-          <input type="date" disabled class='form-control' value="{{$dateAndtime->date_overtime}}"/> <br/>
-          <input type="time" disabled class='form-control' value="{{$dateAndtime->time_overtime}}" /><hr/>
+          <label>From:</label>
+          <input class='form-control' disabled value="{{date('F d, Y', strtotime($dateAndtime->dateFromOvertime))}}"/> <br/>  
+          <input type='time' disabled class='form-control'value="{{$dateAndtime->timeFromOvertime}}" />
+          <br/><label>To:</label>
+          <input class='form-control' disabled value="{{date('F d, Y', strtotime($dateAndtime->dateToOvertime))}}"/> <br/>
+          <input type='time' disabled class='form-control' value="{{$dateAndtime->timeToOvertime}}" /><hr/>
         </div>
         @endforeach
         <label>Client Paid:</label>

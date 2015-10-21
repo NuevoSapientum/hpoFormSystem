@@ -10,15 +10,22 @@
   @foreach($contents as $content)
     <form method="POST" action="{{URL::to('inbox/edit/' . $content->form_id . '/' . $content->id)}}">
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+        <hr/>
         <label>Employee Name:</label>
         <input disabled value="{{$content->users->emp_name}}" class="form-control" />
-        <br/>
-        <label>Date/Time:</label>
+        <hr/>
+        <label>Total Hours: {{$content->total_overtime}}</label>
+        <hr/>
         @foreach($dateTime as $dateAndtime)
         <?php $count++ ?>
         <div id="datesTime">
-          <input type='date' class='form-control' name='dateOvertime{{$count}}' value="{{$dateAndtime->date_overtime}}"/> <br/>
-          <input type='time' class='form-control' name='timeOvertime{{$count}}' value="{{$dateAndtime->time_overtime}}" /><hr/>  
+          <label>From:</label>
+          <input type='date' class='form-control' name='dateFromOvertime{{$count}}' value="{{$dateAndtime->dateFromOvertime}}"/> <br/>  
+          <input type='time' class='form-control' name='timeFromOvertime{{$count}}' value="{{$dateAndtime->timeFromOvertime}}" />
+          <br/><label>To:</label>
+          <input type='date' class='form-control' name='dateToOvertime{{$count}}' value="{{$dateAndtime->dateToOvertime}}"/> <br/>
+          <input type='time' class='form-control' name='timeToOvertime{{$count}}' value="{{$dateAndtime->timeToOvertime}}" /><hr/>  
+          
           <input type="hidden" name="count" value="{{$count}}" >
           <input type="hidden" name="id{{$count}}" value="{{$dateAndtime->id}}" >
         </div>
@@ -32,7 +39,7 @@
                 <option value="{{$Supervisor->id}}">{{$Supervisor->emp_name}}</option>
               @endif
             @endforeach
-        </select>
+        </select><br/>
         <label>Detailed Purpose of Overtime:</label>
         <textarea class="form-control" id="purpose" name="purpose">{{$content->purpose}}</textarea>
         <br/>
