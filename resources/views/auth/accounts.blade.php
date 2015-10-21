@@ -19,8 +19,9 @@
 
 @section('content')
   <button class="btn btn-info" data-toggle="modal" data-target="#entitlement" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span> Change Entitlements</button>
-  <button class="btn btn-info" data-toggle="modal" data-target="#department" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Department</button>
-  <button class="btn btn-info" data-toggle="modal" data-target="#position" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Position</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#department" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add New Department</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#position" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add New Position</button>
+  <button class="btn btn-info" data-toggle="modal" data-target="#schedule" ><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add New Schedule</button>
   <br/>
   <br/>
   <table id="example">
@@ -82,7 +83,7 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h2>Add Department:</h2>
+                  <h2>Add New Department:</h2>
                   <hr/>
                 </div>
                 <div class="modal-body">
@@ -104,7 +105,7 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h2>Add Position:</h2>
+                  <h2>Add New Position:</h2>
                   <hr/>
                 </div>
                 <div class="modal-body">
@@ -117,6 +118,32 @@
                     </select>
                     <br/>
                     <input type="text" class="form-control" name="position_name" placeholder="Position Name" />
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="modal fade" id="schedule" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Add New Schedule:</h2>
+                  <hr/>
+                </div>
+                <div class="modal-body">
+                  <form action="{{URL::to('accounts/addSchedule')}}" method="POST" >
+                    <?php echo Form::token() ?>
+                    <label>From:</label>
+                    <input type="time" class="form-control" name="shift_from" />
+                    <br/>
+                    <label>To:</label>
+                    <input type="time" class="form-control" name="shift_to" />
                     <br/>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                   </form>

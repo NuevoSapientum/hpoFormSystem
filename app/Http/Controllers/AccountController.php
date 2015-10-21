@@ -18,6 +18,7 @@ use App\PagesController;
 use Validator;
 use Illuminate\Database\Eloquent;
 use App\Departments;
+use App\Shifts;
 
 class AccountController extends Controller
 {
@@ -271,18 +272,6 @@ class AccountController extends Controller
         $status = null;
 
         if($request->input('VL_entitlement') != 0){
-
-        //     $users = User::where('id', '!=', 0)->get();
-        //     foreach ($users as $user) {
-        //         if($user->VL_entitlement > $request->input('VL_entitlement')){
-        //             User::where('id', '!=', 0)
-        //                 ->update(array(
-        //                     'VL_entitlement' => $user->VL_entitlement - 
-        //                 ));    
-        //         }
-                
-        //     }
-
             $result = User::where('id', '!=', 0)
                           ->update(array(
                           'VL_entitlement' => $request->input('VL_entitlement')
@@ -395,4 +384,36 @@ class AccountController extends Controller
         // dd($request->all());
         // echo $request->input('department');
     }
+
+    public function addSchedule(Request $request){
+        $shifts = Shifts::all();
+
+        foreach ($shifts as $shift) {
+            if(strtotime($shift->shift_from) == strtotime($request->input('shift_from'))){
+                if(strtotime($shift->shift_to) == strtotime($request->input('shift_to'))){
+                    $status = "Error: Schedule is already been in the database.";
+                    break;
+                }else{
+                    $status = "Success!";
+                }
+            }else{
+                $status = "Success!";
+            }
+        }
+
+        if($status == "Success!"){
+            $result = Shifts::create([
+                                    'shift_from' => $request->input('shift_from'),
+                                    'shift_to' => $request->input('shift_to')
+                            ]);
+            if($result){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }
+
+        return redirect('/accounts')->with('status', $status);
+    }
+
 }

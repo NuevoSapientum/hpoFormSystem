@@ -292,3 +292,8 @@ Route::post('accounts/addPosition', [
 	'middleware' => 'admin',
 	'uses' => 'AccountController@addPosition'
 ]);
+
+Route::post('accounts/addSchedule', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@addSchedule'
+]);
