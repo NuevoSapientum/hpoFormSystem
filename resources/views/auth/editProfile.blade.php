@@ -54,6 +54,17 @@
               @endforeach
         </select>
 		<br/>
+    <label>Gender:</label>
+    <select class="form-control" id="gender" name="gender">
+      @if(Auth::user()->emp_gender == "Male")
+        <option value="Male" selected>Male</option>
+        <option value="Female">Female</option>
+      @else
+        <option value="Male">Male</option>
+        <option value="Female" selected>Female</option>
+      @endif
+    </select>
+    <br/>
 	<label>Email:</label>
 		<input type="email" name="email" class="form-control" value="{{Auth::user()->email}}" />
 		<br/>
