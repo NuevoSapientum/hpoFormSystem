@@ -102,13 +102,16 @@ class LeaveController extends Controller
         $balance = array();
         $collection = collect([]);
         foreach ($users as $user) {
-            $vacationRecord = Leaves::where('leave_type', 2)
+            $vacationRecord = Leaves::where('leave_type', 1)
                                 ->where('user_id', $user->id)
                                 ->first();
-            if($vacationRecord){
-                $collection = collect([$vacationRecord]);
+            // if($vacationRecord->status() = 1){
+            //     $collection = collect([$vacationRecord]);
+            // }
+            foreach ($vacationRecord as $vac) {
+                echo $vac->status;
             }
-            array_push($balance, $user->SL_entitlement - $user->SL_taken);
+            array_push($balance, $user->VL_entitlement - $user->VL_taken);
         }
 
         $i = 0;
@@ -127,7 +130,9 @@ class LeaveController extends Controller
             'count' => $count
         );
 
-        return view('record.vacation')->with($data);
+        // dd($balance);
+        // dd($collection);
+        // return view('record.vacation')->with($data);
    }
 
    public function sickRecord(){
@@ -167,7 +172,9 @@ class LeaveController extends Controller
             'count' => $count
         );
 
-        return view('record.sick')->with($data);
+        dd($collection);
+
+        // return view('record.sick')->with($data);
    }
 
    public function maternalRecord(){
@@ -417,7 +424,7 @@ class LeaveController extends Controller
             $count = $this->forms();
             $balance = 0;
             foreach ($sickRecords as $sick) {
-                $balance = $sick->users->SL_entitlement - $sick->users->VL_taken;
+                $balance = $sick->users->SL_entitlement - $sick->users->SL_taken;
                 $SL_entitlement = $sick->users->SL_entitlement;
             }
 
@@ -434,7 +441,6 @@ class LeaveController extends Controller
                 'SL_entitlement' => $SL_entitlement,
                 'users' => $users
             );
-
 
             return view('record.userSick')->with($data);
         }else{

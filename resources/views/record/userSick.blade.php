@@ -29,7 +29,7 @@
                 <td>{{date('F d, Y', strtotime($sick->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($sick->updated_at))}}</td>
                 <td>{{$sick->days_applied}}</td>
-                <td>{{$sick->users->VL_taken}}</td>
+                <td>{{$sick->users->SL_taken}}</td>
                 <td>{{date('F d, Y', strtotime($sick->start_date))}}</td>
                 @if($sick->status === 0)
                   <td>Pending</td>
