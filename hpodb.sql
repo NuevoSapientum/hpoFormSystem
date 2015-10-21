@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2015 at 05:46 PM
+-- Generation Time: Oct 21, 2015 at 12:27 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -47,15 +47,7 @@ CREATE TABLE IF NOT EXISTS `change_schedules` (
   `status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `change_schedules`
---
-
-INSERT INTO `change_schedules` (`id`, `user_id`, `shift_id`, `dateFromShift`, `dateToShift`, `department_id`, `form_id`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `purpose`, `reason`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `status`, `created_at`, `updated_at`) VALUES
-(40, 1, 2, '2015-10-21', '2015-10-22', 8, 3, 12, 16, 13, 1, 'asd1', '', 1, 1, 1, 1, 1, '2015-10-21 06:53:19', '2015-10-21 07:43:10'),
-(41, 1, 1, '2015-10-21', '2015-10-22', 8, 3, 12, 16, 12, 1, 'asd', 'Invalid', 2, 0, 0, 0, 2, '2015-10-21 07:44:15', '2015-10-21 07:44:34');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -65,29 +57,15 @@ INSERT INTO `change_schedules` (`id`, `user_id`, `shift_id`, `dateFromShift`, `d
 
 CREATE TABLE IF NOT EXISTS `datetime_overtime` (
 `id` int(10) unsigned NOT NULL,
-  `date_overtime` date NOT NULL,
-  `time_overtime` time NOT NULL,
+  `dateFromOvertime` date NOT NULL,
+  `timeFromOvertime` time NOT NULL,
+  `dateToOvertime` date NOT NULL,
+  `timeToOvertime` time NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `overtime_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `datetime_overtime`
---
-
-INSERT INTO `datetime_overtime` (`id`, `date_overtime`, `time_overtime`, `user_id`, `overtime_id`, `created_at`, `updated_at`) VALUES
-(15, '2015-10-18', '01:01:00', 17, 19, '2015-10-19 21:00:00', '2015-10-19 21:00:00'),
-(16, '2015-10-19', '01:01:00', 17, 19, '2015-10-19 21:00:00', '2015-10-19 21:00:00'),
-(17, '2015-10-18', '01:01:00', 17, 20, '2015-10-19 22:38:57', '2015-10-19 22:38:57'),
-(18, '2015-10-19', '01:01:00', 17, 20, '2015-10-19 22:38:57', '2015-10-19 22:38:57'),
-(19, '2015-10-20', '01:01:00', 17, 20, '2015-10-19 22:38:57', '2015-10-19 22:38:57'),
-(20, '2015-10-19', '01:01:00', 17, 21, '2015-10-20 05:25:53', '2015-10-20 05:25:53'),
-(21, '2015-10-19', '01:01:00', 17, 22, '2015-10-20 06:37:54', '2015-10-20 06:37:54'),
-(22, '2015-10-21', '01:01:00', 17, 23, '2015-10-20 09:38:05', '2015-10-20 09:38:05'),
-(23, '2015-10-21', '01:01:00', 17, 24, '2015-10-20 09:40:01', '2015-10-20 09:40:01'),
-(24, '2015-10-21', '01:01:00', 12, 25, '2015-10-20 09:42:45', '2015-10-20 09:42:45');
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -114,9 +92,7 @@ INSERT INTO `departments` (`id`, `department_name`, `created_at`, `updated_at`) 
 (5, 'KSI Operations', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (6, 'Engage IQ', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (7, 'DTR', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 'Human Resource', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, 'Janitor', '2015-10-18 20:21:22', '2015-10-18 20:21:22'),
-(14, 'Guard', '2015-10-18 20:29:44', '2015-10-18 20:29:44');
+(8, 'Human Resource', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -146,14 +122,6 @@ CREATE TABLE IF NOT EXISTS `exit_pass` (
   `date_from` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `date_to` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `exit_pass`
---
-
-INSERT INTO `exit_pass` (`id`, `user_id`, `department_id`, `form_id`, `reason`, `purpose`, `permission_id1`, `permission_id2`, `permission_id3`, `permission_id4`, `permission_1`, `permission_2`, `permission_3`, `permission_4`, `days_applied`, `status`, `created_at`, `updated_at`, `date_from`, `date_to`) VALUES
-(16, 17, 2, 1, '', 'Errand', 12, 16, 1, 14, 1, 1, 1, 1, 0, 1, '2015-10-19 20:25:33', '2015-10-19 21:16:53', '2015-10-19 04:25:00', '2015-10-19 06:25:00'),
-(17, 17, 2, 1, 'Denied', 'Reason1', 13, 16, 1, 14, 1, 1, 2, 0, 0, 2, '2015-10-19 09:20:30', '2015-10-19 21:29:08', '2015-10-19 05:20:00', '2015-10-19 05:20:00');
 
 -- --------------------------------------------------------
 
@@ -204,22 +172,6 @@ CREATE TABLE IF NOT EXISTS `leaves` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `leaves`
---
-
-INSERT INTO `leaves` (`id`, `user_id`, `department_id`, `leave_type`, `purpose`, `reason`, `form_id`, `permission_id1`, `permission_id2`, `permission_1`, `permission_2`, `days_applied`, `start_date`, `status`, `created_at`, `updated_at`) VALUES
-(4, 17, 2, 2, 'Sick', '', 2, 13, 1, 1, 1, 4, '2015-10-19', 1, '2015-10-19 08:00:00', '2015-10-19 21:31:12'),
-(5, 17, 2, 1, 'Reunion', '', 2, 12, 1, 1, 1, 5, '2015-10-18', 1, '2015-10-19 08:00:00', '2015-10-19 21:52:32'),
-(6, 17, 2, 4, 'asd', '', 2, 12, 1, 1, 1, 20, '2015-10-17', 1, '2015-10-19 08:00:00', '2015-10-19 22:05:53'),
-(7, 17, 2, 1, 'asd', 'Invalid\r\n', 2, 12, 1, 1, 2, 2, '2015-10-18', 2, '2015-10-19 08:00:00', '2015-10-19 22:09:39'),
-(8, 17, 2, 2, 'sick2', 'Invalid', 2, 12, 1, 2, 0, 4, '2015-10-18', 2, '2015-10-19 08:00:00', '2015-10-19 22:13:00'),
-(10, 17, 2, 1, 'Going to Japan', '', 2, 12, 1, 0, 0, 2, '2015-10-20', 0, '2015-10-21 01:35:07', '2015-10-21 01:35:07'),
-(11, 1, 8, 3, 'Pregnant', '', 2, 12, 1, 1, 1, 68, '2015-10-20', 1, '2015-10-21 02:19:45', '2015-10-21 05:55:18'),
-(12, 1, 8, 2, 'asd', '', 2, 12, 1, 0, 0, 3, '2015-10-20', 0, '2015-10-21 05:29:46', '2015-10-21 05:29:46'),
-(13, 1, 8, 1, 'asd', '', 2, 12, 1, 0, 0, 3, '2015-10-20', 0, '2015-10-21 05:47:03', '2015-10-21 05:47:03'),
-(14, 12, 3, 4, 'asd', '', 2, 12, 1, 0, 0, 7, '2015-10-27', 0, '2015-10-21 06:05:34', '2015-10-21 06:05:34');
-
 -- --------------------------------------------------------
 
 --
@@ -264,22 +216,10 @@ CREATE TABLE IF NOT EXISTS `overtime_authorization` (
   `reason` text COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
   `client_paid` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `overtime_authorization`
---
-
-INSERT INTO `overtime_authorization` (`id`, `user_id`, `permission_id1`, `permission_1`, `department_id`, `form_id`, `purpose`, `reason`, `status`, `client_paid`, `created_at`, `updated_at`) VALUES
-(19, 17, 12, 1, 2, 4, 'asd', '', 1, 1, '2015-10-19 08:00:00', '2015-10-19 22:33:29'),
-(20, 17, 12, 2, 2, 4, 'asd', 'Invalid', 2, 2, '2015-10-19 08:00:00', '2015-10-19 23:02:57'),
-(21, 17, 12, 1, 2, 4, 'asd', '', 1, 1, '2015-10-19 13:25:53', '2015-10-20 06:23:22'),
-(22, 17, 12, 1, 2, 4, 'asd', '', 1, 1, '2015-10-19 14:37:54', '2015-10-20 09:36:08'),
-(23, 17, 12, 1, 2, 4, 'qwe', '', 1, 1, '2015-10-20 08:00:00', '2015-10-20 09:38:27'),
-(24, 17, 12, 1, 2, 4, '123', '', 1, 1, '2015-10-20 08:00:00', '2015-10-20 10:23:59'),
-(25, 12, 12, 0, 3, 4, 'asd', '', 0, 0, '2015-10-20 08:00:00', '2015-10-20 09:42:59');
+  `total_overtime` time NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -438,8 +378,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_name`, `emp_gender`, `shift_id`, `position_id`, `img_id`, `email`, `username`, `password`, `permissioners`, `SL_entitlement`, `remember_token`, `created_at`, `updated_at`, `VL_entitlement`, `PL_entitlement`, `ML_entitlement`, `SL_taken`, `VL_taken`, `ML_taken`, `PL_taken`) VALUES
-(1, 'Robin Scherbatsky', 'Female', 2, 5, 1, 'himym@example.com', 1200289, '$2y$10$m1grdPAspbDaIPEmId6O8ed9NazgYIuRIH4pPqeQNIktpVTKJWUkK', 0, 7, '86luMTtTlR1q13RmvTxgOC5XRSP7xkW8zR640JiJExLOUHSAHq0pekVrlMHr', '2015-10-09 07:00:00', '2015-10-21 07:44:17', 7, 0, 68, 0, 0, 68, 0),
-(12, 'Barney Stinson', 'Male', 15, 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'Ap8Jcat5T0IhtqFpQtFR11UtvryfESQbyH5AFcNZMMYNySkvbEDsZs1KrzCc', '2015-10-10 11:19:53', '2015-10-21 07:41:29', 7, 7, 0, 0, 0, 0, 0),
+(1, 'Robin Scherbatsky', 'Female', 2, 5, 1, 'himym@example.com', 1200289, '$2y$10$m1grdPAspbDaIPEmId6O8ed9NazgYIuRIH4pPqeQNIktpVTKJWUkK', 0, 7, 'pZbeJdofaHSmdeUA7G5fSVP8ggCwjchEHebef9c7qbzeaRzoeSbeiLJ8gFK4', '2015-10-09 07:00:00', '2015-10-22 02:00:09', 7, 0, 68, 0, 0, 68, 0),
+(12, 'Barney Stinson', 'Male', 15, 2, 12, 'hpo@example.com', 1200300, '$2y$10$qFMIOXxEg5IwrjnoBMT1y.cCWb9Rgk1sKO.c9ScKHNGiGMoqV5IVe', 1, 7, 'l4TavSYnR9BHiYSzqHZEqBhgb9VoASFHMq6LI0JwMyz9e6RDw90VREhys5po', '2015-10-10 11:19:53', '2015-10-22 02:00:57', 7, 7, 0, 0, 0, 0, 0),
 (13, 'Ted Mosby', 'Male', 15, 4, 13, 'tedmosby@himym.com', 1200301, '$2y$10$ULkm7BmOiTQCWCobIuZEM.NMHzI6xpgW5Kd9sXbxehQ2QEf5ANIjS', 1, 7, '34JGkqpVAK2v2lBCPio6Aq6JJtOhiuK7KrPZQdvcIgpmcTFNf2KzSG8NOdyK', '2015-10-10 16:21:16', '2015-10-21 07:42:27', 7, 7, 0, 0, 0, 0, 0),
 (14, 'Marshall Eriksen', 'Male', 15, 1, 14, 'marshallE@himym.com', 1200302, '$2y$10$MDPUWU6hQVjZ/IpXVjD4oOpZtdqpGGjdKxAo0tZISF1.wtowM4PdG', 3, 7, '0BAwwg73GKvFGRB1IB7pF67AuxGTvUW2fGaI8MiYwxfH0Re7icjmQ2XyXd40', '2015-10-10 16:22:24', '2015-10-21 03:46:34', 7, 7, 0, 0, 0, 0, 0),
 (16, 'Lily Aldrin', 'Female', 15, 3, 16, 'lilyeriksen@himym.com', 1200303, '$2y$10$8d.agHMb7U8CuRWY0uIeUOlBKkQVIqX0207W4tLiMQPU6AAxyMPpe', 2, 7, 'a7d1fph74Z9SkSwtccbwXTlqt7rCgKOSHjhBqXNf9HRWrzHHOGkGCb5vvOzM', '2015-10-10 16:23:24', '2015-10-21 07:42:08', 7, 0, 68, 0, 0, 0, 0),
@@ -531,12 +471,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `change_schedules`
 --
 ALTER TABLE `change_schedules`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=42;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `datetime_overtime`
 --
 ALTER TABLE `datetime_overtime`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT for table `departments`
 --
@@ -561,7 +501,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 -- AUTO_INCREMENT for table `overtime_authorization`
 --
 ALTER TABLE `overtime_authorization`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT for table `positions`
 --
