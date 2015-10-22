@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Positions;
 use App\Shifts;
+use App\User;
 
 trait RegistersUsers
 {
@@ -43,9 +44,25 @@ trait RegistersUsers
                 $request, $validator
             );
         }
+        $flag = 0;
 
-        $this->create($request->all());
+        $users = User::all();
+        foreach ($users as $user) {
+            if($user->username == $request->input('username')){
+                    $flag = 1;
+            }
+        }
+
+        if($flag == 1){
+            $status = "Username is already taken!";
+        }else{
+            if($this->create($request->all())){
+                $status = "Success!";
+            }else{
+                $status = "Failed!";
+            }
+        }  
         
-        return redirect($this->redirectPath());
+        return redirect('dashboard')->with('status', $status);
     }
 }
