@@ -21,8 +21,6 @@
       <label>Employee Name:</label>
       <input disabled value="{{$content->users->emp_name}}" class="form-control" />
       <hr/>
-		<label>Current Shift:</label>
-      <input type="date" class="form-control" disabled /><br/>
       <label>Shift Schedule:</label>
       <input value="{{$currentShift}}" disabled class="form-control" />
       <hr/>

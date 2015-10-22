@@ -478,10 +478,13 @@ class ApprovalController extends Controller
             }elseif($data['permission_2'] == 1){
                 if(isset($data['VLDays'])){
                     foreach ($contents as $content) {
-                        $user = User::where('id', $content->users->id)
+                        $user = User::where('id', $content->users->id)->get();
+                        foreach ($user as $us) {
+                            User::where('id', $content->users->id)
                                     ->update(array(
-                                        'VL_taken' => $data['VLDays']
+                                        'VL_taken' => $data['VLDays'] + $us->VL_taken
                                     ));
+                        }
                     }
                     return Leaves::where('id', $id)
                                  ->update(array(
@@ -492,10 +495,13 @@ class ApprovalController extends Controller
                                 ));  
                 }elseif(isset($data['SLDays'])){
                     foreach ($contents as $content) {
-                        $user = User::where('id', $content->users->id)
+                        $user = User::where('id', $content->users->id)->get();
+                        foreach ($user as $us) {
+                            User::where('id', $content->users->id)
                                     ->update(array(
-                                        'SL_taken' => $data['SLDays']
+                                        'SL_taken' => $data['SLDays'] + $us->SL_taken
                                     ));
+                        }
                     }
                     return Leaves::where('id', $id)
                                  ->update(array(
@@ -506,10 +512,13 @@ class ApprovalController extends Controller
                                 )); 
                 }elseif(isset($data['MLDays'])){
                     foreach ($contents as $content) {
-                        $user = User::where('id', $content->users->id)
+                        $user = User::where('id', $content->users->id)->get();
+                        foreach ($user as $us) {
+                            User::where('id', $content->users->id)
                                     ->update(array(
-                                        'ML_taken' => $data['MLDays']
+                                        'ML_taken' => $data['MLDays'] + $us->ML_taken
                                     ));
+                        }
                     }
                     // dd($data);
                     return Leaves::where('id', $id)
@@ -521,10 +530,13 @@ class ApprovalController extends Controller
                                 )); 
                 }elseif(isset($data['PLDays'])){
                     foreach ($contents as $content) {
-                        $user = User::where('id', $content->users->id)
+                        $user = User::where('id', $content->users->id)->get();
+                        foreach ($user as $us) {
+                            User::where('id', $content->users->id)
                                     ->update(array(
-                                        'PL_taken' => $data['PLDays']
+                                        'PL_taken' => $data['PLDays'] + $us->PL_taken
                                     ));
+                        }
                     }
                     return Leaves::where('id', $id)
                                  ->update(array(

@@ -237,7 +237,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="{{URL::to('/history')}}"><i class="glyphicon glyphicon-list-alt"></i> <span>History</span></a></li>  
 
             @if($empDepartment->department_name == "Human Resource")
-              @if($title == 'Vacation Leave' || $title == 'Sick Leave' || $title == 'Maternal Leave' || $title == 'Paternal Leave')
+              @if($title == 'Vacation Leave' || $title == 'Sick Leave' || $title == 'Maternity Leave' || $title == 'Paternity Leave')
               <li class="treeview active">
               @else
               <li class="treeview">
@@ -246,8 +246,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="treeview-menu">
                   <li><a href="{{URL::to('record/vacation')}}">Vacation Leave</a></li>
                   <li><a href="{{URL::to('record/sick')}}">Sick Leave</a></li>
-                  <li><a href="{{URL::to('record/maternal')}}">Maternal Leave</a></li>
-                  <li><a href="{{URL::to('record/paternal')}}">Paternal Leave</a></li>
+                  <li><a href="{{URL::to('record/maternity')}}">Maternity Leave</a></li>
+                  <li><a href="{{URL::to('record/paternity')}}">Paternity Leave</a></li>
                 </ul>
               </li>
             @endif

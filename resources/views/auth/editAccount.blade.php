@@ -44,19 +44,22 @@
 		<label>Permissioner:</label>
 		<div class="radio">
 			@if($user->permissioners == 1)
+				<label><input type="radio" value="0" name="permissioners" />None</label>
 				<label><input type="radio" value="1" checked="checked" name="permissioners" />Supervisor |</label>
 				<label><input type="radio" value="2" name="permissioners" />Project Manager |</label>
 				<label><input type="radio" value="3" name="permissioners" />Company Representative</label>
 			@elseif($user->permissioners == 2)
+				<label><input type="radio" value="0" name="permissioners" />None</label>
 				<label><input type="radio" value="1" name="permissioners" />Supervisor |</label>
 				<label><input type="radio" value="2" checked="checked" name="permissioners" />Project Manager |</label>
 				<label><input type="radio" value="3" name="permissioners" />Company Representative</label>
 			@elseif($user->permissioners == 3)
+				<label><input type="radio" value="0" name="permissioners" />None</label>
 				<label><input type="radio" value="1" name="permissioners" />Supervisor |</label>
 				<label><input type="radio" value="2" name="permissioners" />Project Manager |</label>
 				<label><input type="radio" value="3" checked="checked" name="permissioners" />Company Representative</label>
 			@else
-				<input type="radio" value="0" hidden checked="checked" name="permissioners" >
+				<label><input type="radio" value="0" name="permissioners" checked />None</label>
 				<label><input type="radio" value="1" name="permissioners" />Supervisor |</label>
 				<label><input type="radio" value="2" name="permissioners" />Project Manager |</label>
 				<label><input type="radio" value="3" name="permissioners" />Company Representative</label>

@@ -104,17 +104,46 @@ class LeaveController extends Controller
         foreach ($users as $user) {
             $vacationRecord = Leaves::where('leave_type', 1)
                                 ->where('user_id', $user->id)
+                                ->where('status', 1)
+                                ->orderBy('id', 'desc')
                                 ->first();
-            // if($vacationRecord->status() = 1){
-            //     $collection = collect([$vacationRecord]);
-            // }
-            foreach ($vacationRecord as $vac) {
-                echo $vac->status;
+            if($vacationRecord){
+                $collection->push($vacationRecord);
+            }else{
+                $collection->push('N/A');
             }
+            // echo $user->id;
             array_push($balance, $user->VL_entitlement - $user->VL_taken);
         }
 
         $i = 0;
+
+        // foreach ($collection as $asd) {
+        //     echo $asd['user_id'] .'<br/>';
+        // }
+        // $vacationRecords = $collection;
+        // $a = 0;
+        // foreach ($users as $user) {
+        //     echo "<table>";
+        //     echo "<tr>";
+        //     echo "<td>" . $user->emp_name . "</td>";
+        //     echo "<td>" . $user->VL_entitlement . "</td>";
+        //     foreach ($vacationRecords as $variable) {
+        //         if(isset($variable['start_date'])){
+        //             echo "<td>". $variable['id'] . "</td>";
+        //         }else{
+        //             echo "<td>".$variable."</td>";
+        //         }
+                
+        //         // echo $variable[$a]['id'];
+        //     }
+        //     echo "</tr>";
+        //     echo "</table>";
+        // }
+
+        // echo $vacationRecord['start_date'];
+
+        // dd($collection);
 
         $data = array(
             'title' => 'Vacation Leave',
@@ -132,7 +161,13 @@ class LeaveController extends Controller
 
         // dd($balance);
         // dd($collection);
-        // return view('record.vacation')->with($data);
+        // dd($collection);
+        // if($collection[1] == ''){
+        //     echo "null";
+        // }else{
+        //     echo "1";
+        // }
+        return view('record.vacation')->with($data);
    }
 
    public function sickRecord(){
@@ -172,28 +207,28 @@ class LeaveController extends Controller
             'count' => $count
         );
 
-        dd($collection);
+        // dd($collection);
 
-        // return view('record.sick')->with($data);
+        return view('record.sick')->with($data);
    }
 
-   public function maternalRecord(){
+   public function maternityRecord(){
         $positions = $this->position();
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
         $id = Auth::user()->position_id;
         $empDepartment = Positions::find($id)->departments;
-        $users = User::all();
+        $users = User::where('emp_gender', "Female")->get();
         $count = $this->forms();
         $balance = array();
         $collection = collect([]);
         foreach ($users as $user) {
-            $maternalRecord = Leaves::where('leave_type', 3)
+            $maternityRecord = Leaves::where('leave_type', 3)
                                 ->where('user_id', $user->id)
                                 ->first();
-            if($maternalRecord){
-                $collection = collect([$maternalRecord]);
+            if($maternityRecord){
+                $collection = collect([$maternityRecord]);
             }
             array_push($balance, $user->ML_entitlement - $user->ML_taken);
         }
@@ -201,7 +236,7 @@ class LeaveController extends Controller
         $i = 0;
 
         $data = array(
-            'title' => 'Maternal Leave',
+            'title' => 'Maternity Leave',
             'positions' => $positions,
             'profileImage' => $profileImage,
             'inboxNotif' => $inboxNotif,
@@ -210,30 +245,30 @@ class LeaveController extends Controller
             'balance' => $balance,
             'i' => $i,
             'users' => $users,
-            'maternalRecords' => $collection,
+            'maternityRecords' => $collection,
             'count' => $count
         );
 
-        return view('record.maternal')->with($data);
+        return view('record.maternity')->with($data);
    }
 
-   public function paternalRecord(){
+   public function paternityRecord(){
         $positions = $this->position();
         $profileImage = $this->getImage();
         $inboxNotif = $this->inboxNotif();
         $approvalNotif = $this->approvalNotif();
         $id = Auth::user()->position_id;
         $empDepartment = Positions::find($id)->departments;
-        $users = User::all();
+        $users = User::where('emp_gender', "Male")->get();
         $count = $this->forms();
         $balance = array();
         $collection = collect([]);
         foreach ($users as $user) {
-            $paternalRecord = Leaves::where('leave_type', 4)
+            $paternityRecord = Leaves::where('leave_type', 4)
                                 ->where('user_id', $user->id)
                                 ->first();
-            if($paternalRecord){
-                $collection = collect([$paternalRecord]);
+            if($paternityRecord){
+                $collection = collect([$paternityRecord]);
             }
             array_push($balance, $user->PL_entitlement - $user->PL_taken);
         }
@@ -241,7 +276,7 @@ class LeaveController extends Controller
         $i = 0;
 
         $data = array(
-            'title' => 'Paternal Leave',
+            'title' => 'Paternity Leave',
             'positions' => $positions,
             'profileImage' => $profileImage,
             'inboxNotif' => $inboxNotif,
@@ -250,11 +285,11 @@ class LeaveController extends Controller
             'balance' => $balance,
             'i' => $i,
             'users' => $users,
-            'paternalRecords' => $collection,
+            'paternityRecords' => $collection,
             'count' => $count
         );
 
-        return view('record.paternal')->with($data);
+        return view('record.paternity')->with($data);
    }
 
    public function view($type, $id){
@@ -322,7 +357,7 @@ class LeaveController extends Controller
                                     ->where('id', $id)
                                     ->get();
             $data = array(
-                'title' => 'Maternal Leave',
+                'title' => 'Maternity Leave',
                 'positions' => $positions,
                 'profileImage' => $profileImage,
                 'inboxNotif' => $inboxNotif,
@@ -333,7 +368,7 @@ class LeaveController extends Controller
                 'count' => $count
             );
 
-            return view('record.maternalView')->with($data);
+            return view('record.maternityView')->with($data);
         }elseif($type == 4){
             $positions = $this->position();
             $profileImage = $this->getImage();
@@ -347,7 +382,7 @@ class LeaveController extends Controller
                                     ->where('id', $id)
                                     ->get();
             $data = array(
-                'title' => 'Paternal Leave',
+                'title' => 'Paternity Leave',
                 'positions' => $positions,
                 'profileImage' => $profileImage,
                 'inboxNotif' => $inboxNotif,
@@ -358,7 +393,7 @@ class LeaveController extends Controller
                 'count' => $count
             );
 
-            return view('record.paternalView')->with($data);
+            return view('record.paternityView')->with($data);
         }
    }
 
@@ -449,89 +484,89 @@ class LeaveController extends Controller
         
    }
 
-   public function viewUserMaternal($id){
+   public function viewUserMaternity($id){
         $users = User::find($id);
         // dd($user)
-        $maternalUser = Leaves::where('leave_type', 3)
+        $maternityUser = Leaves::where('leave_type', 3)
                                ->where('user_id', $id)->first();
-        if($maternalUser){
+        if($maternityUser){
             $positions = $this->position();
             $profileImage = $this->getImage();
             $inboxNotif = $this->inboxNotif();
             $approvalNotif = $this->approvalNotif();
             $id_user = Auth::user()->position_id;
             $empDepartment = Positions::find($id_user)->departments;
-            $maternalRecords = Leaves::where('leave_type', 3)
+            $maternityRecords = Leaves::where('leave_type', 3)
                                      ->where('user_id', $id)
                                      ->get();
             $count = $this->forms();
             $balance = 0;
-            foreach ($maternalRecords as $maternal) {
-                $balance = $maternal->users->ML_entitlement - $maternal->users->ML_taken;
-                $ML_entitlement = $maternal->users->ML_entitlement;
+            foreach ($maternityRecords as $maternity) {
+                $balance = $maternity->users->ML_entitlement - $maternity->users->ML_taken;
+                $ML_entitlement = $maternity->users->ML_entitlement;
             }
 
             $data = array(
-                'title' => 'View User Maternal Leaves',
+                'title' => 'View User Maternity Leaves',
                 'positions' => $positions,
                 'profileImage' => $profileImage,
                 'inboxNotif' => $inboxNotif,
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'count' => $count,
-                'maternalRecords' => $maternalRecords,
+                'maternityRecords' => $maternityRecords,
                 'balance' => max($balance,0),
                 'ML_entitlement' => $ML_entitlement,
                 'users' => $users
             );
 
 
-            return view('record.userMaternal')->with($data);
+            return view('record.userMaternity')->with($data);
         }else{
-            return redirect('dashboard')->with('status', 'Error: No Maternal Records Found');
+            return redirect('dashboard')->with('status', 'Error: No Maternity Records Found');
         }
    }
 
-   public function viewUserPaternal($id){
+   public function viewUserPaternity($id){
         $users = User::find($id);
         // dd($user)
-        $paternalUser = Leaves::where('leave_type', 4)
+        $paternityUser = Leaves::where('leave_type', 4)
                                ->where('user_id', $id)->first();
-        if($paternalUser){
+        if($paternityUser){
             $positions = $this->position();
             $profileImage = $this->getImage();
             $inboxNotif = $this->inboxNotif();
             $approvalNotif = $this->approvalNotif();
             $id_user = Auth::user()->position_id;
             $empDepartment = Positions::find($id_user)->departments;
-            $paternalRecords = Leaves::where('leave_type', 4)
+            $paternityRecords = Leaves::where('leave_type', 4)
                                      ->where('user_id', $id)
                                      ->get();
             $count = $this->forms();
             $balance = 0;
-            foreach ($paternalRecords as $paternal) {
-                $balance = $paternal->users->PL_entitlement - $paternal->users->PL_taken;
-                $PL_entitlement = $paternal->users->PL_entitlement;
+            foreach ($paternityRecords as $paternity) {
+                $balance = $paternity->users->PL_entitlement - $paternity->users->PL_taken;
+                $PL_entitlement = $paternity->users->PL_entitlement;
             }
 
             $data = array(
-                'title' => 'View User Paternal Leaves',
+                'title' => 'View User Paternity Leaves',
                 'positions' => $positions,
                 'profileImage' => $profileImage,
                 'inboxNotif' => $inboxNotif,
                 'approvalNotif' => $approvalNotif,
                 'empDepartment' => $empDepartment,
                 'count' => $count,
-                'paternalRecords' => $paternalRecords,
+                'paternityRecords' => $paternityRecords,
                 'balance' => max($balance, 0),
                 'PL_entitlement' => $PL_entitlement,
                 'users' => $users
             );
 
 
-            return view('record.userPaternal')->with($data);
+            return view('record.userPaternity')->with($data);
         }else{
-            return redirect('dashboard')->with('status', 'Error: No Paternal Records Found');
+            return redirect('dashboard')->with('status', 'Error: No Paternity Records Found');
         }
    }
 

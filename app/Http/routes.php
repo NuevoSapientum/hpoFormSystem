@@ -82,14 +82,14 @@ Route::get('record/sick',[
 	'uses' => 'LeaveController@sickRecord'
 ]);
 
-Route::get('record/maternal',[
+Route::get('record/maternity',[
 	'middleware' => 'admin',
-	'uses' => 'LeaveController@maternalRecord'
+	'uses' => 'LeaveController@maternityRecord'
 ]);
 
-Route::get('record/paternal',[
+Route::get('record/paternity',[
 	'middleware' => 'admin',
-	'uses' => 'LeaveController@paternalRecord'
+	'uses' => 'LeaveController@paternityRecord'
 ]);
 
 Route::get('record/vacation/view/{type}/{id}', [
@@ -112,24 +112,24 @@ Route::get('record/sick/view/{id}', [
 	'uses' => 'LeaveController@viewUserSick'
 ]);
 
-Route::get('record/maternal/view/{type}/{id}', [
+Route::get('record/maternity/view/{type}/{id}', [
 	'middleware' => 'admin',
 	'uses' => 'LeaveController@view'
 ]);
 
-Route::get('record/maternal/view/{id}', [
+Route::get('record/maternity/view/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'LeaveController@viewUserMaternal'
+	'uses' => 'LeaveController@viewUserMaternity'
 ]);
 
-Route::get('record/paternal/view/{type}/{id}', [
+Route::get('record/paternity/view/{type}/{id}', [
 	'middleware' => 'admin',
 	'uses' => 'LeaveController@view'
 ]);
 
-Route::get('record/paternal/view/{id}', [
+Route::get('record/paternity/view/{id}', [
 	'middleware' => 'admin',
-	'uses' => 'LeaveController@viewUserPaternal'
+	'uses' => 'LeaveController@viewUserPaternity'
 ]);
 
 /*Routes for the Inbox of the user*/

@@ -19,8 +19,6 @@
 	<form method="POST" action="{{URL::to('approval/view/' . $content->form_id . '/' . $content->id)}}" name="editProfile" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 		<hr/>
-    <label>Current Shift:</label>
-      <input type="date" class="form-control" disabled /><br/>
       <label>Shift Schedule:</label>
       <input value="{{$currentShift}}" disabled class="form-control" />
       <hr/>

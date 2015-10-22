@@ -25,8 +25,11 @@
       <div class="radio">
         <label><input type="radio" name="typeofLeave" id="VL" value="1" />Vacation Leave</label>
         <label><input type="radio" name="typeofLeave" id="SL" value="2" />Sick Leave </label>
+      @if(Auth::user()->emp_gender == "Female")
         <label><input type="radio" name="typeofLeave" id="ML" value="3" />Maternity Leave </label>
+      @else
         <label><input type="radio" name="typeofLeave" id="PL" value="4" />Paternity Leave </label>
+      @endif
       </div>
         
         <div id="VLShow">
