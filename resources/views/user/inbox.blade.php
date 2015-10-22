@@ -12,7 +12,7 @@
   @endif
   <div class="well well-sm">
     <h1>
-      Welcome {{Auth::user()->emp_name}}
+      {{Auth::user()->emp_name}}'s Inbox
     </h1>
   </div>
 @endsection

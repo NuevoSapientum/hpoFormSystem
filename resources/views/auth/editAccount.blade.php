@@ -72,13 +72,13 @@
 		<input type="number" name="SL_entitlement" value="{{$user->SL_entitlement}}" class="form-control" />
 		<br/>
 		<div id="ML" style="display:none">
-			<label>Maternal Entitlement:</label>
+			<label>Maternity Entitlement:</label>
 			<input type="number" name="ML_entitlement" value="{{$user->ML_entitlement}}" class="form-control" />
 			<br/>	
 		</div>
 		
 		<div id="PL" style="display:none">
-			<label>Parental Entitlement:</label>
+			<label>Paternity Entitlement:</label>
 			<input type="number" name="PL_entitlement" value="{{$user->PL_entitlement}}" class="form-control" />	
 		</div>
 		<hr/>
