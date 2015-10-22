@@ -201,6 +201,97 @@ class PagesController extends Controller
         return view('submittedForms')->with($data);
     }
 
+    public function submittedFormsExit(){
+        $positions = $this->position();
+        $profileImage = $this->getImage();
+        $inboxNotif = $this->inboxNotif();
+        $approvalNotif = $this->approvalNotif();
+        $id = Auth::user()->position_id;
+        $empDepartment = Positions::find($id)->departments;
+        $exitPass = ExitPass::where('status', '!=', 3)->get();
+        $count = $this->forms();
+        $data = array(
+            'title' => 'Submitted Forms',
+            'positions' => $positions,
+            'profileImage' => $profileImage,
+            'inboxNotif' => $inboxNotif,
+            'approvalNotif' => $approvalNotif,
+            'empDepartment' => $empDepartment,
+            'count' => $count,
+            'exitPass' => $exitPass
+        );
+
+        return view('forms.viewAllExit')->with($data);
+    }
+
+    public function submittedFormsLeave(){
+        $positions = $this->position();
+        $profileImage = $this->getImage();
+        $inboxNotif = $this->inboxNotif();
+        $approvalNotif = $this->approvalNotif();
+        $id = Auth::user()->position_id;
+        $empDepartment = Positions::find($id)->departments;
+        $leaveForm = Leaves::where('status', '!=', 3)->get();
+        $count = $this->forms();
+        $data = array(
+            'title' => 'Submitted Forms',
+            'positions' => $positions,
+            'profileImage' => $profileImage,
+            'inboxNotif' => $inboxNotif,
+            'approvalNotif' => $approvalNotif,
+            'empDepartment' => $empDepartment,
+            'count' => $count,
+            'leaveForm' => $leaveForm
+        );
+
+        return view('forms.viewAllLeave')->with($data);
+    }
+
+    public function submittedFormsChange(){
+        $positions = $this->position();
+        $profileImage = $this->getImage();
+        $inboxNotif = $this->inboxNotif();
+        $approvalNotif = $this->approvalNotif();
+        $id = Auth::user()->position_id;
+        $empDepartment = Positions::find($id)->departments;
+        $changeSchedule = Change::where('status', '!=', 3)->get();
+        $count = $this->forms();
+        $data = array(
+            'title' => 'Submitted Forms',
+            'positions' => $positions,
+            'profileImage' => $profileImage,
+            'inboxNotif' => $inboxNotif,
+            'approvalNotif' => $approvalNotif,
+            'empDepartment' => $empDepartment,
+            'count' => $count,
+            'changeSchedule' => $changeSchedule
+        );
+
+        return view('forms.viewAllChange')->with($data);
+    }
+
+    public function submittedFormsOvertime(){
+        $positions = $this->position();
+        $profileImage = $this->getImage();
+        $inboxNotif = $this->inboxNotif();
+        $approvalNotif = $this->approvalNotif();
+        $id = Auth::user()->position_id;
+        $empDepartment = Positions::find($id)->departments;
+        $oas = Overtime::where('status', '!=', 3)->get();
+        $count = $this->forms();
+        $data = array(
+            'title' => 'Submitted Forms',
+            'positions' => $positions,
+            'profileImage' => $profileImage,
+            'inboxNotif' => $inboxNotif,
+            'approvalNotif' => $approvalNotif,
+            'empDepartment' => $empDepartment,
+            'count' => $count,
+            'oas' => $oas
+        );
+
+        return view('forms.viewAllOvertime')->with($data);
+    }
 
     public function editForm($type, $id){
         $inboxNotif = $this->inboxNotif();

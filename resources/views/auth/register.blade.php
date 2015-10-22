@@ -70,7 +70,8 @@
                 <option value="{{$positions->id}}">{{$positions->position_name}}</option>
               @endforeach
             </select>
-            <label>Work Shift:</label>
+            <br/>
+            <label>Shift:</label>
             <select class="form-control" name="shift">
                 @foreach($shifts as $shift)
                     <option value="{{$shift->id}}">{{date('h:i A', strtotime($shift->shift_from))}} to {{date('h:i A', strtotime($shift->shift_to))}}</option>

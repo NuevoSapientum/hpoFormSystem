@@ -21,7 +21,8 @@
       @endif
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
       <hr/>
-      
+      <label>Shift: {{$currentShift}}</label>
+      <hr/>
       <br/>
       <label>From:</label>
       <input id="dateFrom" name="dateFrom" class="form-control"/><br/> 

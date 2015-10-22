@@ -110,6 +110,10 @@ class FormController extends Controller
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
         $CompanyReps = User::where('permissioners', 3)->get();
+        $currentShift = Shifts::where('id', Auth::user()->shift_id)->get();
+        foreach ($currentShift as $cur) {
+            $currentShift = date('h:i A', strtotime($cur->shift_from)) . ' to ' . date('h:i A', strtotime($cur->shift_to));
+        }
         $count = $this->forms();
         $data = array(
                     'title' => 'Exit Pass',
@@ -122,6 +126,7 @@ class FormController extends Controller
                     'inboxNotif' => $inboxNotif,
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
+                    'currentShift' => $currentShift,
                     'count' => $count
         );
         return view('exitForm')->with($data);

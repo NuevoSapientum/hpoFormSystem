@@ -52,6 +52,26 @@ Route::get('submittedforms', [
 	'uses' => 'PagesController@submittedForms'
 ]);
 
+Route::get('submittedforms/exit', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@submittedFormsExit'
+]);
+
+Route::get('submittedforms/leave', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@submittedFormsLeave'
+]);
+
+Route::get('submittedforms/change', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@submittedFormsChange'
+]);
+
+Route::get('submittedforms/overtime', [
+	'middleware' => 'admin',
+	'uses' => 'PagesController@submittedFormsOvertime'
+]);
+
 Route::get('submittedforms/edit/{type}/{id}', [
 	'middleware' => 'auth',
 	'uses' => 'PagesController@editForm'

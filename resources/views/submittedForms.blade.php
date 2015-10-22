@@ -19,7 +19,12 @@
       @section('content')
           <h1>Employees Submitted Forms</h1>
           <hr/>
-          <table>
+            <a class="btn btn-primary" href="{{URL::to('/submittedforms')}}" style="width:170px">All Forms</a>
+            <a class="btn btn-primary" href="{{URL::to('/submittedforms/exit')}}" style="width:170px">Exit Pass</a>
+            <a class="btn btn-primary" href="{{URL::to('/submittedforms/leave')}}" style="width:250px">Request for Leave of Absence</a>
+            <a class="btn btn-primary" href="{{URL::to('/submittedforms/change')}}" style="width:170px">Change Schedule</a>
+            <a class="btn btn-primary" href="{{URL::to('/submittedforms/overtime')}}" style="width:250px">Overtime Authorization</a>
+          <hr/>
           <table id="example">
           <thead>
             <tr>
@@ -33,7 +38,7 @@
           </thead>
           <tbody>
             @foreach($exitPass as $exit)
-            <tr>
+            <tr id="exitPass">
               <td>{{$exit->users->emp_name}}</td>
               <td>{{date('F d, Y', strtotime($exit->created_at))}}</td>
               <td>{{date('F d, Y', strtotime($exit->updated_at))}}</td>
@@ -64,7 +69,7 @@
             @endforeach
 
             @foreach($leaveForm as $leave)
-            <tr>
+            <tr id="leaveForm">
               <td>{{$leave->users->emp_name}}</td>
               <td>{{date('F d, Y', strtotime($leave->created_at))}}</td>
               <td>{{date('F d, Y', strtotime($leave->updated_at))}}</td>
@@ -95,7 +100,7 @@
             @endforeach
 
             @foreach($changeSchedule as $change)
-            <tr>
+            <tr id="changeSchedule">
               <td>{{$change->users->emp_name}}</td>
               <td>{{date('F d, Y', strtotime($change->created_at))}}</td>
               <td>{{date('F d, Y', strtotime($change->updated_at))}}</td>
@@ -126,7 +131,7 @@
             @endforeach
               
             @foreach($oas as $over)
-            <tr>
+            <tr id="over">
               <td>{{$over->users->emp_name}}</td>
               <td>{{date('F d, Y', strtotime($over->created_at))}}</td>
               <td>{{date('F d, Y', strtotime($over->updated_at))}}</td>
@@ -163,6 +168,7 @@
         $(function(){
           $("#example").dataTable();
         })
+
         </script>
       @endsection
 
