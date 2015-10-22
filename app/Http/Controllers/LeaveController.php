@@ -112,38 +112,11 @@ class LeaveController extends Controller
             }else{
                 $collection->push('N/A');
             }
-            // echo $user->id;
+
             array_push($balance, $user->VL_entitlement - $user->VL_taken);
         }
 
         $i = 0;
-
-        // foreach ($collection as $asd) {
-        //     echo $asd['user_id'] .'<br/>';
-        // }
-        // $vacationRecords = $collection;
-        // $a = 0;
-        // foreach ($users as $user) {
-        //     echo "<table>";
-        //     echo "<tr>";
-        //     echo "<td>" . $user->emp_name . "</td>";
-        //     echo "<td>" . $user->VL_entitlement . "</td>";
-        //     foreach ($vacationRecords as $variable) {
-        //         if(isset($variable['start_date'])){
-        //             echo "<td>". $variable['id'] . "</td>";
-        //         }else{
-        //             echo "<td>".$variable."</td>";
-        //         }
-                
-        //         // echo $variable[$a]['id'];
-        //     }
-        //     echo "</tr>";
-        //     echo "</table>";
-        // }
-
-        // echo $vacationRecord['start_date'];
-
-        // dd($collection);
 
         $data = array(
             'title' => 'Vacation Leave',
@@ -159,14 +132,6 @@ class LeaveController extends Controller
             'count' => $count
         );
 
-        // dd($balance);
-        // dd($collection);
-        // dd($collection);
-        // if($collection[1] == ''){
-        //     echo "null";
-        // }else{
-        //     echo "1";
-        // }
         return view('record.vacation')->with($data);
    }
 
@@ -184,9 +149,13 @@ class LeaveController extends Controller
         foreach ($users as $user) {
             $sickRecord = Leaves::where('leave_type', 2)
                                 ->where('user_id', $user->id)
+                                ->where('status', 1)
+                                ->orderBy('id', 'desc')
                                 ->first();
             if($sickRecord){
-                $collection = collect([$sickRecord]);
+                $collection->push($sickRecord);
+            }else{
+                $collection->push("N/A");
             }
             array_push($balance, $user->SL_entitlement - $user->SL_taken);
         }
@@ -226,9 +195,13 @@ class LeaveController extends Controller
         foreach ($users as $user) {
             $maternityRecord = Leaves::where('leave_type', 3)
                                 ->where('user_id', $user->id)
+                                ->where('status', 1)
+                                ->orderBy('id', 'desc')
                                 ->first();
             if($maternityRecord){
-                $collection = collect([$maternityRecord]);
+                $collection->push($maternityRecord);
+            }else{
+                $collection->push('N/A');
             }
             array_push($balance, $user->ML_entitlement - $user->ML_taken);
         }
@@ -266,9 +239,13 @@ class LeaveController extends Controller
         foreach ($users as $user) {
             $paternityRecord = Leaves::where('leave_type', 4)
                                 ->where('user_id', $user->id)
+                                ->where('status', 1)
+                                ->orderBy('id', 'desc')
                                 ->first();
             if($paternityRecord){
-                $collection = collect([$paternityRecord]);
+                $collection->push($paternityRecord);
+            }else{
+                $collection->push('N/A');
             }
             array_push($balance, $user->PL_entitlement - $user->PL_taken);
         }

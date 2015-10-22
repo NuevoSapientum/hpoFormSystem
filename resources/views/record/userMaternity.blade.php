@@ -29,7 +29,7 @@
                 <td>{{date('F d, Y', strtotime($maternity->created_at))}}</td>
                 <td>{{date('F d, Y', strtotime($maternity->updated_at))}}</td>
                 <td>{{$maternity->days_applied}}</td>
-                <td>{{$maternity->users->VL_taken}}</td>
+                <td>{{$maternity->users->ML_taken}}</td>
                 <td>{{date('F d, Y', strtotime($maternity->start_date))}}</td>
                 @if($maternity->status === 0)
                   <td>Pending</td>

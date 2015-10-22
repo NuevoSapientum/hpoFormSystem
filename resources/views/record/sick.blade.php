@@ -14,6 +14,7 @@
               <th>Name</th>
               <th>Entitlement</th>
               <th>Balance</th>
+              <th>Last Leave</th>
               <th></th>
             </tr>
           </thead>
@@ -22,7 +23,13 @@
               <tr>
                 <td>{{$user->emp_name}}</td>
                 <td>{{$user->SL_entitlement}}</td>
-                <td>{{$balance[$i++]}}</td>
+                <td>{{$balance[$i]}}</td>
+                @if($sickRecords[$i] != "N/A")
+                <td>{{date('F d, Y', strtotime($sickRecords[$i]['start_date']))}}</td>
+                @else
+                <td>{{$sickRecords[$i]}}</td>
+                @endif
+                <?php $i++ ?>
                 <td>
                   <a href="{{URL::to('record/sick/view/' . $user->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
                 </td>

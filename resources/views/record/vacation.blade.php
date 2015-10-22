@@ -14,7 +14,7 @@
               <th>Name</th>
               <th>Entitlement</th>
               <th>Balance</th>
-              <!-- <th>Last Leave</th> -->
+              <th>Last Leave</th>
               <th></th>
             </tr>
           </thead>
@@ -24,14 +24,16 @@
             <tr>
               <td>{{$user->emp_name}}</td>
               <td>{{$user->VL_entitlement}}</td>
-              <td>{{max($balance[$i++],0)}}</td>
+              <td>{{max($balance[$i],0)}}</td>
+              @if($vacationRecords[$i] != "N/A")
+              <td>{{date('F d, Y', strtotime($vacationRecords[$i]['start_date']))}}</td>
+              @else
+              <td>{{$vacationRecords[$i]}}</td>
+              @endif
+              <?php $i++ ?>
               <td>
                 <a href="{{URL::to('record/vacation/view/' . $user->id)}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View User Records</a>
               </td>
-              @foreach($vacationRecords as $vacation)
-                  
-              @endforeach
-
                 </tr>
             @endforeach
             
