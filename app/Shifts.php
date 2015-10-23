@@ -12,4 +12,8 @@ class Shifts extends Model
     	'shift_from',
     	'shift_to'
     ];
+
+    public function users(){
+    	return $this->belongsTo('App\User');
+    }
 }

@@ -185,7 +185,7 @@ class ApprovalController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.departments_id', 8)
+                    ->where('positions.department_id', 8)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
@@ -209,7 +209,7 @@ class ApprovalController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.departments_id', 8)
+                    ->where('positions.department_id', 8)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $dataSecond = array(
@@ -228,7 +228,7 @@ class ApprovalController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.departments_id', 8)
+                    ->where('positions.department_id', 8)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();

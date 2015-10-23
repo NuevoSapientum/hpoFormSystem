@@ -59,6 +59,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function shifts(){
-        return $this->hasOne('App\Shifts');
+        return $this->belongsTo('App\Shifts');
     }
 }

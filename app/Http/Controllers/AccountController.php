@@ -369,7 +369,7 @@ class AccountController extends Controller
             }
             $result = Positions::create([
                         'position_name' => $request->input('position_name'),
-                        'departments_id' => $request->input('department')
+                        'department_id' => $request->input('department')
             ]);
 
             if($result){
