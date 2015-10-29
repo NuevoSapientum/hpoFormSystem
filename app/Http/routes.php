@@ -317,3 +317,18 @@ Route::post('accounts/addSchedule', [
 	'middleware' => 'admin',
 	'uses' => 'AccountController@addSchedule'
 ]);
+
+Route::post('accounts/deleteDepartment', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@deleteDepartment'
+]);
+
+Route::post('accounts/deletePosition', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@deletePosition'
+]);
+
+Route::post('accounts/deleteSchedule', [
+	'middleware' => 'admin',
+	'uses' => 'AccountController@deleteSchedule'
+]);

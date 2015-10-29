@@ -107,7 +107,9 @@ class AccountController extends Controller
         $positions = $this->position();
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
-        $departments = Departments::all();
+        $departments = Departments::where('status', '!=', 1)->get();
+        $positions = Positions::where('status', '!=', 1)->get();
+        $shifts = Shifts::where('status', '!=', 1)->get();
         $count = $this->forms();
         $data = array(
                     'title' => 'Manage Accounts',
@@ -118,6 +120,8 @@ class AccountController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
                     'departments' => $departments,
+                    'positions' => $positions,
+                    'shifts' => $shifts,
                     'count' => $count
             );
         // dd($departments);
@@ -411,6 +415,51 @@ class AccountController extends Controller
             }else{
                 $status = "Failed!";
             }
+        }
+
+        return redirect('/accounts')->with('status', $status);
+    }
+
+    public function deleteDepartment(Request $request){
+        $result = Departments::where('id', $request->input('department'))
+                        ->update(array(
+                        'status' => 1,
+        ));
+
+        if($result){
+            $status = "Success!";
+        }else{
+            $status = "Failed!";
+        }
+
+        return redirect('/accounts')->with('status', $status);
+    }
+
+    public function deletePosition(Request $request){
+        $result = Positions::where('id', $request->input('position'))
+                        ->update(array(
+                        'status' => 1,
+        ));
+
+        if($result){
+            $status = "Success!";
+        }else{
+            $status = "Failed!";
+        }
+
+        return redirect('/accounts')->with('status', $status);
+    }
+
+    public function deleteSchedule(Request $request){
+        $result = Shifts::where('id', $request->input('schedule'))
+                        ->update(array(
+                        'status' => 1,
+        ));
+
+        if($result){
+            $status = "Success!";
+        }else{
+            $status = "Failed!";
         }
 
         return redirect('/accounts')->with('status', $status);

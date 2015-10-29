@@ -12,7 +12,14 @@ class DepartmentsTableSeeder extends Seeder
     public function run()
     {
         DB::table('departments')->insert([
-        		'department_name' => 'Human Resource',
+                ['department_name' => 'Human Resource'],
+                ['department_name' => 'HPO Operations'],
+                ['department_name' => 'SysAd'],
+                ['department_name' => 'HR and Finance'],
+                ['department_name' => 'KSI Operations'],
+                ['department_name' => 'Engage IQ'],
+                ['department_name' => 'DTR'],
+                ['department_name' => 'Sales & Marketing'],
         ]);
     }
 }

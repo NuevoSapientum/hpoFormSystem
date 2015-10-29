@@ -18,6 +18,7 @@ class CreatePositionsTable extends Migration
             $table->integer('department_id')->unsigned();
             $table->foreign('department_id')->references('id')
                   ->on('departments')->onDelete('cascade');
+            $table->integer('status')->default(0);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
