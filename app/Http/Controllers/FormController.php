@@ -105,7 +105,7 @@ class FormController extends Controller
         $empDepartment = Positions::find($user_position)->departments;
         $HRs = DB::table("positions")
                 ->join('users', 'users.position_id', '=', 'positions.id')
-                ->where('positions.department_id', 8)
+                ->where('positions.department_id', 1)
                 ->get();
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();
@@ -200,7 +200,7 @@ class FormController extends Controller
         $positions = $this->position();
         $HRs = DB::table("positions")
                 ->join('users', 'users.position_id', '=', 'positions.id')
-                ->where('positions.department_id', 8)
+                ->where('positions.department_id', 1)
                 ->get();
         $Supervisors = User::where('permissioners', 1)->get();
         $user_position = Auth::user()->position_id;
@@ -377,7 +377,7 @@ class FormController extends Controller
         $empDepartment = Positions::find($user_position)->departments;
         $HRs = DB::table("positions")
                 ->join('users', 'users.position_id', '=', 'positions.id')
-                ->where('positions.department_id', 8)
+                ->where('positions.department_id', 1)
                 ->get();
         $Supervisors = User::where('permissioners', 1)->get();
         $PMs = User::where('permissioners', 2)->get();

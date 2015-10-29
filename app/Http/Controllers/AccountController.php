@@ -108,7 +108,7 @@ class AccountController extends Controller
         $user_position = Auth::user()->position_id;
         $empDepartment = Positions::find($user_position)->departments;
         $departments = Departments::where('status', '!=', 1)->get();
-        $positions = Positions::where('status', '!=', 1)->get();
+        $positions_all = Positions::where('status', '!=', 1)->get();
         $shifts = Shifts::where('status', '!=', 1)->get();
         $count = $this->forms();
         $data = array(
@@ -120,7 +120,7 @@ class AccountController extends Controller
                     'approvalNotif' => $approvalNotif,
                     'empDepartment' => $empDepartment,
                     'departments' => $departments,
-                    'positions' => $positions,
+                    'positions_all' => $positions_all,
                     'shifts' => $shifts,
                     'count' => $count
             );

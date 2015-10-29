@@ -178,7 +178,7 @@
                   <form action="{{URL::to('accounts/deletePosition')}}" method="POST" >
                     <?php echo Form::token() ?>
                     <select name="position" class="form-control">
-                      @foreach($positions as $position)
+                      @foreach($positions_all as $position)
                         <option value="{{$position->id}}">{{$position->position_name}}</option>
                       @endforeach
                     </select>

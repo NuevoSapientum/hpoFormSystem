@@ -25,7 +25,7 @@ class CreateChangeSchedulesTable extends Migration
                   ->on('departments')->onDelete('cascade');
             $table->date('dateFromShift');
             $table->date('dateToShift');
-            $table->integer('form_id')->unsigned();
+            $table->integer('form_id')->unsigned()->default(3);
             $table->foreign('form_id')->references('id')
                   ->on('form_types')->onDelete('cascade');
             $table->text('reason');

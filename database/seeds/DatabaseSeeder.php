@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProfileImageTableSeeder::class);
         $this->call(ShiftsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(FormTypesSeeder::class);
 
         Model::reguard();
     }

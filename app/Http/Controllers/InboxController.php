@@ -153,7 +153,7 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.department_id', 8)
+                    ->where('positions.department_id', 1)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
@@ -185,7 +185,7 @@ class InboxController extends Controller
                 if($content->permission_1 != 0){
                     $HRs = DB::table("positions")
                             ->join('users', 'users.position_id', '=', 'positions.id')
-                            ->where('positions.department_id', 8)
+                            ->where('positions.department_id', 1)
                             ->get();
                     $Supervisors = User::where('permissioners', 1)->get();
                     $dataSecond = array(
@@ -201,7 +201,7 @@ class InboxController extends Controller
                 }else{
                     $HRs = DB::table("positions")
                             ->join('users', 'users.position_id', '=', 'positions.id')
-                            ->where('positions.department_id', 8)
+                            ->where('positions.department_id', 1)
                             ->get();
                     $Supervisors = User::where('permissioners', 1)->get();
                     $dataSecond = array(
@@ -222,7 +222,7 @@ class InboxController extends Controller
             $permissioners = User::where('permissioners', '!=', 0)->get();
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.department_id', 8)
+                    ->where('positions.department_id', 1)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
@@ -323,7 +323,7 @@ class InboxController extends Controller
             }else{
                 $status = "Failed!";
             }
-            // return redirect('inbox')->with('status', $status);
+            return redirect('inbox')->with('status', $status);
         }
     }
 
@@ -419,7 +419,7 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.department_id', 8)
+                    ->where('positions.department_id', 1)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
@@ -441,7 +441,7 @@ class InboxController extends Controller
             $empDepartment = Positions::find($user_position)->departments;
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.department_id', 8)
+                    ->where('positions.department_id', 1)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $dataSecond = array(
@@ -460,7 +460,7 @@ class InboxController extends Controller
             $permissioners = User::where('permissioners', '!=', 0)->get();
             $HRs = DB::table("positions")
                     ->join('users', 'users.position_id', '=', 'positions.id')
-                    ->where('positions.department_id', 8)
+                    ->where('positions.department_id', 1)
                     ->get();
             $Supervisors = User::where('permissioners', 1)->get();
             $PMs = User::where('permissioners', 2)->get();
